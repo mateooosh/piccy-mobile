@@ -1,0 +1,12 @@
+{
+  "name": "piccy-mobile",
+  "displayName": "piccy-mobile",
+  "expo": {
+    "name": "piccy-mobile",
+    "slug": "piccy-mobile",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

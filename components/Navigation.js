@@ -5,7 +5,7 @@ import LogIn from './LogIn.js';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator,  } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import SettingsScreen from './SettingsScreen.js';
 import BottomTab from './BottomTab.js';
@@ -48,7 +48,7 @@ export default function Navigation(){
                 options={({ route, navigation }) => ({
                   headerTitle: getHeaderTitle(route),
                   headerRight: () => (
-                    <MaterialCommunityIcons onPress={()=>navigation.navigate('Settings')} name="settings" color='black' size={30}/>
+                    <MaterialIcons onPress={()=>navigation.navigate('Settings')} name="settings" color='black' size={30}/>
                   ),
                   headerRightContainerStyle:{
                     paddingRight: 15

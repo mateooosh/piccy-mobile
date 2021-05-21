@@ -1,8 +1,7 @@
 
 import React, {useState, useEffect} from 'react';
 import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
-import { NavigationEvents } from 'react-navigation'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
@@ -10,7 +9,9 @@ const Tab = createBottomTabNavigator();
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const TopTab = createMaterialTopTabNavigator();
 
-import { Camera } from 'expo-camera';
+//import screens
+import AddScreen from './AddScreen.js';
+import HomeScreen from './HomeScreen.js';
 
 export default function BottomTab(){
   return(
@@ -24,7 +25,7 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={30}/>
+            <MaterialIcons name="home" color={color} size={30}/>
           ),
         }} 
         name="Home" 
@@ -34,7 +35,7 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="search" color={color} size={30}/>
+            <MaterialIcons name="search" color={color} size={30}/>
           ),
         }} 
         name="Search" 
@@ -44,7 +45,7 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="add-circle" color={color} size={30}/>
+            <MaterialIcons name="add-circle" color={color} size={30}/>
           ),
         }} 
         name="Add" 
@@ -54,7 +55,7 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="message" color={color} size={30}/>
+            <MaterialIcons name="message" color={color} size={30}/>
           ),
         }} 
         name="Messages" 
@@ -65,7 +66,7 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="account-circle" color={color} size={30}/>
+            <MaterialIcons name="account-circle" color={color} size={30}/>
           ),
         }} 
         name="Account" 
@@ -75,21 +76,12 @@ export default function BottomTab(){
   )
 }
 
-
-function HomeScreen(){
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  )
-}
-
 function SearchScreen(){
   const [query, setQuery] = useState('');
 
   function getIcon(){
     if(query.length > 0)
-      return <MaterialCommunityIcons onPress={() => setQuery('')} name="close" color={'black'} size={30} style={{position: 'absolute', right: 10, top:8}}/>;
+      return <MaterialIcons onPress={() => setQuery('')} name="close" color={'black'} size={30} style={{position: 'absolute', right: 10, top:8}}/>;
     else
       return;
   }
@@ -118,64 +110,7 @@ function SearchScreen(){
   )
 }
 
-function AddScreen({ navigation }){
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
 
-  const [loaded, setLoaded] = useState(true);
-
-  useEffect(() => 
-    navigation.addListener('focus', () => setLoaded(true)),
-    []
-  );
-
-  useEffect(() => 
-    navigation.addListener('blur', () => setLoaded(false)),
-    []
-  );
-  
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-  
-
-  function toggleType(){
-    if(type === Camera.Constants.Type.back)
-      setType(Camera.Constants.Type.front)
-    else if(type === Camera.Constants.Type.front)
-      setType(Camera.Constants.Type.back)
-  }
-
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {loaded && (
-        <Camera style={{width: Dimensions.get('window').width, height:Dimensions.get('window').width*3/4}} type={type} ratio="3:4"></Camera>
-      )} 
-     
-      <TouchableOpacity
-        onPress={toggleType}
-        style={{
-          marginTop: 50,
-          padding: 10,
-          borderRadius: 6,
-          backgroundColor: '#2196F3',
-        }}
-      >
-        <Text style={{color: 'white'}}> Flip </Text>
-      </TouchableOpacity>
-    </View>
-  )
-}
 
 function MessagesScreen(){
   return (

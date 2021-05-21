@@ -87,12 +87,15 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   input: {
-    paddingVertical: 8,
-    fontSize: 16,
+    // paddingVertical: 8,
+    // fontSize: 16,
+    // marginBottom: 30,
+    // borderBottomWidth: 1,
+    // borderBottomColor: 'grey',
+    // borderLeftWidth: 0,
+
+    backgroundColor: '#ddd', paddingHorizontal: 15, borderRadius: 10, fontSize: 16, paddingVertical: 8, marginTop: 10,
     marginBottom: 30,
-    borderBottomWidth: 1,
-    borderBottomColor: 'grey',
-    borderLeftWidth: 0,
     
   },
   button: {

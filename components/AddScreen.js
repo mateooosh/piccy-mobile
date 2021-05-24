@@ -1,17 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationEvents } from 'react-navigation'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-const Tab = createBottomTabNavigator();
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-const TopTab = createMaterialTopTabNavigator();
 
 import { Camera } from 'expo-camera';
-import Picker from './Picker.js';
+import * as ImagePicker from 'expo-image-picker';
 
 
 export default function AddScreen({ navigation }){
@@ -19,15 +16,33 @@ export default function AddScreen({ navigation }){
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   const [loaded, setLoaded] = useState(true);
+  const [cameraVisible, setCameraVisible] = useState(false);
   const [flash, setFlash] = useState('off');
 
+  const [photo, setPhoto] = useState(null);
+
+  const camera = useRef(null);
+  const scrollRef = useRef(null);
+
   useEffect(() => 
-    navigation.addListener('focus', () => setLoaded(true)),
+    navigation.addListener('focus', () => {
+      setLoaded(true);
+      return function cleanupListener() {
+        window.removeEventListener('focus');
+      }
+    }),
     []
   );
 
   useEffect(() => 
-    navigation.addListener('blur', () => setLoaded(false)),
+    navigation.addListener('blur', () => {
+      setLoaded(false)
+      setCameraVisible(false);
+      setPhoto(null);
+      return function cleanupListener() {
+        window.removeEventListener('blur');
+      }
+    }),
     []
   );
   
@@ -64,67 +79,149 @@ export default function AddScreen({ navigation }){
       setFlash('off');
   }
 
+  async function takePicture(){
+    setPhoto(await camera.current.takePictureAsync());
+    setCameraVisible(false);
+  }
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setPhoto(result);
+      setCameraVisible(false);
+    }
+  };
+
   return (
-    <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-      {/* {loaded && (
-        <Camera style={{width: Dimensions.get('window').width, height:Dimensions.get('window').width*3/4}} type={type} ratio="3:4" flashMode={flash}></Camera>
-      )} 
-     
-      <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems:'flex-end',width: '100%'}}>
-        <TouchableOpacity
-          onPress={toggleType}
+    <View style={{ flex: 1 }}>
+      
+      <ScrollView ref={scrollRef} contentContainerStyle={{width: '100%'}}>
+        {!cameraVisible &&
+          <TouchableOpacity 
+            onPress={() => {
+              setCameraVisible(true);
+              setPhoto(null);
+            }}
+            style={{
+              marginHorizontal: 20,
+              marginTop: 20,
+              padding: 15,
+              borderRadius: 15,
+              backgroundColor: '#2196F3',
+            }}
+          >
+            <Text style={{color: 'white', textAlign: 'center'}}>Take picture</Text>
+          </TouchableOpacity>
+        }
+        <TouchableOpacity 
+          onPress={pickImage}
           style={{
-            marginVertical: 10,
-            padding: 10,
-            borderRadius: 15,
-            backgroundColor: '#2196F3',
-          }}
-        >
-          <MaterialIcons name="refresh" color={'white'} size={30}/>
-        </TouchableOpacity>
-
-
-        <TouchableOpacity
-          onPress={() => alert('Make photo!')}
-          style={{
-            marginVertical: 10,
+            marginTop: 20,
+            marginHorizontal: 20,
             padding: 15,
             borderRadius: 15,
             backgroundColor: '#2196F3',
-          }}
-        >
-          <MaterialIcons name="photo-camera" color={'white'} size={50}/>
+          }}>
+          <Text style={{color: 'white', textAlign: 'center'}}>Pick an image from your gallery</Text>
         </TouchableOpacity>
+        {loaded && cameraVisible && (
+          <View style={{positon: 'relative', marginTop: 20}}>
+            <Camera whiteBalance="auto" autoFocus="on" ref={camera} style={{width: Dimensions.get('window').width, height:Dimensions.get('window').width}} type={type} ratio="1:1" flashMode={flash}></Camera>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems:'flex-end',width: '100%', position: 'absolute', bottom: 0}}>
+              <TouchableOpacity
+                onPress={toggleType}
+                style={{
+                  opacity: 0.9,
+                  marginVertical: 10,
+                  padding: 10,
+                  borderRadius: 15,
+                  // backgroundColor: '#2196F3',
+                }}
+              >
+                <MaterialIcons name="refresh" color={'white'} size={40}/>
+              </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={setNextFlashMode}
-          style={{
-            marginVertical: 10,
-            padding: 10,
-            borderRadius: 15,
-            backgroundColor: '#2196F3',
-          }}
-        >
-          {flash==='off' ? (
-              <MaterialIcons name="flash-off" color={'white'} size={30}/>
-            ) : (<></>)
-          }
-          {flash==='torch' ? (
-              <MaterialCommunityIcons name="flashlight" color={'white'} size={30}/>
-            ) : (<></>)
-          }
-          {flash==='on' ? (
-              <MaterialIcons name="flash-on" color={'white'} size={30}/>
-            ) : (<></>)
-          }
-          {flash==='auto' ? (
-              <MaterialIcons name="flash-auto" color={'white'} size={30}/>
-            ) : (<></>)
-          }
-        </TouchableOpacity>
-      </View> */}
-      <ScrollView>
-        <Picker/>
+
+              <TouchableOpacity
+                onPress={takePicture}
+                style={{
+                  opacity: 0.9,
+                  padding: 10,
+                }}
+              >
+                <MaterialIcons name="photo-camera" color={'white'} size={80}/>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={setNextFlashMode}
+                style={{
+                  opacity: 0.9,
+                  marginVertical: 10,
+                  padding: 10,
+                }}
+              >
+                {flash==='off' ? (
+                    <MaterialIcons name="flash-off" color={'white'} size={40}/>
+                  ) : (<></>)
+                }
+                {flash==='torch' ? (
+                    <MaterialCommunityIcons name="flashlight" color={'white'} size={40}/>
+                  ) : (<></>)
+                }
+                {flash==='on' ? (
+                    <MaterialIcons name="flash-on" color={'white'} size={40}/>
+                  ) : (<></>)
+                }
+                {flash==='auto' ? (
+                    <MaterialIcons name="flash-auto" color={'white'} size={40}/>
+                  ) : (<></>)
+                }
+              </TouchableOpacity>
+            </View>
+          </View>
+        )} 
+
+        {/* <Divider style={{marginVertical: 20}}/> */}
+        {photo && 
+          <View>
+            {/* <Text>Your photo:</Text> */}
+            <Image source={{ uri: photo.uri }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginVertical: 20}} />
+            <Text style={{fontWeight: '700',fontSize: 16, marginHorizontal: '5%'}}>Caption</Text>
+            <TextInput
+              style={{backgroundColor: '#ddd', marginHorizontal: '5%', paddingVertical: 5, marginBottom: 20, marginTop: 10, paddingHorizontal: 15, paddingVertical: 10, borderRadius: 10, textAlignVertical: 'top'}}
+              multiline={true}
+              numberOfLines={3}
+              // value={this.state.text}
+              placeholder="Write your caption..."
+            />   
+
+            <TouchableOpacity 
+              onPress={() => {
+                // setCameraVisible(true);
+                // setPhoto(null);
+                alert("add new post");
+              }}
+              style={{
+                marginHorizontal: 20,
+                marginBottom: 20,
+                padding: 15,
+                borderRadius: 15,
+                backgroundColor: '#2196F3',
+              }}
+            >
+              <Text style={{color: 'white', textAlign: 'center'}}>Add new post</Text>
+            </TouchableOpacity>
+          </View>
+        }
+         
       </ScrollView>
     </View>
   )

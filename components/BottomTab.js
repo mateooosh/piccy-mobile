@@ -87,7 +87,7 @@ function SearchScreen(){
   }
 
   return (
-    <View style={{ flex: 1, justifyContent:'space-between', }}>
+    <View style={{ flex: 1, justifyContent:'space-between' }}>
         <View style={{marginHorizontal: 20, marginTop: 20, marginBottom: 10}}>
           <TextInput 
             onChangeText={(str) => setQuery(str)} 

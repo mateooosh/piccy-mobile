@@ -2,16 +2,15 @@ import React, {useState, useEffect, useRef} from 'react';
 import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useStore, useSelector } from 'react-redux';
 
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
 
 export default function AddScreen({ navigation }){
+  const store = useStore();
+
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
@@ -19,6 +18,7 @@ export default function AddScreen({ navigation }){
   const [cameraVisible, setCameraVisible] = useState(false);
   const [flash, setFlash] = useState('off');
 
+  const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
 
   const camera = useRef(null);
@@ -80,13 +80,24 @@ export default function AddScreen({ navigation }){
   }
 
   async function takePicture(){
-    setPhoto(await camera.current.takePictureAsync());
+    console.log("photo")
+    // setPhoto(await camera.current.takePictureAsync({base64: true}));
+    await camera.current.takePictureAsync({
+      base64: true,
+    }).then(data => {
+      if(data.base64.includes(","))
+        setPhoto(data.base64);
+      else
+        setPhoto("data:image/webp;base64,"+data.base64)
+    });
+    
     setCameraVisible(false);
   }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -95,15 +106,45 @@ export default function AddScreen({ navigation }){
     console.log(result);
 
     if (!result.cancelled) {
-      setPhoto(result);
+      setPhoto("data:image/webp;base64,"+result.base64);
       setCameraVisible(false);
     }
   };
 
+  
+
+  async function createPost(){
+    const index = photo.indexOf(",");
+    let base64 = photo.slice(index+1, (photo.length));
+
+    let obj = {
+      idUser: store.getState().id,
+      description: description,
+      photo: base64
+    };
+    console.log(obj)   
+
+    const url = `http://10.10.0.156:3000/posts`;
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+      'Content-Type': 'application/json'
+      },
+    })
+    .then(response => response.json())
+    .then(response => {
+      alert(response.message);
+    })
+    .catch(err => {
+      alert("Something went wrong!")
+    })
+  }
+
   return (
     <View style={{ flex: 1 }}>
       
-      <ScrollView ref={scrollRef} contentContainerStyle={{width: '100%'}}>
+      <ScrollView keyboardShouldPersistTaps='handled' ref={scrollRef} contentContainerStyle={{width: '100%'}}>
         {!cameraVisible &&
           <TouchableOpacity 
             onPress={() => {
@@ -193,22 +234,26 @@ export default function AddScreen({ navigation }){
         {photo && 
           <View>
             {/* <Text>Your photo:</Text> */}
-            <Image source={{ uri: photo.uri }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginVertical: 20}} />
+            <Image source={{ uri: photo }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginVertical: 20}} />
             <Text style={{fontWeight: '700',fontSize: 16, marginHorizontal: '5%'}}>Caption</Text>
             <TextInput
               style={{backgroundColor: '#ddd', marginHorizontal: '5%', paddingVertical: 5, marginBottom: 20, marginTop: 10, paddingHorizontal: 15, paddingVertical: 10, borderRadius: 10, textAlignVertical: 'top'}}
               multiline={true}
               numberOfLines={3}
-              // value={this.state.text}
+              value={description}
+              onChangeText={(str) => {
+                setDescription(str);
+                console.log(description);
+              }}
               placeholder="Write your caption..."
             />   
-
+            <Text>{description}</Text>
             <TouchableOpacity 
-              onPress={() => {
+              onPress={
                 // setCameraVisible(true);
                 // setPhoto(null);
-                alert("add new post");
-              }}
+                createPost
+              }
               style={{
                 marginHorizontal: 20,
                 marginBottom: 20,

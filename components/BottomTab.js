@@ -38,7 +38,7 @@ export default function BottomTab(){
             <MaterialIcons name="search" color={color} size={30}/>
           ),
         }} 
-        name="Search" 
+        name="search" 
         component={SearchScreen}
       />
 
@@ -48,7 +48,7 @@ export default function BottomTab(){
             <MaterialIcons name="add-circle" color={color} size={30}/>
           ),
         }} 
-        name="Add" 
+        name="add" 
         component={AddScreen} 
       />
 
@@ -58,7 +58,7 @@ export default function BottomTab(){
             <MaterialIcons name="message" color={color} size={30}/>
           ),
         }} 
-        name="Messages" 
+        name="messages" 
         component={MessagesScreen} 
         
       />
@@ -69,7 +69,7 @@ export default function BottomTab(){
             <MaterialIcons name="account-circle" color={color} size={30}/>
           ),
         }} 
-        name="Account" 
+        name="account" 
         component={AccountScreen} 
       />
     </Tab.Navigator>
@@ -102,8 +102,8 @@ function SearchScreen(){
             inactiveTintColor: 'black',
             style: { backgroundColor: '#f2f2f2' },
           }}>
-          <TopTab.Screen name="Accounts" children={()=><SearchAccounts query={query}/>}/>
-          <TopTab.Screen name="Tags" children={()=><SearchTags query={query}/>}/>
+          <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query}/>}/>
+          <TopTab.Screen name="tags" children={()=><SearchTags query={query}/>}/>
         </TopTab.Navigator>
       
     </View>

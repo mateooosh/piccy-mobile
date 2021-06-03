@@ -23,13 +23,13 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Home':
       return 'Home'
-    case 'Search':
+    case 'search':
       return 'Search'
-    case 'Add':
+    case 'add':
         return 'New post'
-    case 'Messages':
+    case 'messages':
       return 'My messages';
-    case 'Account':
+    case 'account':
       return 'My account';
   }
 }
@@ -38,8 +38,20 @@ function getHeaderTitle(route) {
 export default function Navigation(){
   const logged = useSelector(state => state.logged);
 
+  const config = {
+    screens: {
+      Settings: 'settings',
+      Home: '/',
+    },
+  };
+
+  const linking = {
+    prefixes: ['http://localhost:19006/'],
+    config,
+  };
+
   return(
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator headerMode="screen" >
         {logged ? (
             <>

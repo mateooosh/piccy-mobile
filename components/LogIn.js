@@ -1,7 +1,7 @@
 
 import React, {useState} from 'react';
-import { useStore, useSelector } from 'react-redux'
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView , Button } from 'react-native';
+import { useStore, useSelector } from 'react-redux';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView , Button, ActivityIndicator} from 'react-native';
 import { Divider } from 'react-native-elements';
 
 export default function LogIn({ navigation }) {
@@ -9,10 +9,13 @@ export default function LogIn({ navigation }) {
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   
   // const logged = useSelector(state => state.logged);
   
   function logIn(username,password){
+    setLoading(true);
+
     let obj = {
       username: username,
       password: password,
@@ -28,14 +31,18 @@ export default function LogIn({ navigation }) {
     })
     .then(response => response.json())
     .then(response => {
-      alert(response.message);
+      // alert(response.message);
       store.dispatch({ type: "logged/true" });
       store.dispatch({ type: "tokenSet", payload: response.token });
       store.dispatch({ type: "usernameSet", payload: response.username });
       store.dispatch({ type: "idSet", payload: response.id });
+      setLoading(false);
       console.log(store.getState());
     })
-    .catch(err => alert("Something went wrong!"))
+    .catch(err => {
+      setLoading(false);
+      alert("Something went wrong!")
+    })
   }
 
   return (
@@ -62,7 +69,12 @@ export default function LogIn({ navigation }) {
           />
 
           <TouchableOpacity onPress={logIn.bind(this,username,password)} style={styles.button}>
-            <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Log in</Text>
+            {!loading &&
+              <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Log in</Text>
+            }
+            {loading &&
+              <ActivityIndicator size={19} color="white"/>
+            }
           </TouchableOpacity>
         </View>
         

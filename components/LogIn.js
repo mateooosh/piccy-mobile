@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView , Button, ActivityIndicator} from 'react-native';
 import { Divider } from 'react-native-elements';
+import {API_URL} from '@env';
 
 export default function LogIn({ navigation }) {
   const store = useStore();
@@ -21,7 +22,7 @@ export default function LogIn({ navigation }) {
       password: password,
     };
 
-    const url = `http://10.10.0.156:3000/auth`;
+    const url = `${API_URL}/auth`;
     fetch(url, {
       method: "POST",
       body: JSON.stringify(obj),

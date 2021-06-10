@@ -6,7 +6,7 @@ import { useStore, useSelector } from 'react-redux';
 
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-
+import {API_URL} from '@env';
 
 export default function AddScreen({ navigation }){
   const store = useStore();
@@ -124,7 +124,7 @@ export default function AddScreen({ navigation }){
     };
     console.log(obj)   
 
-    const url = `http://10.10.0.156:3000/posts`;
+    const url = `${API_URL}/posts`;
     fetch(url, {
       method: "POST",
       body: JSON.stringify(obj),

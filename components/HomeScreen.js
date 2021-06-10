@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Text, ActivityIndicator, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useStore, useSelector } from 'react-redux'
+import { useStore, useSelector } from 'react-redux';
+import {API_URL} from '@env';
 
-export default function HomeScreen(){
+export default function HomeScreen({navigation}){
   const store = useStore();
   console.log(store.getState().id);
   
@@ -12,7 +13,7 @@ export default function HomeScreen(){
   // const [photo3, setPhoto3] = useState(null);
 
   function getPosts(){
-    const url = `http://10.10.0.156:3000/posts?idUser=${store.getState().id}`;
+    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
@@ -30,7 +31,7 @@ export default function HomeScreen(){
   }, [])
 
   function likePost(idUser, idPost, index){
-    const url = `http://10.10.0.156:3000/likes`;
+    const url = `${API_URL}/likes`;
     console.log(JSON.stringify({idUser: idUser, idPost: idPost}));
     fetch(url, {
       method: "POST",
@@ -51,7 +52,7 @@ export default function HomeScreen(){
   }
 
   function dislikePost(idUser, idPost, index){
-    const url = `http://10.10.0.156:3000/likes`;
+    const url = `${API_URL}/likes`;
     fetch(url, {
       method: "DELETE",
       body: JSON.stringify({idUser: idUser, idPost: idPost}),
@@ -112,10 +113,19 @@ export default function HomeScreen(){
           <View key={post.id} style={{marginBottom: 20}}>
             <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 12, marginHorizontal: 15}}>
               <TouchableOpacity 
+                activeOpacity={0.8}
                 style={{ marginRight: 15}} 
-                onPress={() => alert(`navigate to /${post.username}`)}
+                onPress={()=>navigation.navigate('Profile', {username: post.username})}
               >
-                <Image source={{ uri: post.photo }} style={{ width: 40, height: 40, borderRadius: 50}} /> 
+                {post.userPhoto !== null &&
+                  <Image source={{ uri: post.userPhoto }} style={{ width: 40, height: 40, borderRadius: 50}} /> 
+                }
+                {post.userPhoto === null &&
+                  <MaterialIcons name="account-circle" color={'black'} size={40} />
+                }
+
+                
+
               </TouchableOpacity>
               
               <View>
@@ -127,7 +137,15 @@ export default function HomeScreen(){
                 <Text style={{fontWeight: '500', fontSize: 12, color: '#777'}}>{displayTime(post.uploadDate)}</Text>
               </View>
             </View>
-            <Image source={{ uri: post.photo }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} /> 
+            <TouchableOpacity 
+              activeOpacity={0.8}
+              style={{ marginRight: 15}} 
+              onPress={() => alert(`navigate to /post/${post.id}`)}
+            >
+              <Image source={{ uri: post.photo }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} />  
+            </TouchableOpacity>
+            
+
             <View style={{flexDirection:'row',  marginVertical: 10, justifyContent: 'space-around'}}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 {post.liked === 0 &&

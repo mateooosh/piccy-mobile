@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView , Button } from 'react-native';
 import { Divider } from 'react-native-elements';
+import {API_URL} from '@env';
 
 export default function Register({ navigation }) {
   const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ export default function Register({ navigation }) {
       name: name
     };
 
-    const url = `http://10.10.0.156:3000/users`;
+    const url = `${API_URL}/users`;
     fetch(url, {
       method: "POST",
       body: JSON.stringify(obj),

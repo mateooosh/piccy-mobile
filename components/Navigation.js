@@ -9,7 +9,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import SettingsScreen from './SettingsScreen.js';
 import BottomTab from './BottomTab.js';
-
+import ProfileScreen from './ProfileScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +41,7 @@ export default function Navigation(){
   const config = {
     screens: {
       Settings: 'settings',
+      Profile: ':username',
       Home: '/',
     },
   };
@@ -60,7 +61,7 @@ export default function Navigation(){
                 options={({ route, navigation }) => ({
                   headerTitle: getHeaderTitle(route),
                   headerRight: () => (
-                    <MaterialIcons onPress={()=>navigation.navigate('Settings')} name="settings" color='black' size={30}/>
+                    <MaterialIcons onPress={()=>navigation.navigate('Settings', {id: 2})} name="settings" color='black' size={30}/>
                   ),
                   headerRightContainerStyle:{
                     paddingRight: 15
@@ -68,6 +69,8 @@ export default function Navigation(){
                 })}
               />
               <Stack.Screen name="Settings" component={SettingsScreen}/>
+              <Stack.Screen name="Profile" component={ProfileScreen} options={({route}) => ({headerTitle: route.params.username})}
+                />
             </>
           ) : (
             <>

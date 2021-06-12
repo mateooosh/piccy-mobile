@@ -4,8 +4,8 @@ import { createStore } from 'redux';
 const initialState = {
   logged: true,
   token: '',
-  username: 'xroomanx',
-  id: '39',
+  username: 'asd',
+  id: '40',
 };
 
 function Reducer(state = initialState, action) {

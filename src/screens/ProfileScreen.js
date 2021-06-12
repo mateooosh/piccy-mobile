@@ -21,14 +21,15 @@ export default function AccountScreen({route, navigation}){
       return;
     }
 
-    const url = `${API_URL}/users?username=${route.params.username}`;
+    // get information about profile
+    const url = `${API_URL}/users?username=${route.params.username}&myIdUser=${store.getState().id}`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
       console.log(response);
       setProfile(response);
 
-
+      // get user's posts
       fetch(`${API_URL}/posts?username=${route.params.username}&onlyUserPosts=true`)
       .then(response => response.json())
       .then(response => {
@@ -41,6 +42,48 @@ export default function AccountScreen({route, navigation}){
     .catch(err => console.log(err));
   }, [])
 
+  //follow user
+  function follow(idUser, idFollower){
+    console.log(idUser, idFollower);
+
+    let deepCopy = JSON.parse(JSON.stringify(profile));
+    deepCopy[0].amIFollowing = 1;
+    setProfile(deepCopy);
+
+    const url = `${API_URL}/users/${idUser}/follow/${idFollower}`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+    })
+    .then(response => response.json())
+    .then(response => {     
+      
+      console.log(response.message);
+    })
+    .catch(err => console.log(err))
+  }
+
+  // unfollow user
+  function unfollow(idUser, idFollower){
+      let deepCopy = JSON.parse(JSON.stringify(profile));
+      deepCopy[0].amIFollowing = 0;
+      setProfile(deepCopy);
+
+      const url = `${API_URL}/users/${idUser}/follow/${idFollower}`;
+      fetch(url, {
+        method: 'DELETE',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+      })
+      .then(response => response.json())
+      .then(response => {   
+        console.log(response.message);
+      })
+      .catch(err => console.log(err))
+    }
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -80,12 +123,22 @@ export default function AccountScreen({route, navigation}){
               <Text style={{fontSize: 15, fontWeight: '700', fontSize: 16}}>{item.name}</Text>
               <Text style={{fontSize: 14}}>{item.description}</Text>
 
-              <TouchableOpacity 
-                onPress={() => alert('follow')} 
-                style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
-              >
-                <Text style={{textAlign: 'center', color: 'white'}}>Follow</Text>
-              </TouchableOpacity>
+              { item.amIFollowing === 0 && 
+                <TouchableOpacity 
+                  onPress={follow.bind(this, store.getState().id, item.id)} 
+                  style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
+                >
+                  <Text style={{textAlign: 'center', color: 'white', fontWeight: '700'}}>Follow</Text>
+                </TouchableOpacity>
+              }
+              { item.amIFollowing === 1 && 
+                <TouchableOpacity 
+                  onPress={unfollow.bind(this, store.getState().id, item.id)} 
+                  style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#ccc', borderRadius: 6, marginVertical: 20}}
+                >
+                  <Text style={{textAlign: 'center', color: 'white', fontWeight: '700'}}>Following</Text>
+                </TouchableOpacity>
+              }
             </View>
 
             

@@ -20,7 +20,7 @@ export default function Register({ navigation }) {
 
     const url = `${API_URL}/users`;
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(obj),
       headers: {
       'Content-Type': 'application/json'
@@ -33,19 +33,47 @@ export default function Register({ navigation }) {
 
   return (
     <View style={styles.container} >
-      <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}>
+      <ScrollView 
+        keyboardShouldPersistTaps='handled' 
+        contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}
+      >
         <View>
           <Text style={styles.label}>E-mail</Text>
-          <TextInput onSubmitEditing={createAccount.bind(this,username,email,password,name)} onChangeText={(str) => setEmail(str)} style={styles.input} placeholder="E-mail" autoCompleteType="email"/>
+          <TextInput 
+            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
+            onChangeText={(str) => setEmail(str)} 
+            style={styles.input} 
+            placeholder="E-mail" 
+            autoCompleteType="email"
+          />
 
           <Text style={styles.label}>Username</Text>
-          <TextInput onSubmitEditing={createAccount.bind(this,username,email,password,name)} onChangeText={(str) => setUsername(str)} style={styles.input} placeholder="Username" autoCompleteType="username"/>
+          <TextInput 
+            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
+            onChangeText={(str) => setUsername(str)} 
+            style={styles.input} 
+            placeholder="Username" 
+            autoCompleteType="username"
+          />
           
           <Text style={styles.label}>Password</Text>
-          <TextInput onSubmitEditing={createAccount.bind(this,username,email,password,name)} onChangeText={(str) => setPassword(str)} style={styles.input} secureTextEntry={true} placeholder="Password" autoCompleteType="password"/>
+          <TextInput 
+            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
+            onChangeText={(str) => setPassword(str)} 
+            style={styles.input} 
+            secureTextEntry={true} 
+            placeholder="Password" 
+            autoCompleteType="password"
+          />
 
           <Text style={styles.label}>Name</Text>
-          <TextInput onSubmitEditing={createAccount.bind(this,username,email,password,name)} onChangeText={(str) => setName(str)} style={styles.input} placeholder="Name" autoCompleteType="name"/>
+          <TextInput 
+            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
+            onChangeText={(str) => setName(str)} 
+            style={styles.input} 
+            placeholder="Name" 
+            autoCompleteType="name"
+          />
           
           <TouchableOpacity onPress={createAccount.bind(this,username,email,password,name)} style={styles.button}>
             <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>

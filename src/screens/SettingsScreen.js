@@ -7,10 +7,10 @@ export default function SettingsScreen(){
   const store = useStore();
 
   function logOut() {
-    store.dispatch({ type: "logged/false" });
-    store.dispatch({ type: "tokenSet", payload: '' });
-    store.dispatch({ type: "usernameSet", payload: '' });
-    store.dispatch({ type: "idSet", payload: '' });
+    store.dispatch({ type: 'logged/false' });
+    store.dispatch({ type: 'tokenSet', payload: '' });
+    store.dispatch({ type: 'usernameSet', payload: '' });
+    store.dispatch({ type: 'idSet', payload: '' });
   }
 
   return (

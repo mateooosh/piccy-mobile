@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
+import { Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useStore, useSelector } from 'react-redux';
-import {API_URL} from '@env';
+import { useStore } from 'react-redux';
+import {API_URL, API_URL_WS} from '@env';
+import { io } from "socket.io-client";
 
 export default function HomeScreen({navigation}){
   const store = useStore();
-  console.log(store.getState().id);
   
   const [posts, setPosts] = useState([]);
   // const [photo3, setPhoto3] = useState(null);
@@ -25,8 +25,13 @@ export default function HomeScreen({navigation}){
   }
 
   useEffect(() => {
-    console.log("home mounted");
-    getPosts()
+    console.log('home mounted');
+
+    const socket = io(API_URL_WS, { transports : ['websocket']});
+
+    socket.emit('new user', store.getState().username);
+    
+    getPosts();
     // setTimeout(() => getPosts(), 2000);
   }, [])
 
@@ -34,7 +39,7 @@ export default function HomeScreen({navigation}){
     const url = `${API_URL}/likes`;
     console.log(JSON.stringify({idUser: idUser, idPost: idPost}));
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({idUser: idUser, idPost: idPost}),
       headers: {
       'Content-Type': 'application/json'
@@ -54,7 +59,7 @@ export default function HomeScreen({navigation}){
   function dislikePost(idUser, idPost, index){
     const url = `${API_URL}/likes`;
     fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       body: JSON.stringify({idUser: idUser, idPost: idPost}),
       headers: {
       'Content-Type': 'application/json'
@@ -118,20 +123,20 @@ export default function HomeScreen({navigation}){
                 onPress={()=>navigation.navigate('Profile', {username: post.username})}
               >
                 {post.userPhoto !== null &&
-                  <Image source={{ uri: post.userPhoto }} style={{ width: 40, height: 40, borderRadius: 50}} /> 
+                  <Image 
+                    source={{ uri: post.userPhoto }} 
+                    style={{ width: 40, height: 40, borderRadius: 50}} 
+                  /> 
                 }
                 {post.userPhoto === null &&
                   <MaterialIcons name="account-circle" color={'black'} size={40} />
                 }
-
-                
-
               </TouchableOpacity>
               
               <View>
                 <Text 
                   style={{fontWeight: '700', fontSize: 15}} 
-                  onPress={() => alert(`navigate to /${post.username}`)}>
+                  onPress={() => navigation.navigate('Profile', {username: post.username})}>
                   {post.username}
                 </Text>
                 <Text style={{fontWeight: '500', fontSize: 12, color: '#777'}}>{displayTime(post.uploadDate)}</Text>
@@ -139,10 +144,12 @@ export default function HomeScreen({navigation}){
             </View>
             <TouchableOpacity 
               activeOpacity={0.8}
-              style={{ marginRight: 15}} 
               onPress={() => alert(`navigate to /post/${post.id}`)}
             >
-              <Image source={{ uri: post.photo }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} />  
+              <Image 
+                source={{ uri: post.photo }} 
+                style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} 
+              />  
             </TouchableOpacity>
             
 
@@ -155,22 +162,25 @@ export default function HomeScreen({navigation}){
                 {post.liked === 1 &&
                   <MaterialCommunityIcons onPress={dislikePost.bind(this, store.getState().id, post.id, idx)} name="heart" color={'#E40000'} size={30}/>
                 }
-                {/* <Text style={{marginLeft: 5}}>Like</Text> */}
               </View>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <MaterialCommunityIcons onPress={() => alert('Comment')} name="comment-outline" color={'black'} size={30}/>
-                {/* <Text style={{marginLeft: 5}}>Comment</Text> */}
               </View>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                  <MaterialIcons onPress={() => alert('Share')} name="share" color={'black'} size={30}/>
-                {/* <Text style={{marginLeft: 5}}>Share</Text> */}
               </View>
               
              
             </View>
             <Text style={{marginHorizontal: 15, fontWeight: '700', fontSize: 13}}>{post.likes} likes</Text>
             <Text style={{marginHorizontal: 15, fontSize: 13}}>
-              <Text style={{fontWeight: '700'}} onPress={() => alert(`navigate to /${post.username}`)}>{post.username} </Text>
+              <Text 
+                style={{fontWeight: '700'}} 
+                onPress={() => alert(`navigate to /${post.username}`)}
+              >
+                {post.username} 
+              </Text>
+              
               {post.description.split(' ').map((word, index) => {
                 if(word.charAt(0) === '#')
                   return <Text key={index} onPress={() => alert(`Navigate to ${word} tag`)} style={{color: '#1F72FF'}}>{word} </Text>

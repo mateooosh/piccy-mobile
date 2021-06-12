@@ -17,7 +17,6 @@ export default function AccountScreen({route, navigation}){
   useEffect(() => {
     //if this is my account
     if(route.params.username === store.getState().username){
-      alert('ta')
       navigation.navigate('account')
       return;
     }
@@ -46,7 +45,11 @@ export default function AccountScreen({route, navigation}){
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       { profile.map((item) => 
-          <ScrollView key={item.id} style={{paddingTop: 10, width: '100%'}} contentContainerStyle={{alignItems: 'center'}}>
+          <ScrollView 
+            key={item.id} 
+            style={{paddingTop: 10, width: '100%'}} 
+            contentContainerStyle={{alignItems: 'center'}}
+          >
             { item.photo !== null &&
               <Image source={{ uri: item.photo }} style={{ width: 150, height: 150, borderRadius: 150, margin: 10}}/>
             }
@@ -77,7 +80,10 @@ export default function AccountScreen({route, navigation}){
               <Text style={{fontSize: 15, fontWeight: '700', fontSize: 16}}>{item.name}</Text>
               <Text style={{fontSize: 14}}>{item.description}</Text>
 
-              <TouchableOpacity onPress={() => alert('follow')} style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}>
+              <TouchableOpacity 
+                onPress={() => alert('follow')} 
+                style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
+              >
                 <Text style={{textAlign: 'center', color: 'white'}}>Follow</Text>
               </TouchableOpacity>
             </View>
@@ -91,15 +97,20 @@ export default function AccountScreen({route, navigation}){
               }
               <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start'}}>
                 { posts.map((post) => 
-                  <TouchableOpacity activeOpacity={0.8} key={post.id} onPress={() => alert(`go to /post/${post.id}`)}>
-                    <Image source={{ uri: post.photo }} style={{width: Dimensions.get('window').width/3-4, height: Dimensions.get('window').width/3-4, margin: 2}}/>
+                  <TouchableOpacity 
+                    activeOpacity={0.8} 
+                    key={post.id} 
+                    onPress={() => alert(`go to /post/${post.id}`)}
+                  >
+                    <Image 
+                      source={{ uri: post.photo }} 
+                      style={{width: Dimensions.get('window').width/3-4, height: Dimensions.get('window').width/3-4, margin: 2}}
+                    />
                   </TouchableOpacity>
                 )
                 }
               </View>
-              
             </View>
-            
           </ScrollView>
         )
       }

@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
+import { Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useStore, useSelector } from 'react-redux';
+import { useStore } from 'react-redux';
 
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
@@ -80,8 +80,7 @@ export default function AddScreen({ navigation }){
   }
 
   async function takePicture(){
-    console.log("photo")
-    // setPhoto(await camera.current.takePictureAsync({base64: true}));
+    console.log('photo')
     await camera.current.takePictureAsync({
       base64: true,
     }).then(data => {
@@ -106,7 +105,7 @@ export default function AddScreen({ navigation }){
     console.log(result);
 
     if (!result.cancelled) {
-      setPhoto("data:image/webp;base64,"+result.base64);
+      setPhoto(`data:image/webp;base64,${result.base64}`);
       setCameraVisible(false);
     }
   };
@@ -114,7 +113,7 @@ export default function AddScreen({ navigation }){
   
 
   async function createPost(){
-    const index = photo.indexOf(",");
+    const index = photo.indexOf(',');
     let base64 = photo.slice(index+1, (photo.length));
 
     let obj = {
@@ -126,7 +125,7 @@ export default function AddScreen({ navigation }){
 
     const url = `${API_URL}/posts`;
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(obj),
       headers: {
       'Content-Type': 'application/json'
@@ -137,14 +136,18 @@ export default function AddScreen({ navigation }){
       alert(response.message);
     })
     .catch(err => {
-      alert("Something went wrong!")
+      alert('Something went wrong!')
     })
   }
 
   return (
     <View style={{ flex: 1 }}>
       
-      <ScrollView keyboardShouldPersistTaps='handled' ref={scrollRef} contentContainerStyle={{width: '100%'}}>
+      <ScrollView 
+        keyboardShouldPersistTaps='handled' 
+        ref={scrollRef} 
+        contentContainerStyle={{width: '100%'}}
+      >
         {!cameraVisible &&
           <TouchableOpacity 
             onPress={() => {
@@ -175,7 +178,17 @@ export default function AddScreen({ navigation }){
         </TouchableOpacity>
         {loaded && cameraVisible && (
           <View style={{positon: 'relative', marginTop: 20}}>
-            <Camera whiteBalance="auto" autoFocus="on" ref={camera} style={{width: Dimensions.get('window').width, height:Dimensions.get('window').width}} type={type} ratio="1:1" flashMode={flash}></Camera>
+            <Camera 
+              whiteBalance="auto" 
+              autoFocus="on" 
+              ref={camera} 
+              style={{width: Dimensions.get('window').width, height:Dimensions.get('window').width}} 
+              type={type} 
+              ratio="1:1" 
+              flashMode={flash}
+            >
+            </Camera>
+
             <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems:'flex-end',width: '100%', position: 'absolute', bottom: 0}}>
               <TouchableOpacity
                 onPress={toggleType}
@@ -184,10 +197,13 @@ export default function AddScreen({ navigation }){
                   marginVertical: 10,
                   padding: 10,
                   borderRadius: 15,
-                  // backgroundColor: '#2196F3',
                 }}
               >
-                <MaterialIcons name="refresh" color={'white'} size={40}/>
+                <MaterialIcons 
+                  name="refresh" 
+                  color={'white'} 
+                  size={40}
+                />
               </TouchableOpacity>
 
 
@@ -230,11 +246,12 @@ export default function AddScreen({ navigation }){
           </View>
         )} 
 
-        {/* <Divider style={{marginVertical: 20}}/> */}
         {photo && 
           <View>
-            {/* <Text>Your photo:</Text> */}
-            <Image source={{ uri: photo }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginVertical: 20}} />
+            <Image 
+              source={{ uri: photo }} 
+              style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginVertical: 20}} 
+            />
             <Text style={{fontWeight: '700',fontSize: 16, marginHorizontal: '5%'}}>Caption</Text>
             <TextInput
               style={{backgroundColor: '#ddd', marginHorizontal: '5%', paddingVertical: 5, marginBottom: 20, marginTop: 10, paddingHorizontal: 15, paddingVertical: 10, borderRadius: 10, textAlignVertical: 'top'}}
@@ -249,11 +266,7 @@ export default function AddScreen({ navigation }){
             />   
             <Text>{description}</Text>
             <TouchableOpacity 
-              onPress={
-                // setCameraVisible(true);
-                // setPhoto(null);
-                createPost
-              }
+              onPress={createPost}
               style={{
                 marginHorizontal: 20,
                 marginBottom: 20,

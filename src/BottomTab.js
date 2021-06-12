@@ -2,16 +2,16 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
+import {API_URL, API_URL_WS} from '@env';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const TopTab = createMaterialTopTabNavigator();
 import { useStore, useSelector } from 'react-redux'
+import { io } from "socket.io-client";
 
-
-// notifications
+// // notifications
 // import * as Notifications from 'expo-notifications';
 // import Constants from 'expo-constants';
 // Notifications.setNotificationHandler({
@@ -23,20 +23,21 @@ import { useStore, useSelector } from 'react-redux'
 // });
 
 //import screens
-import AddScreen from './AddScreen.js';
-import HomeScreen from './HomeScreen.js';
-import AccountScreen from './AccountScreen.js';
+import AddScreen from './screens/AddScreen.js';
+import HomeScreen from './screens/HomeScreen.js';
+import AccountScreen from './screens/AccountScreen.js';
 
-import { io } from "socket.io-client";
+
+
 
 // async function schedulePushNotification() {
 //   await Notifications.scheduleNotificationAsync({
 //     content: {
-//       title: "You've got mail! 📬",
-//       body: 'Here is the notification body',
+//       title: "You've got a message",
+//       body: 'Server sent a message to you after 5 seconds',
 //       data: { data: 'goes here' },
 //     },
-//     trigger: { seconds: 2 },
+//     trigger: { seconds: 10 },
 //   });
 // }
 
@@ -77,11 +78,13 @@ export default function BottomTab(){
   // const notificationListener = useRef();
   // const responseListener = useRef();
 
-  
-
   // useEffect(() => {
-
-
+  //   const socket = io(API_URL_WS, { transports : ['websocket']});
+  //   socket.on('notification', async (data) => {
+  //     console.log('not',data);
+  //     await schedulePushNotification();
+      
+  //   })
 
   //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
@@ -93,10 +96,10 @@ export default function BottomTab(){
   //     console.log(response);
   //   });
 
-  //   async () => {
-  //     await schedulePushNotification();
-  //   }
-
+  //   // setTimeout(async () => {
+  //   //   await schedulePushNotification();
+  //   // }, 2000);
+ 
   //   return () => {
   //     Notifications.removeNotificationSubscription(notificationListener.current);
   //     Notifications.removeNotificationSubscription(responseListener.current);
@@ -177,23 +180,23 @@ function SearchScreen(){
 
   return (
     <View style={{ flex: 1, justifyContent:'space-between' }}>
-        <View style={{marginHorizontal: 20, marginTop: 20, marginBottom: 10}}>
-          <TextInput 
-            onChangeText={(str) => setQuery(str)} 
-            style={{backgroundColor: '#ddd', paddingHorizontal: 20, borderRadius: 15, fontSize: 16, height: 46}}
-            placeholder="Type here..." 
-            value={query}
-          />
-          {getIcon()}
-        </View>
-        <TopTab.Navigator tabBarOptions={{
-            activeTintColor:'#2196F3',
-            inactiveTintColor: 'black',
-            style: { backgroundColor: '#f2f2f2' },
-          }}>
-          <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query}/>}/>
-          <TopTab.Screen name="tags" children={()=><SearchTags query={query}/>}/>
-        </TopTab.Navigator>
+      <View style={{marginHorizontal: 20, marginTop: 20, marginBottom: 10}}>
+        <TextInput 
+          onChangeText={(str) => setQuery(str)} 
+          style={{backgroundColor: '#ddd', paddingHorizontal: 20, borderRadius: 15, fontSize: 16, height: 46}}
+          placeholder="Type here..." 
+          value={query}
+        />
+        {getIcon()}
+      </View>
+      <TopTab.Navigator tabBarOptions={{
+          activeTintColor:'#2196F3',
+          inactiveTintColor: 'black',
+          style: { backgroundColor: '#f2f2f2' },
+        }}>
+        <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query}/>}/>
+        <TopTab.Screen name="tags" children={()=><SearchTags query={query}/>}/>
+      </TopTab.Navigator>
       
     </View>
   )
@@ -203,9 +206,9 @@ function SearchScreen(){
 
 function MessagesScreen(){
   useEffect(() => {
-    const socket = io("ws://10.10.0.156:3000", { transports : ['websocket']});
+    // const socket = io(API_URL_WS, { transports : ['websocket']});
 
-    socket.emit("new user", `User${Math.floor(Math.random() * 1000000)}`);
+    // socket.emit("new user", `User${Math.floor(Math.random() * 1000000)}`);
   }, [])
 
 

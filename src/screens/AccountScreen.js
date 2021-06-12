@@ -1,9 +1,9 @@
 
-import React, {useState, useEffect, useRef} from 'react';
-import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { Text, View, TouchableOpacity, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { useStore, useSelector } from 'react-redux'
+import { useStore } from 'react-redux'
 import {API_URL} from '@env';
 
 export default function AccountScreen(){
@@ -37,14 +37,25 @@ export default function AccountScreen(){
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       { profile.map((item) => 
-          <ScrollView key={item.id} style={{paddingTop: 10, width: '100%'}} contentContainerStyle={{alignItems: 'center'}}>
+          <ScrollView 
+            key={item.id} 
+            style={{paddingTop: 10, width: '100%'}} 
+            contentContainerStyle={{alignItems: 'center'}}
+          >
             { item.photo !== null &&
-              <Image source={{ uri: item.photo }} style={{ width: 150, height: 150, borderRadius: 150, margin: 10}}/>
+              <Image 
+                source={{ uri: item.photo }} 
+                style={{ width: 150, height: 150, borderRadius: 150, margin: 10}}
+              />
             }
             { item.photo === null &&
-              <MaterialIcons name="account-circle" color={'black'} size={150} style={{margin: 10}}/>
+              <MaterialIcons 
+                name="account-circle" 
+                color={'black'} 
+                size={150} 
+                style={{margin: 10}}
+              />
             }
-            
             
             <Text style={{fontWeight: '700', fontSize: 16}}>{item.username}</Text>
             
@@ -68,7 +79,10 @@ export default function AccountScreen(){
               <Text style={{fontSize: 15, fontWeight: '700', fontSize: 16}}>{item.name}</Text>
               <Text style={{fontSize: 14}}>{item.description}</Text>
 
-              <TouchableOpacity onPress={() => alert('edit profile')} style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}>
+              <TouchableOpacity 
+                onPress={() => alert('edit profile')} 
+                style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
+              >
                 <Text style={{textAlign: 'center', color: 'white'}}>Edit Profile</Text>
               </TouchableOpacity>
             </View>
@@ -78,19 +92,28 @@ export default function AccountScreen(){
             <View style={{width: '100%'}}>
               <Text style={{fontSize: 22, fontWeight: '700', textAlign: 'left', paddingLeft: 20, marginBottom: 10}}>Posts</Text>
               {posts.length < 1 &&
-                <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
+                <ActivityIndicator 
+                  size={60} 
+                  color="#2196F3" 
+                  style={{marginVertical: 40}}
+                />
               }
               <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start'}}>
                 { posts.map((post) => 
-                  <TouchableOpacity activeOpacity={0.8} key={post.id} onPress={() => alert(`go to /post/${post.id}`)}>
-                    <Image source={{ uri: post.photo }} style={{width: Dimensions.get('window').width/3-4, height: Dimensions.get('window').width/3-4, margin: 2}}/>
+                  <TouchableOpacity 
+                    activeOpacity={0.8} 
+                    key={post.id} 
+                    onPress={() => alert(`go to /post/${post.id}`)}
+                  >
+                    <Image 
+                      source={{ uri: post.photo }} 
+                      style={{width: Dimensions.get('window').width/3-4, height: Dimensions.get('window').width/3-4, margin: 2}}
+                    />
                   </TouchableOpacity>
                 )
                 }
               </View>
-              
             </View>
-            
           </ScrollView>
         )
       }

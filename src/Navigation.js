@@ -7,9 +7,9 @@ import { createStackNavigator,  } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import SettingsScreen from './SettingsScreen.js';
+import SettingsScreen from './screens/SettingsScreen.js';
 import BottomTab from './BottomTab.js';
-import ProfileScreen from './ProfileScreen.js';
+import ProfileScreen from './screens/ProfileScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -26,11 +26,11 @@ function getHeaderTitle(route) {
     case 'search':
       return 'Search'
     case 'add':
-        return 'New post'
+      return 'New Post'
     case 'messages':
-      return 'My messages';
+      return 'My Messages';
     case 'account':
-      return 'My account';
+      return 'My Account';
   }
 }
 

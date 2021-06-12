@@ -15,7 +15,7 @@ export default function AddScreen({ navigation }){
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   const [loaded, setLoaded] = useState(true);
-  const [cameraVisible, setCameraVisible] = useState(false);
+  const [cameraVisible, setCameraVisible] = useState(true);
   const [flash, setFlash] = useState('off');
 
   const [description, setDescription] = useState('');
@@ -37,7 +37,7 @@ export default function AddScreen({ navigation }){
   useEffect(() => 
     navigation.addListener('blur', () => {
       setLoaded(false)
-      setCameraVisible(false);
+      setCameraVisible(true);
       setPhoto(null);
       return function cleanupListener() {
         window.removeEventListener('blur');
@@ -157,8 +157,8 @@ export default function AddScreen({ navigation }){
             style={{
               marginHorizontal: 20,
               marginTop: 20,
-              padding: 15,
-              borderRadius: 15,
+              padding: 10,
+              borderRadius: 6,
               backgroundColor: '#2196F3',
             }}
           >
@@ -170,8 +170,8 @@ export default function AddScreen({ navigation }){
           style={{
             marginTop: 20,
             marginHorizontal: 20,
-            padding: 15,
-            borderRadius: 15,
+            padding: 10,
+            borderRadius: 6,
             backgroundColor: '#2196F3',
           }}>
           <Text style={{color: 'white', textAlign: 'center'}}>Pick an image from your gallery</Text>
@@ -270,8 +270,8 @@ export default function AddScreen({ navigation }){
               style={{
                 marginHorizontal: 20,
                 marginBottom: 20,
-                padding: 15,
-                borderRadius: 15,
+                padding: 10,
+                borderRadius: 6,
                 backgroundColor: '#2196F3',
               }}
             >

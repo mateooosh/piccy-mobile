@@ -8,7 +8,7 @@ import { useStore, useSelector } from 'react-redux'
 
 export default function AccountScreen({route, navigation}){
   const store = useStore();
-  useState(()=>{
+  useEffect(()=>{
     console.log(route.params.username)
   }, [])
   const [profile, setProfile] = useState([]);
@@ -48,6 +48,7 @@ export default function AccountScreen({route, navigation}){
 
     let deepCopy = JSON.parse(JSON.stringify(profile));
     deepCopy[0].amIFollowing = 1;
+    deepCopy[0].followers++;
     setProfile(deepCopy);
 
     const url = `${API_URL}/users/${idUser}/follow/${idFollower}`;
@@ -69,6 +70,7 @@ export default function AccountScreen({route, navigation}){
   function unfollow(idUser, idFollower){
       let deepCopy = JSON.parse(JSON.stringify(profile));
       deepCopy[0].amIFollowing = 0;
+      deepCopy[0].followers--;
       setProfile(deepCopy);
 
       const url = `${API_URL}/users/${idUser}/follow/${idFollower}`;
@@ -123,22 +125,30 @@ export default function AccountScreen({route, navigation}){
               <Text style={{fontSize: 15, fontWeight: '700', fontSize: 16}}>{item.name}</Text>
               <Text style={{fontSize: 14}}>{item.description}</Text>
 
-              { item.amIFollowing === 0 && 
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                { item.amIFollowing === 0 && 
+                  <TouchableOpacity 
+                    onPress={follow.bind(this, store.getState().id, item.id)} 
+                    style={{paddingVertical: 6, width: '48%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
+                  >
+                    <Text style={{textAlign: 'center', color: 'white', fontWeight: '700'}}>Follow</Text>
+                  </TouchableOpacity>
+                }
+                { item.amIFollowing === 1 && 
+                  <TouchableOpacity 
+                    onPress={unfollow.bind(this, store.getState().id, item.id)} 
+                    style={{paddingVertical: 6, width: '48%', backgroundColor:'#ccc', borderRadius: 6, marginVertical: 20}}
+                  >
+                    <Text style={{textAlign: 'center', color: 'white', fontWeight: '700'}}>Following</Text>
+                  </TouchableOpacity>
+                }
                 <TouchableOpacity 
-                  onPress={follow.bind(this, store.getState().id, item.id)} 
-                  style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
+                  onPress={() => alert('send message')}
+                  style={{paddingVertical: 6, width: '48%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
                 >
-                  <Text style={{textAlign: 'center', color: 'white', fontWeight: '700'}}>Follow</Text>
+                  <Text style={{textAlign: 'center', color: 'white', fontWeight: '700'}}>Message</Text>
                 </TouchableOpacity>
-              }
-              { item.amIFollowing === 1 && 
-                <TouchableOpacity 
-                  onPress={unfollow.bind(this, store.getState().id, item.id)} 
-                  style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#ccc', borderRadius: 6, marginVertical: 20}}
-                >
-                  <Text style={{textAlign: 'center', color: 'white', fontWeight: '700'}}>Following</Text>
-                </TouchableOpacity>
-              }
+              </View>
             </View>
 
             
@@ -153,7 +163,7 @@ export default function AccountScreen({route, navigation}){
                   <TouchableOpacity 
                     activeOpacity={0.8} 
                     key={post.id} 
-                    onPress={() => alert(`go to /post/${post.id}`)}
+                    onPress={() => navigation.navigate('Post', {id: post.id})}
                   >
                     <Image 
                       source={{ uri: post.photo }} 

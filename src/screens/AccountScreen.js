@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useStore } from 'react-redux'
 import {API_URL} from '@env';
 
-export default function AccountScreen(){
+export default function AccountScreen({navigation}){
   const store = useStore();
 
   const [profile, setProfile] = useState([]);
@@ -103,7 +103,7 @@ export default function AccountScreen(){
                   <TouchableOpacity 
                     activeOpacity={0.8} 
                     key={post.id} 
-                    onPress={() => alert(`go to /post/${post.id}`)}
+                    onPress={() => navigation.navigate('Post', {id: post.id})}
                   >
                     <Image 
                       source={{ uri: post.photo }} 

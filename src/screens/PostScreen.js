@@ -1,47 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl } from 'react-native';
+
+import React, {useState, useEffect} from 'react';
+import { Text, View, TouchableOpacity, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useStore } from 'react-redux';
-import {API_URL, API_URL_WS} from '@env';
-import { io } from "socket.io-client";
+import { useStore } from 'react-redux'
+import {API_URL} from '@env';
 
-export default function HomeScreen({navigation}){
+export default function PostScreen({route, navigation}){
   const store = useStore();
-  
+
   const [posts, setPosts] = useState([]);
-  const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    getPosts();
-    // setTimeout(()=> {
-    //   setRefreshing(false);
-    // }, 2000)
-  }, []);
-
-  function getPosts(){
-    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false`;
+  useEffect(() => {
+    console.log(route.params.id);
+    const url = `${API_URL}/posts/${route.params.id}?idUser=${store.getState().id}`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
       console.log(response);
       setPosts(response);
       displayTime(response[0].uploadDate);
-      setRefreshing(false);
     })
     .catch(err => console.log(err));
-  }
-
-  useEffect(() => {
-    console.log('home mounted');
-
-    const socket = io(API_URL_WS, { transports : ['websocket']});
-
-    socket.emit('new user', store.getState().username);
-    
-    getPosts();
-    // setTimeout(() => getPosts(), 2000);
   }, [])
 
   function likePost(idUser, idPost, index){
@@ -115,17 +95,9 @@ export default function HomeScreen({navigation}){
   }
 
 
-
-
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ScrollView 
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }>
+      <ScrollView>
         {posts.length < 1 &&
           <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
         }
@@ -159,7 +131,7 @@ export default function HomeScreen({navigation}){
             </View>
             <TouchableOpacity 
               activeOpacity={0.8}
-              onPress={() => navigation.navigate('Post', {id: post.id})}
+              onPress={() => alert(`navigate to /post/${post.id}`)}
             >
               <Image 
                 source={{ uri: post.photo }} 
@@ -191,7 +163,7 @@ export default function HomeScreen({navigation}){
             <Text style={{marginHorizontal: 15, fontSize: 13}}>
               <Text 
                 style={{fontWeight: '700'}} 
-                onPress={() => navigation.navigate('Profile', {username: post.username})}
+                onPress={() => alert(`navigate to /${post.username}`)}
               >
                 {post.username + ' '} 
               </Text>

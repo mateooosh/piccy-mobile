@@ -10,6 +10,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SettingsScreen from './screens/SettingsScreen.js';
 import BottomTab from './BottomTab.js';
 import ProfileScreen from './screens/ProfileScreen.js';
+import PostScreen from './screens/PostScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,7 @@ export default function Navigation(){
     screens: {
       Settings: 'settings',
       Profile: ':username',
+      Post: 'post/:id',
       Home: '/',
     },
   };
@@ -61,7 +63,7 @@ export default function Navigation(){
                 options={({ route, navigation }) => ({
                   headerTitle: getHeaderTitle(route),
                   headerRight: () => (
-                    <MaterialIcons onPress={()=>navigation.navigate('Settings', {id: 2})} name="settings" color='black' size={30}/>
+                    <MaterialIcons onPress={()=>navigation.navigate('Settings')} name="settings" color='black' size={30}/>
                   ),
                   headerRightContainerStyle:{
                     paddingRight: 15
@@ -69,8 +71,8 @@ export default function Navigation(){
                 })}
               />
               <Stack.Screen name="Settings" component={SettingsScreen}/>
-              <Stack.Screen name="Profile" component={ProfileScreen} options={({route}) => ({headerTitle: route.params.username})}
-                />
+              <Stack.Screen name="Profile" component={ProfileScreen} options={({route}) => ({headerTitle: route.params.username})}/>
+              <Stack.Screen name="Post" component={PostScreen} options={() => ({headerTitle: 'Post'})}/>
             </>
           ) : (
             <>

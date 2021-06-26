@@ -26,6 +26,7 @@ import { io } from "socket.io-client";
 import AddScreen from './screens/AddScreen.js';
 import HomeScreen from './screens/HomeScreen.js';
 import AccountScreen from './screens/AccountScreen.js';
+import SearchScreen from './screens/SearchScreen.js';
 
 
 
@@ -111,7 +112,8 @@ export default function BottomTab(){
       tabBarOptions={{
         activeTintColor: '#2196F3',
         inactiveTintColor: 'black',
-        showLabel: false
+        showLabel: false,
+        keyboardHidesTabBar: true
       }}
     >
       <Tab.Screen 
@@ -168,39 +170,39 @@ export default function BottomTab(){
   )
 }
 
-function SearchScreen(){
-  const [query, setQuery] = useState('');
+// function SearchScreen(){
+//   const [query, setQuery] = useState('');
 
-  function getIcon(){
-    if(query.length > 0)
-      return <MaterialIcons onPress={() => setQuery('')} name="close" color={'black'} size={30} style={{position: 'absolute', right: 10, top:8}}/>;
-    else
-      return;
-  }
+//   function getIcon(){
+//     if(query.length > 0)
+//       return <MaterialIcons onPress={() => setQuery('')} name="close" color={'black'} size={30} style={{position: 'absolute', right: 10, top:8}}/>;
+//     else
+//       return;
+//   }
 
-  return (
-    <View style={{ flex: 1, justifyContent:'space-between' }}>
-      <View style={{marginHorizontal: 20, marginTop: 20, marginBottom: 10}}>
-        <TextInput 
-          onChangeText={(str) => setQuery(str)} 
-          style={{backgroundColor: '#ddd', paddingHorizontal: 20, borderRadius: 15, fontSize: 16, height: 46}}
-          placeholder="Type here..." 
-          value={query}
-        />
-        {getIcon()}
-      </View>
-      <TopTab.Navigator tabBarOptions={{
-          activeTintColor:'#2196F3',
-          inactiveTintColor: 'black',
-          style: { backgroundColor: '#f2f2f2' },
-        }}>
-        <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query}/>}/>
-        <TopTab.Screen name="tags" children={()=><SearchTags query={query}/>}/>
-      </TopTab.Navigator>
+//   return (
+//     <View style={{ flex: 1, justifyContent:'space-between' }}>
+//       <View style={{marginHorizontal: 20, marginTop: 20, marginBottom: 10}}>
+//         <TextInput 
+//           onChangeText={(str) => setQuery(str)} 
+//           style={{backgroundColor: '#ddd', paddingHorizontal: 20, borderRadius: 15, fontSize: 16, height: 46}}
+//           placeholder="Type here..." 
+//           value={query}
+//         />
+//         {getIcon()}
+//       </View>
+//       <TopTab.Navigator tabBarOptions={{
+//           activeTintColor:'#2196F3',
+//           inactiveTintColor: 'black',
+//           style: { backgroundColor: '#f2f2f2' },
+//         }}>
+//         <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query}/>}/>
+//         <TopTab.Screen name="tags" children={()=><SearchTags query={query}/>}/>
+//       </TopTab.Navigator>
       
-    </View>
-  )
-}
+//     </View>
+//   )
+// }
 
 
 
@@ -230,20 +232,3 @@ function MessagesScreen(){
 
 
 
-function SearchAccounts(props){
-  return(
-    <ScrollView style={{padding: 20}}>
-      <Text>Accounts</Text>
-      <Text>{props.query}</Text>
-    </ScrollView>
-  )
-}
-
-function SearchTags(props){
-  return(
-    <ScrollView style={{padding: 20}}>
-       <Text>Tags</Text>
-       <Text>{props.query}</Text>
-    </ScrollView>
-  )
-}

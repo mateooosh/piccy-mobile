@@ -36,7 +36,7 @@ export default function SearchScreen({navigation}){
           inactiveTintColor: 'black',
           style: { backgroundColor: '#f2f2f2' },
         }}>
-        <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query} />}/>
+        <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query} navigation={navigation}/>}/>
         <TopTab.Screen name="tags" children={()=><SearchTags query={query}/>}/>
       </TopTab.Navigator>
       
@@ -51,8 +51,8 @@ function SearchAccounts(props){
 
   useEffect(() => {
     clearTimeout(time);
-    setTime(setTimeout(getAccounts, 0));
-    // setTime(setTimeout(getAccounts, 500));
+    // setTime(setTimeout(getAccounts, 0));
+    setTime(setTimeout(getAccounts, 250));
     return () => clearTimeout(time);
   }, [props])
 
@@ -71,11 +71,11 @@ function SearchAccounts(props){
   return(
     <ScrollView style={{padding: 20}}>
       { result.map((item, idx) => 
-        <View key={idx} style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5, marginHorizontal: 15}}>
+        <View key={idx} style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 10, marginHorizontal: 15}}>
           <TouchableOpacity 
             activeOpacity={0.8}
             style={{ marginRight: 15}} 
-            // onPress={()=>navigation.navigate('Profile', {username: item.username})}
+            onPress={()=>props.navigation.navigate('Profile', {username: item.username})}
           >
             {item.photo !== null &&
               <Image 
@@ -91,7 +91,7 @@ function SearchAccounts(props){
           <View>
             <Text 
               style={{fontWeight: '700', fontSize: 15}} 
-              // onPress={() => navigation.navigate('Profile', {username: item.username})}
+              onPress={()=>props.navigation.navigate('Profile', {username: item.username})}
             >
               {item.username}
             </Text>
@@ -99,7 +99,6 @@ function SearchAccounts(props){
               {item.name}
             </Text>
           </View>
-
         </View>
       )}
     </ScrollView>

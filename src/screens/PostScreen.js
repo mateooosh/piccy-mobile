@@ -96,7 +96,7 @@ export default function PostScreen({route, navigation}){
 
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
       <ScrollView>
         {posts.length < 1 &&
           <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
@@ -129,15 +129,10 @@ export default function PostScreen({route, navigation}){
                 <Text style={{fontWeight: '500', fontSize: 12, color: '#777'}}>{displayTime(post.uploadDate)}</Text>
               </View>
             </View>
-            <TouchableOpacity 
-              activeOpacity={0.8}
-              onPress={() => alert(`navigate to /post/${post.id}`)}
-            >
-              <Image 
-                source={{ uri: post.photo }} 
-                style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} 
-              />  
-            </TouchableOpacity>
+            <Image 
+              source={{ uri: post.photo }} 
+              style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} 
+            />  
             
 
             <View style={{flexDirection:'row',  marginVertical: 10, justifyContent: 'space-around'}}>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl } from 'react-native';
+import { Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl, ToastAndroid } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useStore } from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
 import { io } from "socket.io-client";
+
 
 export default function HomeScreen({navigation}){
   const store = useStore();
@@ -21,7 +22,7 @@ export default function HomeScreen({navigation}){
   }, []);
 
   function getPosts(){
-    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false`;
+    const url = `${API_URL}:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
@@ -29,6 +30,20 @@ export default function HomeScreen({navigation}){
       setPosts(response);
       displayTime(response[0].uploadDate);
       setRefreshing(false);
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Refreshed',
+      //   ToastAndroid.LONG,
+      //   ToastAndroid.TOP,
+      //   0,
+      //   15
+      // );
+      ToastAndroid.showWithGravityAndOffset(
+        'Refreshed',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
     })
     .catch(err => console.log(err));
   }
@@ -41,7 +56,6 @@ export default function HomeScreen({navigation}){
     socket.emit('new user', store.getState().username);
     
     getPosts();
-    // setTimeout(() => getPosts(), 2000);
   }, [])
 
   function likePost(idUser, idPost, index){
@@ -130,8 +144,8 @@ export default function HomeScreen({navigation}){
           <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
         }
         {posts.map((post, idx) => 
-          <View key={post.id} style={{marginBottom: 20}}>
-            <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 12, marginHorizontal: 15}}>
+          <View key={post.id} style={{marginBottom: 10, backgroundColor: 'white', paddingVertical: 12}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 12 , marginHorizontal: 15}}>
               <TouchableOpacity 
                 activeOpacity={0.8}
                 style={{ marginRight: 15}} 

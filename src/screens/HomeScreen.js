@@ -22,7 +22,7 @@ export default function HomeScreen({navigation}){
   }, []);
 
   function getPosts(){
-    const url = `${API_URL}:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false`;
+    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false`;
     fetch(url)
     .then(response => response.json())
     .then(response => {

@@ -51,12 +51,12 @@ function SearchAccounts(props){
 
   useEffect(() => {
     clearTimeout(time);
-    // setTime(setTimeout(getAccounts, 0));
     setTime(setTimeout(getAccounts, 250));
     return () => clearTimeout(time);
   }, [props])
 
   function getAccounts(){
+    // console.log(API_URL)
     const url = `${API_URL}/users/${props.query}`;
     fetch(url)
     .then(response => response.json())
@@ -69,7 +69,7 @@ function SearchAccounts(props){
 
 
   return(
-    <ScrollView style={{padding: 20}}>
+    <ScrollView style={{paddingHorizontal: 10, paddingVertical: 20}}>
       { result.map((item, idx) => 
         <View key={idx} style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 10, marginHorizontal: 15}}>
           <TouchableOpacity 
@@ -88,7 +88,7 @@ function SearchAccounts(props){
             }
           </TouchableOpacity>
 
-          <View>
+          <View style={{flexGrow: 1}}>
             <Text 
               style={{fontWeight: '700', fontSize: 15}} 
               onPress={()=>props.navigation.navigate('Profile', {username: item.username})}
@@ -99,6 +99,16 @@ function SearchAccounts(props){
               {item.name}
             </Text>
           </View>
+
+          <View>
+            <Text style={{fontWeight: '700', fontSize: 15, textAlign: 'center'}}>
+              {item.followers}
+            </Text>
+            <Text style={{color: '#555'}}>
+              Followers
+            </Text>
+          </View>
+
         </View>
       )}
     </ScrollView>

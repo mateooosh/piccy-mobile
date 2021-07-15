@@ -13,18 +13,19 @@ export default function AccountScreen({navigation}){
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
+    console.log(API_URL)
     const url = `${API_URL}/users?idUser=${store.getState().id}`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
-      // console.log(response);
+      console.log(response);
       setProfile(response);
 
 
       fetch(`${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=true`)
       .then(response => response.json())
       .then(response => {
-        // console.log(response);
+        console.log(response);
         setPosts(response);
         
       })

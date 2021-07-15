@@ -17,29 +17,31 @@ export default function AccountScreen({route, navigation}){
   useEffect(() => {
     //if this is my account
     if(route.params.username === store.getState().username){
-      navigation.navigate('account')
+      navigation.navigate('account');
       return;
     }
-
-    // get information about profile
-    const url = `${API_URL}/users?username=${route.params.username}&myIdUser=${store.getState().id}`;
-    fetch(url)
-    .then(response => response.json())
-    .then(response => {
-      console.log(response);
-      setProfile(response);
-
-      // get user's posts
-      fetch(`${API_URL}/posts?username=${route.params.username}&onlyUserPosts=true`)
+    else {
+      // get information about profile
+      const url = `${API_URL}/users?username=${route.params.username}&myIdUser=${store.getState().id}`;
+      fetch(url)
       .then(response => response.json())
       .then(response => {
         console.log(response);
-        setPosts(response);
-        
+        setProfile(response);
+
+        // get user's posts
+        fetch(`${API_URL}/posts?username=${route.params.username}&onlyUserPosts=true`)
+        .then(response => response.json())
+        .then(response => {
+          console.log(response);
+          setPosts(response);
+          
+        })
+        .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));
+    }
+    
   }, [])
 
   //follow user

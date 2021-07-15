@@ -9,7 +9,8 @@ import {API_URL} from '@env';
 export default function PostScreen({route, navigation}){
   const store = useStore();
 
-  const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState([]);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     console.log(route.params.id);
@@ -18,8 +19,17 @@ export default function PostScreen({route, navigation}){
     .then(response => response.json())
     .then(response => {
       console.log(response);
-      setPosts(response);
+      setPost(response);
       displayTime(response[0].uploadDate);
+
+      const urlComments = `${API_URL}/comments/${route.params.id}`;
+      fetch(urlComments)
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        setComments(response);
+      })
+      .catch(err => console.log(err))
     })
     .catch(err => console.log(err));
   }, [])
@@ -59,7 +69,7 @@ export default function PostScreen({route, navigation}){
       let deepCopy = JSON.parse(JSON.stringify(posts));
       deepCopy[index].likes--;
       deepCopy[index].liked = 0;
-      setPosts(deepCopy);
+      setPost(deepCopy);
     })
     .catch(err => console.log(err))
   }
@@ -71,6 +81,8 @@ export default function PostScreen({route, navigation}){
     const minute = 1000*60;
     const hour = 1000*60*60;
     const day = 1000*60*60*24;
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     if(diff < minute)
       return 'Now';
@@ -84,12 +96,10 @@ export default function PostScreen({route, navigation}){
       return (Math.floor(diff/day) === 1) ? Math.floor(diff/day) + ' day ago' : Math.floor(diff/day) + ' days ago';
     }
     else if (diff >= 7 * day && diff < 365.25 * day){
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       return new Date(date).getDate() + ' ' + monthNames[new Date(date).getMonth()];
     }
 
     else if (diff >= day * 365.25){
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       return new Date(date).getDate() + ' ' + monthNames[new Date(date).getMonth()] + ' ' + new Date(date).getFullYear();
     }
   }
@@ -97,12 +107,12 @@ export default function PostScreen({route, navigation}){
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-      <ScrollView>
-        {posts.length < 1 &&
+      <ScrollView style={{paddingBottom: 10}}>
+        {post.length < 1 &&
           <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
         }
-        {posts.map((post, idx) => 
-          <View key={post.id} style={{marginBottom: 20}}>
+        {post.map((post, idx) => 
+          <View key={post.id}>
             <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 12, marginHorizontal: 15}}>
               <TouchableOpacity 
                 activeOpacity={0.8}
@@ -157,10 +167,10 @@ export default function PostScreen({route, navigation}){
             <Text style={{marginHorizontal: 15, fontWeight: '700', fontSize: 13}}>{post.likes} likes</Text>
             <Text style={{marginHorizontal: 15, fontSize: 13}}>
               <Text 
-                style={{fontWeight: '700'}} 
+                style={{fontWeight: '700', marginRight: 5}} 
                 onPress={() => alert(`navigate to /${post.username}`)}
               >
-                {post.username + ' '} 
+                {post.username} 
               </Text>
               
               {post.description.split(' ').map((word, index) => {
@@ -173,6 +183,20 @@ export default function PostScreen({route, navigation}){
           </View>
           )  
         }
+
+        <Text style={{color: '#555', marginHorizontal: 15, marginTop: 10}}>Comments</Text>
+
+        {comments.map((comment, idx) =>
+          <View key={idx} style={{marginHorizontal: 15, marginVertical: 2, display: 'block'}}>
+            <Text 
+              style={{fontWeight: '700', fontSize: 13, marginRight: 5}} 
+              onPress={() => alert(`navigate to /${comment.username}`)}
+            >
+              {comment.username}
+            </Text>
+            <Text style={{fontSize: 13}}>{comment.content}</Text>
+          </View>
+        )} 
       </ScrollView>
     </View>
   )

@@ -82,7 +82,7 @@ export default function Register({ navigation }) {
         
         <View style={{marginTop: 40}}>
           <Divider style={{ backgroundColor: 'black'}} />
-          <Text style={{textAlign:'center', marginVertical: 20}}>Already a Piccy member? <Text onPress={()=>navigation.navigate('Home')} style={{color: '#2196F3', fontWeight:'700'}}>Log in here</Text></Text>
+          <Text style={{textAlign:'center', marginVertical: 20}}>Already a Piccy member? <Text onPress={()=>navigation.push('Home')} style={{color: '#2196F3', fontWeight:'700'}}>Log in here</Text></Text>
         </View>
         
       </ScrollView>

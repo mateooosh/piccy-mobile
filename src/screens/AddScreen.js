@@ -62,10 +62,29 @@ export default function AddScreen({ navigation }){
   
 
   function toggleType(){
-    if(type === Camera.Constants.Type.back)
-      setType(Camera.Constants.Type.front)
-    else if(type === Camera.Constants.Type.front)
-      setType(Camera.Constants.Type.back)
+    if(type === Camera.Constants.Type.back){
+      setType(Camera.Constants.Type.front);
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Changed to front camera',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
+       
+    }
+    else if(type === Camera.Constants.Type.front){
+      setType(Camera.Constants.Type.back);
+      ToastAndroid.showWithGravityAndOffset(
+        'Changed to back camera',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
+    }
+      
   }
 
   function setNextFlashMode(){
@@ -77,6 +96,14 @@ export default function AddScreen({ navigation }){
       setFlash('auto');
     else if(flash==='auto')
       setFlash('off');
+    
+    ToastAndroid.showWithGravityAndOffset(
+      `Flash: ${flash}`,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      0,
+      150
+    );
   }
 
   async function takePicture(){
@@ -88,6 +115,14 @@ export default function AddScreen({ navigation }){
         setPhoto(data.base64);
       else
         setPhoto("data:image/webp;base64,"+data.base64)
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Took picture',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
     });
     
     setCameraVisible(false);
@@ -107,6 +142,14 @@ export default function AddScreen({ navigation }){
     if (!result.cancelled) {
       setPhoto(`data:image/webp;base64,${result.base64}`);
       setCameraVisible(false);
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Picked image',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
     }
   };
 
@@ -134,6 +177,13 @@ export default function AddScreen({ navigation }){
     .then(response => response.json())
     .then(response => {
       alert(response.message);
+      ToastAndroid.showWithGravityAndOffset(
+        'Created new post',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
     })
     .catch(err => {
       alert('Something went wrong!')

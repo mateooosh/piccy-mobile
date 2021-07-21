@@ -75,7 +75,7 @@ function SearchAccounts(props){
           <TouchableOpacity 
             activeOpacity={0.8}
             style={{ marginRight: 15}} 
-            onPress={()=>props.navigation.navigate('Profile', {username: item.username})}
+            onPress={()=>props.navigation.push('Profile', {username: item.username})}
           >
             {item.photo !== null &&
               <Image 
@@ -91,7 +91,7 @@ function SearchAccounts(props){
           <View style={{flexGrow: 1}}>
             <Text 
               style={{fontWeight: '700', fontSize: 15}} 
-              onPress={()=>props.navigation.navigate('Profile', {username: item.username})}
+              onPress={()=>props.navigation.push('Profile', {username: item.username})}
             >
               {item.username}
             </Text>

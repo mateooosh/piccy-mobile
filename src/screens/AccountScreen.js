@@ -65,10 +65,13 @@ export default function AccountScreen({navigation}){
                 <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.postsAmount}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Posts</Text></View>
               </View>
-              <View style={{width: '33%'}}>
+              <TouchableOpacity 
+                style={{width: '33%'}}
+                onPress={() => navigation.push('Followers', {id: item.id})} 
+              >
                 <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.followers}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Followers</Text></View>
-              </View>
+              </TouchableOpacity>
               <View style={{width: '33%'}}>
                 <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.following}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Following</Text></View>
@@ -104,7 +107,7 @@ export default function AccountScreen({navigation}){
                   <TouchableOpacity 
                     activeOpacity={0.8} 
                     key={post.id} 
-                    onPress={() => navigation.navigate('Post', {id: post.id})}
+                    onPress={() => navigation.push('Post', {id: post.id})}
                   >
                     <Image 
                       source={{ uri: post.photo }} 

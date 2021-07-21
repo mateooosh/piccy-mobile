@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl, ToastAndroid } from 'react-native';
+import { Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl, ToastAndroid, StyleSheet } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useStore } from 'react-redux';
@@ -11,39 +11,56 @@ export default function HomeScreen({navigation}){
   const store = useStore();
   
   const [posts, setPosts] = useState([]);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [emptyPosts, setEmptyPosts] = useState(false);
+
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+    setPage(0);
+    setPosts([]);
+    setEmpyuPosts(false);
     getPosts();
+    ToastAndroid.showWithGravityAndOffset(
+      'Refreshed',
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      0,
+      150
+    );
     // setTimeout(()=> {
     //   setRefreshing(false);
     // }, 2000)
   }, []);
 
-  function getPosts(){
-    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false`;
+  function getPosts() {
+    let temp = page + 1;
+    setLoading(true);
+
+    const url = `http://localhost:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
       console.log(response);
-      setPosts(response);
-      displayTime(response[0].uploadDate);
-      setRefreshing(false);
-      // ToastAndroid.showWithGravityAndOffset(
-      //   'Refreshed',
-      //   ToastAndroid.LONG,
-      //   ToastAndroid.TOP,
-      //   0,
-      //   15
-      // );
-      ToastAndroid.showWithGravityAndOffset(
-        'Refreshed',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
+      setLoading(false);
+      //push new posts to array
+      response.map(item => setPosts(posts => [...posts, item]));
+      
+
+      if(!!response.length){
+        setPage(temp);
+      }
+      else{
+        setEmptyPosts(true);
+
+        ToastAndroid.showWithGravityAndOffset(
+          'No more posts',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+          0,
+          150
+        );
+      }
     })
     .catch(err => console.log(err));
   }
@@ -74,6 +91,14 @@ export default function HomeScreen({navigation}){
       deepCopy[index].likes++;
       deepCopy[index].liked = 1;
       setPosts(deepCopy);
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Liked',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
       // alert(response.message);
     })
     .catch(err => console.log(err))
@@ -94,6 +119,14 @@ export default function HomeScreen({navigation}){
       deepCopy[index].likes--;
       deepCopy[index].liked = 0;
       setPosts(deepCopy);
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Disliked',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
     })
     .catch(err => console.log(err))
   }
@@ -128,7 +161,7 @@ export default function HomeScreen({navigation}){
     }
   }
 
-
+  
 
 
   return (
@@ -136,7 +169,7 @@ export default function HomeScreen({navigation}){
       <ScrollView 
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={loading}
             onRefresh={onRefresh}
           />
         }>
@@ -201,7 +234,12 @@ export default function HomeScreen({navigation}){
               
              
             </View>
-            <Text style={{marginHorizontal: 15, fontWeight: '700', fontSize: 13}}>{post.likes} likes</Text>
+            
+            <View style={{flexDirection: 'row', marginBottom: 10}}>
+              <Text style={{marginHorizontal: 15, fontWeight: '700', fontSize: 13}}>{post.likes} likes</Text>
+              <Text style={{fontWeight: '700', fontSize: 13}}>{post.comments} comments</Text>
+            </View>
+
             <Text style={{marginHorizontal: 15, fontSize: 13}}>
               <Text 
                 style={{fontWeight: '700'}} 
@@ -212,7 +250,7 @@ export default function HomeScreen({navigation}){
               
               {post.description.split(' ').map((word, index) => {
                 if(word.charAt(0) === '#')
-                  return <Text key={index} onPress={() => alert(`Navigate to ${word} tag`)} style={{color: '#1F72FF'}}>{word} </Text>
+                  return <Text key={index} onPress={() => alert(`push to ${word} tag`)} style={{color: '#1F72FF'}}>{word} </Text>
                 else
                   return <Text key={index}>{word} </Text>
               })}
@@ -220,7 +258,29 @@ export default function HomeScreen({navigation}){
           </View>
           )  
         }
+
+        {!!posts.length && !emptyPosts &&
+          <TouchableOpacity onPress={getPosts} style={{marginHorizontal: 15, marginVertical: 10, padding: 10, borderRadius: 6, backgroundColor: '#2196F3', color: 'white'}}>
+            {!loading &&
+              <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>More</Text>
+            }
+            {loading &&
+              <ActivityIndicator size={19} color="white"/>
+            }
+          </TouchableOpacity>
+        }
+      
       </ScrollView>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    marginTop: 50,
+    padding: 10,
+    borderRadius: 6,
+    backgroundColor: '#2196F3',
+    color: 'white',
+  },
+});

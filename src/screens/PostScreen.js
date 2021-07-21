@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect} from 'react';
-import { Text, View, TouchableOpacity, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, ScrollView, Dimensions, Image, ActivityIndicator, ToastAndroid } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useStore } from 'react-redux'
@@ -50,6 +50,14 @@ export default function PostScreen({route, navigation}){
       deepCopy[index].likes++;
       deepCopy[index].liked = 1;
       setPosts(deepCopy);
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Liked',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
       // alert(response.message);
     })
     .catch(err => console.log(err))
@@ -70,6 +78,14 @@ export default function PostScreen({route, navigation}){
       deepCopy[index].likes--;
       deepCopy[index].liked = 0;
       setPost(deepCopy);
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Disliked',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        150
+      );
     })
     .catch(err => console.log(err))
   }
@@ -117,7 +133,7 @@ export default function PostScreen({route, navigation}){
               <TouchableOpacity 
                 activeOpacity={0.8}
                 style={{ marginRight: 15}} 
-                onPress={()=>navigation.navigate('Profile', {username: post.username})}
+                onPress={()=>navigation.push('Profile', {username: post.username})}
               >
                 {post.userPhoto !== null &&
                   <Image 
@@ -133,7 +149,7 @@ export default function PostScreen({route, navigation}){
               <View>
                 <Text 
                   style={{fontWeight: '700', fontSize: 15}} 
-                  onPress={() => navigation.navigate('Profile', {username: post.username})}>
+                  onPress={() => navigation.push('Profile', {username: post.username})}>
                   {post.username}
                 </Text>
                 <Text style={{fontWeight: '500', fontSize: 12, color: '#777'}}>{displayTime(post.uploadDate)}</Text>
@@ -142,7 +158,7 @@ export default function PostScreen({route, navigation}){
             <Image 
               source={{ uri: post.photo }} 
               style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} 
-            />  
+            />    
             
 
             <View style={{flexDirection:'row',  marginVertical: 10, justifyContent: 'space-around'}}>
@@ -164,18 +180,22 @@ export default function PostScreen({route, navigation}){
               
              
             </View>
-            <Text style={{marginHorizontal: 15, fontWeight: '700', fontSize: 13}}>{post.likes} likes</Text>
+            <View style={{flexDirection: 'row', marginBottom: 10}}>
+              <Text style={{marginHorizontal: 15, fontWeight: '700', fontSize: 13}}>{post.likes} likes</Text>
+              <Text style={{fontWeight: '700', fontSize: 13}}>{post.comments} comments</Text>
+            </View>
+
             <Text style={{marginHorizontal: 15, fontSize: 13}}>
               <Text 
                 style={{fontWeight: '700', marginRight: 5}} 
-                onPress={() => alert(`navigate to /${post.username}`)}
+                onPress={() => navigation.push('Profile', {username: post.username})}
               >
                 {post.username} 
               </Text>
               
               {post.description.split(' ').map((word, index) => {
                 if(word.charAt(0) === '#')
-                  return <Text key={index} onPress={() => alert(`Navigate to ${word} tag`)} style={{color: '#1F72FF'}}>{word} </Text>
+                  return <Text key={index} onPress={() => alert(`push to ${word} tag`)} style={{color: '#1F72FF'}}>{word} </Text>
                 else
                   return <Text key={index}>{word} </Text>
               })}
@@ -190,7 +210,7 @@ export default function PostScreen({route, navigation}){
           <View key={idx} style={{marginHorizontal: 15, marginVertical: 2, display: 'block'}}>
             <Text 
               style={{fontWeight: '700', fontSize: 13, marginRight: 5}} 
-              onPress={() => alert(`navigate to /${comment.username}`)}
+              onPress={() => navigation.push('Profile', {username: comment.username})}
             >
               {comment.username}
             </Text>

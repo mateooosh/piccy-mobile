@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useStore } from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
 import { io } from "socket.io-client";
+import Post from '../components/Post'
 
 
 export default function HomeScreen({navigation}){
@@ -177,85 +178,10 @@ export default function HomeScreen({navigation}){
           <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
         }
         {posts.map((post, idx) => 
-          <View key={post.id} style={{marginBottom: 10, backgroundColor: 'white', paddingVertical: 12}}>
-            <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 12 , marginHorizontal: 15}}>
-              <TouchableOpacity 
-                activeOpacity={0.8}
-                style={{ marginRight: 15}} 
-                onPress={()=>navigation.navigate('Profile', {username: post.username})}
-              >
-                {post.userPhoto !== null &&
-                  <Image 
-                    source={{ uri: post.userPhoto }} 
-                    style={{ width: 40, height: 40, borderRadius: 50}} 
-                  /> 
-                }
-                {post.userPhoto === null &&
-                  <MaterialIcons name="account-circle" color={'black'} size={40} />
-                }
-              </TouchableOpacity>
-              
-              <View>
-                <Text 
-                  style={{fontWeight: '700', fontSize: 15}} 
-                  onPress={() => navigation.navigate('Profile', {username: post.username})}>
-                  {post.username}
-                </Text>
-                <Text style={{fontWeight: '500', fontSize: 12, color: '#777'}}>{displayTime(post.uploadDate)}</Text>
-              </View>
-            </View>
-            <TouchableOpacity 
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('Post', {id: post.id})}
-            >
-              <Image 
-                source={{ uri: post.photo }} 
-                style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width}} 
-              />  
-            </TouchableOpacity>
-            
+          <Post post={post} idx={idx} key={idx} displayTime={displayTime} 
+                likePost={likePost} dislikePost={dislikePost} navigation={navigation}
 
-            <View style={{flexDirection:'row',  marginVertical: 10, justifyContent: 'space-around'}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {post.liked === 0 &&
-                  <MaterialCommunityIcons onPress={likePost.bind(this, store.getState().id, post.id, idx)} name="heart-outline" color={'black'} size={30}/>
-                }
-
-                {post.liked === 1 &&
-                  <MaterialCommunityIcons onPress={dislikePost.bind(this, store.getState().id, post.id, idx)} name="heart" color={'#E40000'} size={30}/>
-                }
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <MaterialCommunityIcons onPress={() => alert('Comment')} name="comment-outline" color={'black'} size={30}/>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                 <MaterialIcons onPress={() => alert('Share')} name="share" color={'black'} size={30}/>
-              </View>
-              
-             
-            </View>
-            
-            <View style={{flexDirection: 'row', marginBottom: 10}}>
-              <Text style={{marginHorizontal: 15, fontWeight: '700', fontSize: 13}}>{post.likes} likes</Text>
-              <Text style={{fontWeight: '700', fontSize: 13}}>{post.comments} comments</Text>
-            </View>
-
-            <Text style={{marginHorizontal: 15, fontSize: 13}}>
-              <Text 
-                style={{fontWeight: '700'}} 
-                onPress={() => navigation.navigate('Profile', {username: post.username})}
-              >
-                {post.username + ' '} 
-              </Text>
-              
-              {post.description.split(' ').map((word, index) => {
-                if(word.charAt(0) === '#')
-                  return <Text key={index} onPress={() => alert(`push to ${word} tag`)} style={{color: '#1F72FF'}}>{word} </Text>
-                else
-                  return <Text key={index}>{word} </Text>
-              })}
-            </Text>
-          </View>
+          />
           )  
         }
 
@@ -274,13 +200,3 @@ export default function HomeScreen({navigation}){
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  button: {
-    marginTop: 50,
-    padding: 10,
-    borderRadius: 6,
-    backgroundColor: '#2196F3',
-    color: 'white',
-  },
-});

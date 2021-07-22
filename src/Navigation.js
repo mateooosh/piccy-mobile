@@ -12,6 +12,7 @@ import BottomTab from './BottomTab.js';
 import ProfileScreen from './screens/ProfileScreen.js';
 import PostScreen from './screens/PostScreen.js';
 import FollowersScreen from './screens/FollowersScreen.js';
+import FollowingScreen from './screens/FollowingScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -73,9 +74,10 @@ export default function Navigation(){
                 })}
               />
               <Stack.Screen name="Settings" component={SettingsScreen}/>
-              <Stack.Screen name="Profile" component={ProfileScreen}s options={({route}) => ({headerTitle: route.params.username})}/>
+              <Stack.Screen name="Profile" component={ProfileScreen} options={({route}) => ({headerTitle: route.params.username})}/>
               <Stack.Screen name="Post" component={PostScreen} options={() => ({headerTitle: 'Post'})}/>
               <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: 'Followers'})}/>
+              <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: 'Following'})}/>
             </>
           ) : (
             <>

@@ -17,6 +17,7 @@ export default function AccountScreen({route, navigation}){
   useEffect(() => {
     //if this is my account
     if(route.params.username === store.getState().username){
+      console.log('teraz')
       navigation.navigate('account');
       return;
     }
@@ -119,10 +120,14 @@ export default function AccountScreen({route, navigation}){
                 <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.followers}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Followers</Text></View>
               </TouchableOpacity>
-              <View style={{width: '33%'}}>
+              
+               <TouchableOpacity 
+                style={{width: '33%'}}
+                onPress={() => navigation.push('Following', {id: item.id})}   
+              >
                 <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.following}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Following</Text></View>
-              </View>
+              </TouchableOpacity>
             </View>
 
 

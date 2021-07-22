@@ -8,7 +8,7 @@ export default function UserItem (props) {
       <TouchableOpacity 
         activeOpacity={0.8}
         style={{ marginRight: 15}} 
-        onPress={()=>navigation.push('Profile', {username: props.item.username})}
+        onPress={()=>props.navigation.push('Profile', {username: props.item.username})}
       >
         {props.item.userPhoto !== null &&
           <Image 

@@ -58,7 +58,7 @@ export default function Navigation(){
 
   return(
     <NavigationContainer linking={linking}>
-      <Stack.Navigator headerMode="screen" >
+      <Stack.Navigator headerMode="screen">
         {logged ? (
             <>
               <Stack.Screen 

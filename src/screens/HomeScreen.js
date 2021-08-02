@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl, ToastAndroid, StyleSheet } from 'react-native';
+import { Alert, Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl, ToastAndroid, StyleSheet } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useStore } from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
 import { io } from "socket.io-client";
 import Post from '../components/Post'
+
+import { NativeBaseProvider } from 'native-base';
+
+import fun from '../functions/functions.js'
+
+
+console.log(API_URL);
 
 
 export default function HomeScreen({navigation}){
@@ -20,7 +27,7 @@ export default function HomeScreen({navigation}){
   const onRefresh = React.useCallback(() => {
     setPage(0);
     setPosts([]);
-    setEmpyuPosts(false);
+    setEmptyPosts(false);
     getPosts();
     ToastAndroid.showWithGravityAndOffset(
       'Refreshed',
@@ -37,8 +44,8 @@ export default function HomeScreen({navigation}){
   function getPosts() {
     let temp = page + 1;
     setLoading(true);
-
-    const url = `http://localhost:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
+// http://localhost:3000/posts?idUser=39&onlyUserPosts=false&page=1
+    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
@@ -66,7 +73,19 @@ export default function HomeScreen({navigation}){
     .catch(err => console.log(err));
   }
 
+  function updatePosts (post) {
+    let deepCopy = JSON.parse(JSON.stringify(posts));
+    deepCopy.forEach((item) => {
+      if (item.id == post.id) {
+        item = post;
+      }
+    });
+    console.log(posts[0], deepCopy[0])
+    setPosts(deepCopy);
+  }
+
   useEffect(() => {
+
     console.log('home mounted');
 
     const socket = io(API_URL_WS, { transports : ['websocket']});
@@ -76,127 +95,59 @@ export default function HomeScreen({navigation}){
     getPosts();
   }, [])
 
-  function likePost(idUser, idPost, index){
-    const url = `${API_URL}/likes`;
-    console.log(JSON.stringify({idUser: idUser, idPost: idPost}));
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({idUser: idUser, idPost: idPost}),
-      headers: {
-      'Content-Type': 'application/json'
-      },
-    })
-    .then(response => response.json())
-    .then(response => {     
-      let deepCopy = JSON.parse(JSON.stringify(posts));
-      deepCopy[index].likes++;
-      deepCopy[index].liked = 1;
-      setPosts(deepCopy);
-
-      ToastAndroid.showWithGravityAndOffset(
-        'Liked',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
-      // alert(response.message);
-    })
-    .catch(err => console.log(err))
-  }
-
-  function dislikePost(idUser, idPost, index){
-    const url = `${API_URL}/likes`;
-    fetch(url, {
-      method: 'DELETE',
-      body: JSON.stringify({idUser: idUser, idPost: idPost}),
-      headers: {
-      'Content-Type': 'application/json'
-      },
-    })
-    .then(response => response.json())
-    .then(response => {     
-      let deepCopy = JSON.parse(JSON.stringify(posts));
-      deepCopy[index].likes--;
-      deepCopy[index].liked = 0;
-      setPosts(deepCopy);
-
-      ToastAndroid.showWithGravityAndOffset(
-        'Disliked',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
-    })
-    .catch(err => console.log(err))
-  }
-
-  function displayTime(date){
-    let now = new Date();
-    let diff = now - new Date(date);
-
-    const minute = 1000*60;
-    const hour = 1000*60*60;
-    const day = 1000*60*60*24;
-
-    if(diff < minute)
-      return 'Now';
-    else if (diff >= minute && diff < hour){
-      return (Math.floor(diff/minute) === 1) ? Math.floor(diff/minute) + ' minute ago' : Math.floor(diff/minute) + ' minutes ago';
-    }
-    else if (diff >= hour && diff < day){
-      return (Math.floor(diff/hour) === 1) ? Math.floor(diff/hour) + ' hour ago' : Math.floor(diff/hour) + ' hours ago';
-    }
-    else if (diff >= day && diff < 7 * day){
-      return (Math.floor(diff/day) === 1) ? Math.floor(diff/day) + ' day ago' : Math.floor(diff/day) + ' days ago';
-    }
-    else if (diff >= 7 * day && diff < 365.25 * day){
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      return new Date(date).getDate() + ' ' + monthNames[new Date(date).getMonth()];
-    }
-
-    else if (diff >= day * 365.25){
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      return new Date(date).getDate() + ' ' + monthNames[new Date(date).getMonth()] + ' ' + new Date(date).getFullYear();
-    }
-  }
-
-  
-
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ScrollView 
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={onRefresh}
-          />
-        }>
-        {posts.length < 1 &&
-          <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
-        }
-        {posts.map((post, idx) => 
-          <Post post={post} idx={idx} key={idx} displayTime={displayTime} 
-                likePost={likePost} dislikePost={dislikePost} navigation={navigation}
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+          }
+        >
+          {posts.length < 1 && (
+            <ActivityIndicator
+              size={60}
+              color="#2196F3"
+              style={{ marginVertical: 40 }}
+            />
+          )}
+          {posts.map((post, idx) => (
+            <Post
+              post={post}
+              idx={idx}
+              key={idx}
+              navigation={navigation}
+              displayComments={false}
+              updatePosts={updatePosts}
+            />
+          ))}
 
-          />
-          )  
-        }
-
-        {!!posts.length && !emptyPosts &&
-          <TouchableOpacity onPress={getPosts} style={{marginHorizontal: 15, marginVertical: 10, padding: 10, borderRadius: 6, backgroundColor: '#2196F3', color: 'white'}}>
-            {!loading &&
-              <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>More</Text>
-            }
-            {loading &&
-              <ActivityIndicator size={19} color="white"/>
-            }
-          </TouchableOpacity>
-        }
-      
-      </ScrollView>
-    </View>
-  )
+          {!!posts.length && !emptyPosts && (
+            <TouchableOpacity
+              onPress={getPosts}
+              style={{
+                marginHorizontal: 15,
+                marginVertical: 10,
+                padding: 10,
+                borderRadius: 6,
+                backgroundColor: "#2196F3",
+                color: "white",
+              }}
+            >
+              {!loading && (
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    fontWeight: "700",
+                  }}
+                >
+                  More
+                </Text>
+              )}
+              {loading && <ActivityIndicator size={19} color="white" />}
+            </TouchableOpacity>
+          )}
+        </ScrollView>
+      </View>
+  );
 }

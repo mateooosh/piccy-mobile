@@ -121,6 +121,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="home" color={color} size={30}/>
           ),
+          title: "Home"
         }} 
         name="Home" 
         component={HomeScreen}
@@ -131,6 +132,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="search" color={color} size={30}/>
           ),
+          title: "Search"
         }} 
         name="search" 
         component={SearchScreen}
@@ -141,6 +143,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="add-circle" color={color} size={30}/>
           ),
+          title: "Create post"
         }} 
         name="add" 
         component={AddScreen} 
@@ -151,10 +154,10 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="message" color={color} size={30}/>
           ),
+          title: "Messages"
         }} 
         name="messages" 
         component={MessagesScreen} 
-        
       />
 
       <Tab.Screen 
@@ -162,6 +165,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="account-circle" color={color} size={30}/>
           ),
+          title: "My account"
         }} 
         name="account" 
         component={AccountScreen} 

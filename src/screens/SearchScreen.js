@@ -34,10 +34,10 @@ export default function SearchScreen({navigation}){
       <TopTab.Navigator tabBarOptions={{
           activeTintColor:'#2196F3',
           inactiveTintColor: 'black',
-          style: { backgroundColor: '#f2f2f2' },
+          style: { backgroundColor: '#f2f2f2' }
         }}>
-        <TopTab.Screen name="accounts" children={()=><SearchAccounts query={query} navigation={navigation}/>}/>
-        <TopTab.Screen name="tags" children={()=><SearchTags query={query}/>}/>
+        <TopTab.Screen name="Accounts" children={()=><SearchAccounts query={query} navigation={navigation}/>}/>
+        <TopTab.Screen name="Tags" children={()=><SearchTags query={query}/>}/>
       </TopTab.Navigator>
       
     </View>

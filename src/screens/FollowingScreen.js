@@ -15,6 +15,8 @@ export default function FollowingScreen({route, navigation}){
   // const [posts, setPosts] = useState([]);
 
   const [following, setFollowing] = useState([]);
+  const [hasData, setHasData] = useState(false);
+
 
   useEffect(() => {
     // console.log(API_URL)
@@ -26,6 +28,7 @@ export default function FollowingScreen({route, navigation}){
     .then(response => {
       console.log(response);
       setFollowing(response);
+      setHasData(true);
     })
     .catch(err => console.log(err));
 
@@ -41,7 +44,7 @@ export default function FollowingScreen({route, navigation}){
         <UserItem item={item} key={idx} navigation={navigation}/>
       )}
 
-      { following.length === 0 &&
+      { hasData && following.length === 0 &&
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: '100%', paddingVertical: 10}}>
           <Text>NO ONE IS FOLLOWING BY THIS USER</Text>
         </View>

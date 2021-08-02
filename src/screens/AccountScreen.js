@@ -18,14 +18,14 @@ export default function AccountScreen({navigation}){
     fetch(url)
     .then(response => response.json())
     .then(response => {
-      console.log(response);
+      // console.log(response);
       setProfile(response);
 
 
       fetch(`${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=true`)
       .then(response => response.json())
       .then(response => {
-        console.log(response);
+        // console.log(response);
         setPosts(response);
         
       })

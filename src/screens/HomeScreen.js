@@ -12,12 +12,11 @@ import { NativeBaseProvider } from 'native-base';
 import fun from '../functions/functions.js'
 
 
-console.log(API_URL);
+console.log(API_URL, API_URL_WS);
 
 
 export default function HomeScreen({navigation}){
   const store = useStore();
-  
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -44,7 +43,7 @@ export default function HomeScreen({navigation}){
   function getPosts() {
     let temp = page + 1;
     setLoading(true);
-// http://localhost:3000/posts?idUser=39&onlyUserPosts=false&page=1
+    // http://localhost:3000/posts?idUser=39&onlyUserPosts=false&page=1
     const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
     fetch(url)
     .then(response => response.json())
@@ -91,7 +90,15 @@ export default function HomeScreen({navigation}){
     const socket = io(API_URL_WS, { transports : ['websocket']});
 
     socket.emit('new user', store.getState().username);
-    
+
+    // socket.on('test', (v) => {
+    //   console.log('test', v)
+    // })
+
+    socket.on('message', (v) => {
+      console.log('message', v)
+    })
+
     getPosts();
   }, [])
 

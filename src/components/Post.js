@@ -3,10 +3,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
   Dimensions,
   Image,
-  ActivityIndicator,
   ToastAndroid,
   TextInput
 } from "react-native";
@@ -17,6 +15,9 @@ import {
   useDisclose,
   AlertDialog
 } from "native-base";
+
+// import colors
+import colors from '../colors/colors'
 
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -31,13 +32,13 @@ const fun = require("../functions/functions");
 export default function Post(props) {
 
   const { isOpen, onOpen, onClose } = useDisclose();
-  const test = useDisclose();
 
   const [isOpenAlert, setIsOpenAlert] = React.useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
   const cancelRefAlert = React.useRef();
 
   const [post, setPost] = useState({});
+  const [photo, setPhoto] = useState('');
   const [comments, setComments] = useState([]);
   const [reason, setReason] = useState('');
 
@@ -46,9 +47,12 @@ export default function Post(props) {
   useEffect(() => {
     setPost(props.post);
 
+
+    getPhoto(props.post.id);
+
     if(props.displayComments) {
-      const url = `http://localhost:3000/comments/${props.post.id}`;
-      
+      const url = `${API_URL}/comments/${props.post.id}`;
+
       fetch(url)
         .then((response) => response.json())
         .then((response) => {
@@ -58,7 +62,11 @@ export default function Post(props) {
         .catch((err) => console.log(err));
     }
 
-  }, [props])
+    return function cleanup() {
+      console.log('destroy')
+    }
+
+  }, [])
 
   function likePost(idUser, idPost, index) {
     const url = `${API_URL}/likes`;
@@ -116,8 +124,20 @@ export default function Post(props) {
       .catch((err) => console.log(err));
   }
 
+  function getPhoto(id) {
+    const url = `${API_URL}/posts/${id}/photo`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(response => {
+        console.log('photo', response);
+        setPhoto(response.photo);
+      })
+      .catch(err => console.log(err))
+  }
+
   function reportPost() {
-    const url = `http://localhost:3000/reports`;
+    const url = `${API_URL}/reports`;
     const obj = {
       idPost: post.id,
       idReporter: store.getState().id,
@@ -137,8 +157,6 @@ export default function Post(props) {
     })
     .catch(err => console.log(err))
     .finally(() => setIsOpenAlert(false))
-
-
   }
 
   return (
@@ -148,6 +166,7 @@ export default function Post(props) {
         marginBottom: 10,
         backgroundColor: "white",
         paddingVertical: 12,
+        borderRadius: 5
       }}
     >
       <Actionsheet isOpen={isOpen} onClose={onClose}>
@@ -158,17 +177,14 @@ export default function Post(props) {
               onClose();
             }}
           >
-            Report post
+            <Text style={{ fontSize: 16, fontWeight: "600" }}>Report post</Text>
           </Actionsheet.Item>
-          <Actionsheet.Item
-            onPress={async () => {
-              await FileSystem.downloadAsync(
-                post.photo,
-                FileSystem.documentDirectory + "photo"
-              );
-            }}
-          >
-            Download photo
+          <Actionsheet.Item onPress={() => onClose()}>
+            <a href={post.photo} download={`photo${post.id}`} style={{textDecoration: 'none'}}>
+              <Text style={{ fontSize: 16, fontWeight: "600" }}>
+                Download photo
+              </Text>
+            </a>
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
@@ -196,12 +212,14 @@ export default function Post(props) {
                 paddingVertical: 8,
                 marginTop: 10,
               }}
+              multiline={true}
+              numberOfLines={3}
               placeholder="Reason"
             />
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button
-              style={{ backgroundColor: "#2196F3" }}
+              style={{ backgroundColor: colors.blue }}
               ref={cancelRefAlert}
               onPress={onCloseAlert}
             >
@@ -210,7 +228,7 @@ export default function Post(props) {
 
             {reason.length > 3 && (
               <Button
-                style={{ backgroundColor: "#2196F3" }}
+                style={{ backgroundColor: colors.blue }}
                 onPress={() => {
                   console.log("report");
                   reportPost();
@@ -222,14 +240,10 @@ export default function Post(props) {
             )}
 
             {reason.length <= 3 && (
-              <Button
-                style={{ backgroundColor: "#ccc" }}
-                ml={3}
-              >
+              <Button style={{ backgroundColor: "#ccc" }} ml={3}>
                 Report
               </Button>
             )}
-
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>
@@ -289,13 +303,19 @@ export default function Post(props) {
         activeOpacity={0.8}
         onPress={() => props.navigation.navigate("Post", { id: post.id })}
       >
-        <Image
-          source={{ uri: post.photo }}
-          style={{
-            width: Dimensions.get("window").width,
-            height: Dimensions.get("window").width,
-          }}
-        />
+        <View style={{
+          width: Dimensions.get("window").width,
+          height: Dimensions.get("window").width,
+          backgroundColor: '#eee'
+        }}>
+          <Image
+            source={photo}
+            style={{
+              width: Dimensions.get("window").width,
+              height: Dimensions.get("window").width
+            }}
+          />
+        </View>
       </TouchableOpacity>
 
       <View

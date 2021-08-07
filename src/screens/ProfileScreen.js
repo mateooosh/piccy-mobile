@@ -202,7 +202,7 @@ export default function AccountScreen({ route, navigation }) {
               marginTop: 10,
             }}
           >
-            <Text style={{ fontSize: 15, fontWeight: "700", fontSize: 16 }}>
+            <Text style={{ fontWeight: "700", fontSize: 16 }}>
               {item.name}
             </Text>
             <Text style={{ fontSize: 14 }}>{item.description}</Text>

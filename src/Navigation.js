@@ -1,10 +1,9 @@
-
 import React from 'react';
 import Register from './Register.js';
 import LogIn from './LogIn.js';
-import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { createStackNavigator,  } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
+import {NavigationContainer, getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {createStackNavigator,} from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import SettingsScreen from './screens/SettingsScreen.js';
@@ -13,6 +12,7 @@ import ProfileScreen from './screens/ProfileScreen.js';
 import PostScreen from './screens/PostScreen.js';
 import FollowersScreen from './screens/FollowersScreen.js';
 import FollowingScreen from './screens/FollowingScreen.js';
+import EditProfileScreen from './screens/EditProfileScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -38,7 +38,7 @@ function getHeaderTitle(route) {
 }
 
 
-export default function Navigation(){
+export default function Navigation() {
   const logged = useSelector(state => state.logged);
 
   const config = {
@@ -47,6 +47,8 @@ export default function Navigation(){
       Profile: ':username',
       Post: 'post/:id',
       Followers: 'followers/:id',
+      Following: 'following/:id',
+      EditProfile: 'edit-profile',
       Home: '/',
     },
   };
@@ -56,35 +58,38 @@ export default function Navigation(){
     config,
   };
 
-  return(
+  return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator headerMode="screen">
         {logged ? (
-            <>
-              <Stack.Screen 
-                name="Home" component={BottomTab} 
-                options={({ route, navigation }) => ({
-                  headerTitle: getHeaderTitle(route),
-                  headerRight: () => (
-                    <MaterialIcons onPress={()=>navigation.push('Settings')} name="settings" color='black' size={30}/>
-                  ),
-                  headerRightContainerStyle:{
-                    paddingRight: 15
-                  }
-                })}
-              />
-              <Stack.Screen name="Settings" component={SettingsScreen}/>
-              <Stack.Screen name="Profile" component={ProfileScreen} options={({route}) => ({headerTitle: route.params.username})}/>
-              <Stack.Screen name="Post" component={PostScreen} options={() => ({headerTitle: 'Post'})}/>
-              <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: 'Followers'})}/>
-              <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: 'Following'})}/>
-            </>
-          ) : (
-            <>
-              <Stack.Screen name="Home" component={LogIn}/>
-              <Stack.Screen name="Register" component={Register}/>
-            </>
-          )
+          <>
+            <Stack.Screen
+              name="Home" component={BottomTab}
+              options={({route, navigation}) => ({
+                headerTitle: getHeaderTitle(route),
+                headerRight: () => (
+                  <MaterialIcons onPress={() => navigation.push('Settings')} name="settings" color='black' size={30}/>
+                ),
+                headerRightContainerStyle: {
+                  paddingRight: 15
+                }
+              })}
+            />
+            <Stack.Screen name="Settings" component={SettingsScreen}/>
+            <Stack.Screen name="Profile" component={ProfileScreen}
+                          options={({route}) => ({headerTitle: route.params.username})}/>
+            <Stack.Screen name="Post" component={PostScreen} options={() => ({headerTitle: 'Post'})}/>
+            <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: 'Followers'})}/>
+            <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: 'Following'})}/>
+            <Stack.Screen name="EditProfile" component={EditProfileScreen}
+                          options={() => ({headerTitle: 'Edit profile'})}/>
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Home" component={LogIn}/>
+            <Stack.Screen name="Register" component={Register}/>
+          </>
+        )
         }
       </Stack.Navigator>
     </NavigationContainer>

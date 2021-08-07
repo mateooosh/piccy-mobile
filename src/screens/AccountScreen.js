@@ -83,11 +83,11 @@ export default function AccountScreen({navigation}){
 
 
             <View style={{paddingHorizontal: 20, textAlign: 'left', width: '100%', marginTop: 10}}>
-              <Text style={{fontSize: 15, fontWeight: '700', fontSize: 16}}>{item.name}</Text>
+              <Text style={{fontWeight: '700', fontSize: 16}}>{item.name}</Text>
               <Text style={{fontSize: 14}}>{item.description}</Text>
 
               <TouchableOpacity 
-                onPress={() => alert('edit profile')} 
+                onPress={() => navigation.push('EditProfile')}
                 style={{paddingLeft: 20, paddingVertical: 6, width: '100%', backgroundColor:'#2196F3', borderRadius: 6, marginVertical: 20}}
               >
                 <Text style={{textAlign: 'center', color: 'white'}}>Edit Profile</Text>

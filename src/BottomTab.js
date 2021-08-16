@@ -1,16 +1,10 @@
 
-import React, {useState, useEffect, useRef} from 'react';
-import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
+import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {API_URL, API_URL_WS} from '@env';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-const TopTab = createMaterialTopTabNavigator();
-import { useStore, useSelector } from 'react-redux'
-import { io } from "socket.io-client";
-
+import colors from './colors/colors'
 // // notifications
 // import * as Notifications from 'expo-notifications';
 // import Constants from 'expo-constants';
@@ -27,6 +21,7 @@ import AddScreen from './screens/AddScreen.js';
 import HomeScreen from './screens/HomeScreen.js';
 import AccountScreen from './screens/AccountScreen.js';
 import SearchScreen from './screens/SearchScreen.js';
+import MessagesScreen from './screens/MessagesScreen.js';
 
 
 
@@ -110,18 +105,21 @@ export default function BottomTab(){
   return(
     <Tab.Navigator  
       tabBarOptions={{
-        activeTintColor: '#2196F3',
+        activeTintColor: colors.main,
         inactiveTintColor: 'black',
-        showLabel: false,
-        keyboardHidesTabBar: true
+        showLabel: true,
+        keyboardHidesTabBar: true,
+        tabStyle: {
+          paddingBottom: 2
+        }
       }}
     >
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="home" color={color} size={30}/>
+            <MaterialIcons name="home" color={color} size={25}/>
           ),
-          title: "Home"
+          title: "Home",
         }} 
         name="Home" 
         component={HomeScreen}
@@ -130,7 +128,7 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="search" color={color} size={30}/>
+            <MaterialIcons name="search" color={color} size={25}/>
           ),
           title: "Search"
         }} 
@@ -141,18 +139,18 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="add-circle" color={color} size={30}/>
+            <MaterialIcons name="add-circle" color={color} size={25}/>
           ),
           title: "Create post"
         }} 
-        name="add" 
+        name="create-post"
         component={AddScreen} 
       />
 
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="message" color={color} size={30}/>
+            <MaterialIcons name="message" color={color} size={25}/>
           ),
           title: "Messages"
         }} 
@@ -163,9 +161,9 @@ export default function BottomTab(){
       <Tab.Screen 
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="account-circle" color={color} size={30}/>
+            <MaterialIcons name="account-circle" color={color} size={25}/>
           ),
-          title: "My account"
+          title: "Account"
         }} 
         name="account" 
         component={AccountScreen} 
@@ -210,29 +208,29 @@ export default function BottomTab(){
 
 
 
-function MessagesScreen(){
-  useEffect(() => {
-    // const socket = io(API_URL_WS, { transports : ['websocket']});
-
-    // socket.emit("new user", `User${Math.floor(Math.random() * 1000000)}`);
-  }, [])
-
-
-  
-
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {/* <Button
-        title="Press to schedule a notification"
-        onPress={async () => {
-          console.log('scheduled')
-          await schedulePushNotification();
-        }}
-      /> */}
-      <Text>Messages!</Text>
-    </View>
-  )
-}
+// function MessagesScreen(){
+//   useEffect(() => {
+//     // const socket = io(API_URL_WS, { transports : ['websocket']});
+//
+//     // socket.emit("new user", `User${Math.floor(Math.random() * 1000000)}`);
+//   }, [])
+//
+//
+//
+//
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//       {/* <Button
+//         title="Press to schedule a notification"
+//         onPress={async () => {
+//           console.log('scheduled')
+//           await schedulePushNotification();
+//         }}
+//       /> */}
+//       <Text>Messages!</Text>
+//     </View>
+//   )
+// }
 
 
 

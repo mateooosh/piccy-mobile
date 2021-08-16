@@ -1,8 +1,6 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { Text, TextInput, View, TouchableOpacity, Button, StyleSheet, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { Text, TextInput, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-const Tab = createBottomTabNavigator();
 import {API_URL, API_URL_WS} from '@env';
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';

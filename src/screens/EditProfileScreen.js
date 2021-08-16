@@ -4,22 +4,23 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Dimensions,
   Image,
   ActivityIndicator, TextInput,
 } from "react-native";
 
 import {useStore} from "react-redux";
 import {API_URL} from "@env";
-import {colors} from '../colors/colors'
+import colors from '../colors/colors'
 
-console.log(colors)
 
 import UserItem from "../components/UserItem";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import * as ImagePicker from "expo-image-picker";
 
 export default function EditProfileScreen({route, navigation}) {
   const store = useStore();
 
+  const [photo, setPhoto] = useState('');
   const [hasData, setHasData] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -31,27 +32,35 @@ export default function EditProfileScreen({route, navigation}) {
   useEffect(() => {
     const url = `${API_URL}/users/${store.getState().id}/get`;
 
+
     fetch(url)
       .then(response => response.json())
       .then(response => {
+        setPhoto(response.photo);
         setUsername(response.username);
         setEmail(response.email);
-        setName(response.name);
-        setDescription(response.description);
+        setName(response.name || '');
+        setDescription(response.description || '');
         setHasData(true);
         console.log(response);
       })
       .catch(err => console.log(err))
   }, [])
 
-  function editProfile() {
+  async function editProfile() {
     const url = `${API_URL}/users/${store.getState().id}`;
+
+    const index = photo.indexOf(',');
+    let base64 = photo.slice(index + 1, (photo.length));
+
     const obj = {
       username: username,
       email: email,
       name: name,
-      description: description
+      description: description,
+      photo: base64
     }
+
     if (loading)
       return;
 
@@ -66,11 +75,26 @@ export default function EditProfileScreen({route, navigation}) {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response);
+        alert(response.message);
       })
       .catch(err => console.log(err))
       .finally(() => setLoading(false))
   }
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+
+    if (!result.cancelled) {
+      setPhoto(`data:image/webp;base64,${result.base64}`);
+    }
+  };
 
   return (
     <ScrollView
@@ -78,6 +102,23 @@ export default function EditProfileScreen({route, navigation}) {
     >
       {hasData && (
         <View>
+          <TouchableOpacity style={{alignItems: 'center'}} onPress={pickImage}>
+            {photo !== null && (
+              <Image
+                source={{ uri: photo }}
+                style={{ width: 150, height: 150, borderRadius: 150, marginBottom: 10 }}
+              />
+            )}
+            {photo === null && (
+              <MaterialIcons
+                name="account-circle"
+                color={"black"}
+                size={150}
+                style={{ margin: 10 }}
+              />
+            )}
+          </TouchableOpacity>
+
           <Text style={{fontWeight: '700', fontSize: 16}}>
             Username
           </Text>
@@ -143,10 +184,11 @@ export default function EditProfileScreen({route, navigation}) {
               borderRadius: 10,
               fontSize: 16,
               paddingVertical: 8,
-              marginVertical: 10
+              marginVertical: 10,
+              textAlignVertical: 'top'
             }}
             multiline={true}
-            numberOfLines={(description.split('\n').length) > 3 ? (description.split('\n').length) : 3}
+            numberOfLines={ 3 }
             placeholder="Description"
             value={description}
           />
@@ -155,7 +197,7 @@ export default function EditProfileScreen({route, navigation}) {
           <TouchableOpacity onPress={editProfile} style={{
             padding: 10,
             borderRadius: 6,
-            backgroundColor: '#2196F3',
+            backgroundColor: colors.main,
             color: 'white',
             marginTop: 10
           }}>

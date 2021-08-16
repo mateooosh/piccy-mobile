@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {useStore, useSelector} from 'react-redux';
-import {StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Button, ActivityIndicator} from 'react-native';
+import {useStore} from 'react-redux';
+import {StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
 

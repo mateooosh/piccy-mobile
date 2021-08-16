@@ -1,27 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {
-  Text,
   View,
-  TouchableOpacity,
   ScrollView,
-  Dimensions,
-  Image,
   ActivityIndicator,
-  ToastAndroid
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useStore} from 'react-redux'
 import {API_URL} from '@env';
 import Post from '../components/Post'
-import {NativeBaseProvider} from 'native-base';
 
 
 // //import my functions
 const fun = require('../functions/functions');
+import colors from '../colors/colors'
 
 
-console.log(API_URL);
 
 export default function PostScreen({route, navigation}) {
   const store = useStore();
@@ -34,22 +26,36 @@ export default function PostScreen({route, navigation}) {
     fetch(url)
       .then(response => response.json())
       .then(response => {
-        console.log(response);
+        // console.log(response);
         setPost(response);
       })
       .catch(err => console.log(err));
   }, [])
 
+  function updatePosts (post) {
+    let deepCopy = JSON.parse(JSON.stringify(post));
+    deepCopy.forEach((item) => {
+      if (item.id == post.id) {
+        item = post;
+      }
+    });
+    setPost(deepCopy);
+  }
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="always">
         {post.length < 1 &&
-        <ActivityIndicator size={60} color="#2196F3" style={{marginVertical: 40}}/>
+          <ActivityIndicator size={60} color={colors.main} style={{marginVertical: 40}}/>
         }
         {post.map((post, idx) =>
-          <Post post={post} idx={idx} key={idx}
-                navigation={navigation} displayComments={true}
+          <Post
+            post={post}
+            idx={idx}
+            key={idx}
+            navigation={navigation}
+            displayComments={true}
+            updatePosts={updatePosts}
           />
         )}
       </ScrollView>

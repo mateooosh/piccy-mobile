@@ -43,11 +43,11 @@ export default function SettingsScreen(){
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
           <MaterialCommunityIcons style={styles.icon} name="drive-folder-upload" color={'black'} size={30}/>
-          <Text style={{fontSize: 16}}>Option</Text>
+          <Text style={{fontSize: 16}}>Language</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
           <MaterialCommunityIcons style={styles.icon} name="psychology" color={'black'} size={30}/>
-          <Text style={{fontSize: 16}}>Option</Text>
+          <Text style={{fontSize: 16}}>Reset password</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.option} onPress={logOut}>

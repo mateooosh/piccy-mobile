@@ -1,4 +1,5 @@
 
 module.exports = {
-    blue: '#2196F3'
+    main: '#29ab9c',
+    hashtag: '#1F72FF'
 }

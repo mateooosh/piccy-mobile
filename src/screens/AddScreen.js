@@ -1,14 +1,16 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, Image } from 'react-native';
+import {Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useStore } from 'react-redux';
+import {useStore} from 'react-redux';
 
-import { Camera } from 'expo-camera';
+import colors from '../colors/colors';
+
+import {Camera} from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import {API_URL} from '@env';
 
-export default function AddScreen({ navigation }){
+export default function AddScreen({navigation}) {
   const store = useStore();
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -24,17 +26,19 @@ export default function AddScreen({ navigation }){
   const camera = useRef(null);
   const scrollRef = useRef(null);
 
-  useEffect(() => 
+  useEffect(() => {
+    (async () => {
+      const {status} = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+
     navigation.addListener('focus', () => {
       setLoaded(true);
       return function cleanupListener() {
         window.removeEventListener('focus');
       }
-    }),
-    []
-  );
+    })
 
-  useEffect(() => 
     navigation.addListener('blur', () => {
       setLoaded(false)
       setCameraVisible(true);
@@ -42,89 +46,80 @@ export default function AddScreen({ navigation }){
       return function cleanupListener() {
         window.removeEventListener('blur');
       }
-    }),
-    []
-  );
-  
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
+    })
   }, []);
 
   if (hasPermission === null) {
-    return <View />;
+    return <View/>;
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
-  
 
-  function toggleType(){
-    if(type === Camera.Constants.Type.back){
+
+  function toggleType() {
+    if (type === Camera.Constants.Type.back) {
       setType(Camera.Constants.Type.front);
 
-      ToastAndroid.showWithGravityAndOffset(
-        'Changed to front camera',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
-       
-    }
-    else if(type === Camera.Constants.Type.front){
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Changed to front camera',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.BOTTOM,
+      //   0,
+      //   150
+      // );
+
+    } else if (type === Camera.Constants.Type.front) {
       setType(Camera.Constants.Type.back);
-      ToastAndroid.showWithGravityAndOffset(
-        'Changed to back camera',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Changed to back camera',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.BOTTOM,
+      //   0,
+      //   150
+      // );
     }
-      
+
   }
 
-  function setNextFlashMode(){
-    if(flash==='off')
-      setFlash('torch');  
-    else if(flash==="torch")
-      setFlash('on');     
-    else if(flash==="on")
+  function setNextFlashMode() {
+    if (flash === 'off')
+      setFlash('torch');
+    else if (flash === "torch")
+      setFlash('on');
+    else if (flash === "on")
       setFlash('auto');
-    else if(flash==='auto')
+    else if (flash === 'auto')
       setFlash('off');
-    
-    ToastAndroid.showWithGravityAndOffset(
-      `Flash: ${flash}`,
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM,
-      0,
-      150
-    );
+
+    // ToastAndroid.showWithGravityAndOffset(
+    //   `Flash: ${flash}`,
+    //   ToastAndroid.SHORT,
+    //   ToastAndroid.BOTTOM,
+    //   0,
+    //   150
+    // );
   }
 
-  async function takePicture(){
+  async function takePicture() {
     console.log('photo')
     await camera.current.takePictureAsync({
       base64: true,
     }).then(data => {
-      if(data.base64.includes(","))
+      if (data.base64.includes(","))
         setPhoto(data.base64);
       else
-        setPhoto("data:image/webp;base64,"+data.base64)
+        setPhoto("data:image/webp;base64," + data.base64)
 
-      ToastAndroid.showWithGravityAndOffset(
-        'Took picture',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Took picture',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.BOTTOM,
+      //   0,
+      //   150
+      // );
     });
-    
+
     setCameraVisible(false);
   }
 
@@ -143,103 +138,123 @@ export default function AddScreen({ navigation }){
       setPhoto(`data:image/webp;base64,${result.base64}`);
       setCameraVisible(false);
 
-      ToastAndroid.showWithGravityAndOffset(
-        'Picked image',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Picked image',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.BOTTOM,
+      //   0,
+      //   150
+      // );
     }
   };
 
-  
 
-  async function createPost(){
+  async function createPost() {
     const index = photo.indexOf(',');
-    let base64 = photo.slice(index+1, (photo.length));
+    let base64 = photo.slice(index + 1, (photo.length));
 
     let obj = {
       idUser: store.getState().id,
       description: description,
       photo: base64
     };
-    console.log(obj)   
+    console.log(obj)
 
     const url = `${API_URL}/posts`;
     fetch(url, {
       method: 'POST',
       body: JSON.stringify(obj),
       headers: {
-      'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
     })
-    .then(response => response.json())
-    .then(response => {
-      alert(response.message);
-      ToastAndroid.showWithGravityAndOffset(
-        'Created new post',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        150
-      );
-    })
-    .catch(err => {
-      alert('Something went wrong!')
-    })
+      .then(response => response.json())
+      .then(response => {
+        alert(response.message);
+        // ToastAndroid.showWithGravityAndOffset(
+        //   'Created new post',
+        //   ToastAndroid.SHORT,
+        //   ToastAndroid.BOTTOM,
+        //   0,
+        //   150
+        // );
+      })
+      .catch(err => {
+        alert('Something went wrong!')
+      })
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      
-      <ScrollView 
-        keyboardShouldPersistTaps='handled' 
-        ref={scrollRef} 
+    <View style={{flex: 1}}>
+
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
+        ref={scrollRef}
         contentContainerStyle={{width: '100%'}}
       >
-        {!cameraVisible &&
-          <TouchableOpacity 
-            onPress={() => {
-              setCameraVisible(true);
-              setPhoto(null);
+        {photo &&
+        <View>
+          <Image
+            source={{uri: photo}}
+            style={{width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginBottom: 20}}
+          />
+          <Text style={{fontWeight: '700', fontSize: 16, marginHorizontal: '5%'}}>Caption</Text>
+          <TextInput
+            style={{
+              backgroundColor: '#ddd',
+              marginHorizontal: '5%',
+              paddingVertical: 5,
+              marginBottom: 20,
+              marginTop: 10,
+              paddingHorizontal: 15,
+              borderRadius: 10,
+              textAlignVertical: 'top'
             }}
+            multiline={true}
+            numberOfLines={3}
+            value={description}
+            onChangeText={(str) => {
+              setDescription(str);
+              console.log(description);
+            }}
+            placeholder="Write your caption..."
+          />
+          <TouchableOpacity
+            onPress={createPost}
             style={{
               marginHorizontal: 20,
-              marginTop: 20,
+              marginBottom: 20,
               padding: 10,
               borderRadius: 6,
-              backgroundColor: '#2196F3',
+              backgroundColor: colors.main,
             }}
           >
-            <Text style={{color: 'white', textAlign: 'center'}}>Take picture</Text>
+            <Text style={{color: 'white', textAlign: 'center'}}>Add new post</Text>
           </TouchableOpacity>
+        </View>
         }
-        <TouchableOpacity 
-          onPress={pickImage}
-          style={{
-            marginTop: 20,
-            marginHorizontal: 20,
-            padding: 10,
-            borderRadius: 6,
-            backgroundColor: '#2196F3',
-          }}>
-          <Text style={{color: 'white', textAlign: 'center'}}>Pick an image from your gallery</Text>
-        </TouchableOpacity>
+
         {loaded && cameraVisible && (
-          <View style={{positon: 'relative', marginTop: 20}}>
-            <Camera 
-              whiteBalance="auto" 
-              autoFocus="on" 
-              ref={camera} 
-              style={{width: Dimensions.get('window').width, height:Dimensions.get('window').width}} 
-              type={type} 
-              ratio="1:1" 
+          <View style={{positon: 'relative'}}>
+            <Camera
+              whiteBalance="auto"
+              autoFocus="on"
+              ref={camera}
+              style={{width: Dimensions.get('window').width, height: Dimensions.get('window').width}}
+              type={type}
+              ratio="1:1"
               flashMode={flash}
             >
             </Camera>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems:'flex-end',width: '100%', position: 'absolute', bottom: 0}}>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'flex-end',
+              width: '100%',
+              position: 'absolute',
+              bottom: 0
+            }}>
               <TouchableOpacity
                 onPress={toggleType}
                 style={{
@@ -249,9 +264,9 @@ export default function AddScreen({ navigation }){
                   borderRadius: 15,
                 }}
               >
-                <MaterialIcons 
-                  name="refresh" 
-                  color={'white'} 
+                <MaterialIcons
+                  name="refresh"
+                  color={'white'}
                   size={40}
                 />
               </TouchableOpacity>
@@ -275,61 +290,56 @@ export default function AddScreen({ navigation }){
                   padding: 10,
                 }}
               >
-                {flash==='off' ? (
-                    <MaterialIcons name="flash-off" color={'white'} size={40}/>
-                  ) : (<></>)
+                {flash === 'off' ? (
+                  <MaterialIcons name="flash-off" color={'white'} size={40}/>
+                ) : (<></>)
                 }
-                {flash==='torch' ? (
-                    <MaterialCommunityIcons name="flashlight" color={'white'} size={40}/>
-                  ) : (<></>)
+                {flash === 'torch' ? (
+                  <MaterialCommunityIcons name="flashlight" color={'white'} size={40}/>
+                ) : (<></>)
                 }
-                {flash==='on' ? (
-                    <MaterialIcons name="flash-on" color={'white'} size={40}/>
-                  ) : (<></>)
+                {flash === 'on' ? (
+                  <MaterialIcons name="flash-on" color={'white'} size={40}/>
+                ) : (<></>)
                 }
-                {flash==='auto' ? (
-                    <MaterialIcons name="flash-auto" color={'white'} size={40}/>
-                  ) : (<></>)
+                {flash === 'auto' ? (
+                  <MaterialIcons name="flash-auto" color={'white'} size={40}/>
+                ) : (<></>)
                 }
               </TouchableOpacity>
             </View>
           </View>
-        )} 
+        )}
 
-        {photo && 
-          <View>
-            <Image 
-              source={{ uri: photo }} 
-              style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginVertical: 20}} 
-            />
-            <Text style={{fontWeight: '700',fontSize: 16, marginHorizontal: '5%'}}>Caption</Text>
-            <TextInput
-              style={{backgroundColor: '#ddd', marginHorizontal: '5%', paddingVertical: 5, marginBottom: 20, marginTop: 10, paddingHorizontal: 15, paddingVertical: 10, borderRadius: 10, textAlignVertical: 'top'}}
-              multiline={true}
-              numberOfLines={3}
-              value={description}
-              onChangeText={(str) => {
-                setDescription(str);
-                console.log(description);
-              }}
-              placeholder="Write your caption..."
-            />   
-            <Text>{description}</Text>
-            <TouchableOpacity 
-              onPress={createPost}
-              style={{
-                marginHorizontal: 20,
-                marginBottom: 20,
-                padding: 10,
-                borderRadius: 6,
-                backgroundColor: '#2196F3',
-              }}
-            >
-              <Text style={{color: 'white', textAlign: 'center'}}>Add new post</Text>
-            </TouchableOpacity>
-          </View>
+        {!cameraVisible &&
+        <TouchableOpacity
+          onPress={() => {
+            setCameraVisible(true);
+            setPhoto(null);
+          }}
+          style={{
+            marginHorizontal: 20,
+            padding: 10,
+            borderRadius: 6,
+            backgroundColor: colors.main,
+          }}
+        >
+          <Text style={{color: 'white', textAlign: 'center'}}>Take picture again</Text>
+        </TouchableOpacity>
         }
-         
+
+        <TouchableOpacity
+          onPress={pickImage}
+          style={{
+            marginVertical: 20,
+            marginHorizontal: 20,
+            padding: 10,
+            borderRadius: 6,
+            backgroundColor: colors.main,
+          }}>
+          <Text style={{color: 'white', textAlign: 'center'}}>Pick an image from your gallery</Text>
+        </TouchableOpacity>
+
       </ScrollView>
     </View>
   )

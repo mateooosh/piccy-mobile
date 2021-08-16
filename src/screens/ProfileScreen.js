@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
-  TextInput,
   View,
   TouchableOpacity,
-  Button,
-  StyleSheet,
   ScrollView,
   Dimensions,
   Image,

@@ -1,9 +1,6 @@
-
 import React, {useState, useEffect} from 'react';
-import { Text, View, TouchableOpacity, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 
-
-import { useStore } from 'react-redux'
 import {API_URL} from '@env';
 
 import UserItem from '../components/UserItem';

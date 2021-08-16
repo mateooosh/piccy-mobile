@@ -13,6 +13,7 @@ import PostScreen from './screens/PostScreen.js';
 import FollowersScreen from './screens/FollowersScreen.js';
 import FollowingScreen from './screens/FollowingScreen.js';
 import EditProfileScreen from './screens/EditProfileScreen.js';
+import ChatScreen from './screens/ChatScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -28,12 +29,12 @@ function getHeaderTitle(route) {
       return 'Home'
     case 'search':
       return 'Search'
-    case 'add':
-      return 'New Post'
+    case 'create-post':
+      return 'Create new post'
     case 'messages':
-      return 'My Messages';
+      return 'Messages';
     case 'account':
-      return 'My Account';
+      return 'Account';
   }
 }
 
@@ -49,6 +50,7 @@ export default function Navigation() {
       Followers: 'followers/:id',
       Following: 'following/:id',
       EditProfile: 'edit-profile',
+      Channel: 'channel/:idChannel',
       Home: '/',
     },
   };
@@ -83,6 +85,8 @@ export default function Navigation() {
             <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: 'Following'})}/>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}
                           options={() => ({headerTitle: 'Edit profile'})}/>
+            <Stack.Screen name="Channel" component={ChatScreen}
+                          options={() => ({headerTitle: 'Chat'})}/>
           </>
         ) : (
           <>

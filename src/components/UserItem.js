@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { Text, View, TouchableOpacity, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { Text, View, TouchableOpacity, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function UserItem (props) {

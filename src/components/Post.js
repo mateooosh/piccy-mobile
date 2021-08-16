@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Text,
   View,
@@ -6,7 +6,7 @@ import {
   Dimensions,
   Image,
   ToastAndroid,
-  TextInput
+  TextInput, Linking
 } from "react-native";
 
 import {
@@ -22,23 +22,23 @@ import colors from '../colors/colors'
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { useStore, useSelector } from "react-redux";
-import { API_URL } from "@env";
-console.log(API_URL)
+import {useStore} from "react-redux";
+import {API_URL} from "@env";
+
 
 // //import my functions
 const fun = require("../functions/functions");
 
 export default function Post(props) {
 
-  const { isOpen, onOpen, onClose } = useDisclose();
+  const {isOpen, onOpen, onClose} = useDisclose();
 
   const [isOpenAlert, setIsOpenAlert] = React.useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
   const cancelRefAlert = React.useRef();
 
   const [post, setPost] = useState({});
-  const [photo, setPhoto] = useState('');
+  const [photo, setPhoto] = useState(null);
   const [comments, setComments] = useState([]);
   const [reason, setReason] = useState('');
 
@@ -50,7 +50,7 @@ export default function Post(props) {
 
     getPhoto(props.post.id);
 
-    if(props.displayComments) {
+    if (props.displayComments) {
       const url = `${API_URL}/comments/${props.post.id}`;
 
       fetch(url)
@@ -70,10 +70,10 @@ export default function Post(props) {
 
   function likePost(idUser, idPost, index) {
     const url = `${API_URL}/likes`;
-    console.log(JSON.stringify({ idUser: idUser, idPost: idPost }));
+    console.log(JSON.stringify({idUser: idUser, idPost: idPost}));
     fetch(url, {
       method: "POST",
-      body: JSON.stringify({ idUser: idUser, idPost: idPost }),
+      body: JSON.stringify({idUser: idUser, idPost: idPost}),
       headers: {
         "Content-Type": "application/json",
       },
@@ -101,7 +101,7 @@ export default function Post(props) {
     const url = `${API_URL}/likes`;
     fetch(url, {
       method: "DELETE",
-      body: JSON.stringify({ idUser: idUser, idPost: idPost }),
+      body: JSON.stringify({idUser: idUser, idPost: idPost}),
       headers: {
         "Content-Type": "application/json",
       },
@@ -151,12 +151,12 @@ export default function Post(props) {
         "Content-Type": "application/json",
       }
     })
-    .then(response => response.json())
-    .then(response => {
-      console.log(response.message);
-    })
-    .catch(err => console.log(err))
-    .finally(() => setIsOpenAlert(false))
+      .then(response => response.json())
+      .then(response => {
+        console.log(response.message);
+      })
+      .catch(err => console.log(err))
+      .finally(() => setIsOpenAlert(false))
   }
 
   return (
@@ -177,14 +177,13 @@ export default function Post(props) {
               onClose();
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: "600" }}>Report post</Text>
+            <Text style={{fontSize: 16, fontWeight: "600"}}>Report post</Text>
           </Actionsheet.Item>
-          <Actionsheet.Item onPress={() => onClose()}>
-            <a href={post.photo} download={`photo${post.id}`} style={{textDecoration: 'none'}}>
-              <Text style={{ fontSize: 16, fontWeight: "600" }}>
-                Download photo
-              </Text>
-            </a>
+          <Actionsheet.Item onPress={() => {
+            onClose();
+            alert('download photo')
+          }}>
+            Download photo
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
@@ -211,15 +210,16 @@ export default function Post(props) {
                 fontSize: 16,
                 paddingVertical: 8,
                 marginTop: 10,
+                textAlignVertical: 'top'
               }}
               multiline={true}
-              numberOfLines={3}
+              numberOfLines={4}
               placeholder="Reason"
             />
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button
-              style={{ backgroundColor: colors.blue }}
+              style={{backgroundColor: colors.main}}
               ref={cancelRefAlert}
               onPress={onCloseAlert}
             >
@@ -228,7 +228,7 @@ export default function Post(props) {
 
             {reason.length > 3 && (
               <Button
-                style={{ backgroundColor: colors.blue }}
+                style={{backgroundColor: colors.main}}
                 onPress={() => {
                   console.log("report");
                   reportPost();
@@ -240,7 +240,7 @@ export default function Post(props) {
             )}
 
             {reason.length <= 3 && (
-              <Button style={{ backgroundColor: "#ccc" }} ml={3}>
+              <Button style={{backgroundColor: "#ccc"}} ml={3}>
                 Report
               </Button>
             )}
@@ -258,7 +258,7 @@ export default function Post(props) {
       >
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{ marginRight: 15 }}
+          style={{marginRight: 15, position: "relative"}}
           onPress={() =>
             props.navigation.navigate("Profile", {
               username: post.username,
@@ -267,18 +267,18 @@ export default function Post(props) {
         >
           {post.userPhoto !== null && (
             <Image
-              source={{ uri: post.userPhoto }}
-              style={{ width: 40, height: 40, borderRadius: 50 }}
+              source={{uri: post.userPhoto}}
+              style={{width: 40, height: 40, borderRadius: 50}}
             />
           )}
           {post.userPhoto === null && (
-            <MaterialIcons name="account-circle" color={"black"} size={40} />
+            <MaterialIcons name="account-circle" color={"black"} size={40}/>
           )}
         </TouchableOpacity>
 
-        <View style={{ flexGrow: 1 }}>
+        <View style={{flexGrow: 1}}>
           <Text
-            style={{ fontWeight: "700", fontSize: 15 }}
+            style={{fontWeight: "700", fontSize: 15}}
             onPress={() =>
               props.navigation.navigate("Profile", {
                 username: post.username,
@@ -287,7 +287,7 @@ export default function Post(props) {
           >
             {post.username}
           </Text>
-          <Text style={{ fontWeight: "500", fontSize: 12, color: "#777" }}>
+          <Text style={{fontWeight: "500", fontSize: 12, color: "#777"}}>
             {fun.displayTime(post.uploadDate)}
           </Text>
         </View>
@@ -301,7 +301,7 @@ export default function Post(props) {
       </View>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => props.navigation.navigate("Post", { id: post.id })}
+        onPress={() => props.navigation.navigate("Post", {id: post.id})}
       >
         <View style={{
           width: Dimensions.get("window").width,
@@ -309,7 +309,7 @@ export default function Post(props) {
           backgroundColor: '#eee'
         }}>
           <Image
-            source={photo}
+            source={{uri: photo}}
             style={{
               width: Dimensions.get("window").width,
               height: Dimensions.get("window").width
@@ -325,7 +325,7 @@ export default function Post(props) {
           justifyContent: "space-around",
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
           {post.liked === 0 && (
             <MaterialCommunityIcons
               onPress={likePost.bind(
@@ -354,7 +354,7 @@ export default function Post(props) {
             />
           )}
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
           <MaterialCommunityIcons
             onPress={() => alert("Comment")}
             name="comment-outline"
@@ -362,7 +362,7 @@ export default function Post(props) {
             size={30}
           />
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
           <MaterialIcons
             onPress={() => alert("Share")}
             name="share"
@@ -372,18 +372,18 @@ export default function Post(props) {
         </View>
       </View>
 
-      <View style={{ flexDirection: "row", marginBottom: 10 }}>
-        <Text style={{ marginHorizontal: 15, fontWeight: "700", fontSize: 13 }}>
+      <View style={{flexDirection: "row", marginBottom: 10}}>
+        <Text style={{marginHorizontal: 15, fontWeight: "700", fontSize: 13}}>
           {post.likes} likes
         </Text>
-        <Text style={{ fontWeight: "700", fontSize: 13 }}>
+        <Text style={{fontWeight: "700", fontSize: 13}}>
           {post.comments} comments
         </Text>
       </View>
 
-      <Text style={{ marginHorizontal: 15, fontSize: 13 }}>
+      <Text style={{marginHorizontal: 15, fontSize: 13}}>
         <Text
-          style={{ fontWeight: "700" }}
+          style={{fontWeight: "700"}}
           onPress={() =>
             props.navigation.navigate("Profile", {
               username: post.username,
@@ -399,7 +399,7 @@ export default function Post(props) {
               <Text
                 key={index}
                 onPress={() => alert(`push to ${word} tag`)}
-                style={{ color: "#1F72FF" }}
+                style={{color: colors.hashtag, fontWeight: "600"}}
               >
                 {word}{" "}
               </Text>
@@ -409,32 +409,28 @@ export default function Post(props) {
       </Text>
 
       {props.displayComments === true && comments.length > 0 && (
-        <Text style={{ color: "#555", marginHorizontal: 15, marginTop: 10 }}>
+        <Text style={{color: "#555", marginHorizontal: 15, marginTop: 10}}>
           <Text>Comments</Text>
         </Text>
       )}
 
-      {props.displayComments &&
+      {
         comments.map((comment, idx) => (
           <View
+            onPress={() =>
+              props.navigation.push("Profile", {
+                username: comment.username,
+              })
+            }
             key={idx}
             style={{
               marginHorizontal: 15,
               marginVertical: 2,
-              display: "block",
             }}
           >
-            <Text
-              style={{ fontWeight: "700", fontSize: 13, marginRight: 5 }}
-              onPress={() =>
-                props.navigation.push("Profile", {
-                  username: comment.username,
-                })
-              }
-            >
-              {comment.username}
+            <Text style={{fontWeight: "700", fontSize: 13, marginRight: 5}}>{comment.username}
+              <Text style={{fontSize: 13, fontWeight: "500"}}> {comment.content}</Text>
             </Text>
-            <Text style={{ fontSize: 13 }}>{comment.content}</Text>
           </View>
         ))}
     </View>

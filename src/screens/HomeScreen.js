@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Text, ActivityIndicator, View, TouchableOpacity, ScrollView, Dimensions, Image, RefreshControl, ToastAndroid, StyleSheet } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Alert, Text, ActivityIndicator, View, TouchableOpacity, ScrollView, RefreshControl, ToastAndroid } from 'react-native';
 import { useStore } from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
 import { io } from "socket.io-client";
-import Post from '../components/Post'
+import Post from '../components/Post';
+import colors from '../colors/colors';
 
-import { NativeBaseProvider } from 'native-base';
+import { useToast } from 'native-base';
 
-import fun from '../functions/functions.js'
+// import { theme } from 'native-base';
 
-
-console.log(API_URL, API_URL_WS);
-
+console.log(API_URL)
 
 export default function HomeScreen({navigation}){
   const store = useStore();
@@ -21,6 +18,8 @@ export default function HomeScreen({navigation}){
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [emptyPosts, setEmptyPosts] = useState(false);
+
+  const toast = useToast();
 
 
   const onRefresh = React.useCallback(() => {
@@ -44,6 +43,7 @@ export default function HomeScreen({navigation}){
     let temp = page + 1;
     setLoading(true);
     // http://localhost:3000/posts?idUser=39&onlyUserPosts=false&page=1
+    console.log(API_URL)
     const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
     fetch(url)
     .then(response => response.json())
@@ -60,13 +60,13 @@ export default function HomeScreen({navigation}){
       else{
         setEmptyPosts(true);
 
-        ToastAndroid.showWithGravityAndOffset(
-          'No more posts',
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-          0,
-          150
-        );
+        // ToastAndroid.showWithGravityAndOffset(
+        //   'No more posts',
+        //   ToastAndroid.SHORT,
+        //   ToastAndroid.BOTTOM,
+        //   0,
+        //   150
+        // );
       }
     })
     .catch(err => console.log(err));
@@ -84,6 +84,11 @@ export default function HomeScreen({navigation}){
   }
 
   useEffect(() => {
+
+    toast.show({
+      title: 'Home mounted',
+      duration: 3000
+    })
 
     console.log('home mounted');
 
@@ -106,14 +111,15 @@ export default function HomeScreen({navigation}){
   return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ScrollView
+          keyboardShouldPersistTaps="always"
           refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+            <RefreshControl refreshing={loading} onRefresh={onRefresh} colors={[colors.main]} />
           }
         >
           {posts.length < 1 && (
             <ActivityIndicator
               size={60}
-              color="#2196F3"
+              color={colors.main}
               style={{ marginVertical: 40 }}
             />
           )}
@@ -136,7 +142,7 @@ export default function HomeScreen({navigation}){
                 marginVertical: 10,
                 padding: 10,
                 borderRadius: 6,
-                backgroundColor: "#2196F3",
+                backgroundColor: colors.main,
                 color: "white",
               }}
             >

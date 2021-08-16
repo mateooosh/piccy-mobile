@@ -1,6 +1,6 @@
 
 import React, {useState} from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView , Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Divider } from 'react-native-elements';
 import {API_URL} from '@env';
 

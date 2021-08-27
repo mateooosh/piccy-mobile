@@ -5,6 +5,7 @@ import {NavigationContainer, getFocusedRouteNameFromRoute} from '@react-navigati
 import {createStackNavigator,} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import SettingsScreen from './screens/SettingsScreen.js';
 import BottomTab from './BottomTab.js';
@@ -62,7 +63,7 @@ export default function Navigation() {
 
   return (
     <NavigationContainer linking={linking}>
-      <Stack.Navigator headerMode="screen">
+      <Stack.Navigator headerMode="float">
         {logged ? (
           <>
             <Stack.Screen
@@ -86,7 +87,16 @@ export default function Navigation() {
             <Stack.Screen name="EditProfile" component={EditProfileScreen}
                           options={() => ({headerTitle: 'Edit profile'})}/>
             <Stack.Screen name="Channel" component={ChatScreen}
-                          options={() => ({headerTitle: 'Chat'})}/>
+                          options={() => ({
+                            headerTitle: 'Chat',
+                            headerRight: () => (
+                              <MaterialCommunityIcons name="dots-vertical" color='black'
+                                             size={30}/>
+                            ),
+                            headerRightContainerStyle: {
+                              paddingRight: 15
+                            }
+                          })}/>
           </>
         ) : (
           <>

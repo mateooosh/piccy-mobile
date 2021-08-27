@@ -52,7 +52,6 @@ export default function Post(props) {
 
     if (props.displayComments) {
       const url = `${API_URL}/comments/${props.post.id}`;
-
       fetch(url)
         .then((response) => response.json())
         .then((response) => {

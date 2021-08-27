@@ -16,7 +16,6 @@ import colors from '../colors/colors';
 import { useStore } from 'react-redux'
 import {API_URL} from '@env';
 
-console.log(API_URL)
 
 export default function AccountScreen({navigation}){
   const store = useStore();
@@ -82,23 +81,23 @@ export default function AccountScreen({navigation}){
 
             <Text style={{fontWeight: '700', fontSize: 16}}>{item.username}</Text>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 15, padding: 10}}>
-              <View style={{width: '33%'}}>
-                <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.postsAmount}</Text></View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginTop: 15, padding: 10}}>
+              <View style={{width: '31%', backgroundColor: '#ccc', paddingVertical: 10, borderRadius: 8}}>
+                <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18, color: colors.main}}>{item.postsAmount}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Posts</Text></View>
               </View>
               <TouchableOpacity
-                style={{width: '33%'}}
+                style={{width: '31%', backgroundColor: '#ccc', paddingVertical: 10, borderRadius: 8}}
                 onPress={() => navigation.push('Followers', {id: item.id})}
               >
-                <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.followers}</Text></View>
+                <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18, color: colors.main}}>{item.followers}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Followers</Text></View>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{width: '33%'}}
+                style={{width: '31%', backgroundColor: '#ccc', paddingVertical: 10, borderRadius: 8}}
                 onPress={() => navigation.push('Following', {id: item.id})}
               >
-                <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18}}>{item.following}</Text></View>
+                <View><Text style={{textAlign: 'center', fontWeight: '700', fontSize: 18, color: colors.main}}>{item.following}</Text></View>
                 <View><Text style={{textAlign: 'center', fontSize: 16}}>Following</Text></View>
               </TouchableOpacity>
             </View>

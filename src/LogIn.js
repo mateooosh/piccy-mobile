@@ -6,7 +6,6 @@ import {API_URL} from '@env';
 
 export default function LogIn({navigation}) {
   const store = useStore();
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

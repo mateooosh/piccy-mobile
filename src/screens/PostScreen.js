@@ -22,7 +22,9 @@ export default function PostScreen({route, navigation}) {
 
   useEffect(() => {
     console.log(route.params.id);
+
     const url = `${API_URL}/posts/${route.params.id}?idUser=${store.getState().id}`;
+
     fetch(url)
       .then(response => response.json())
       .then(response => {

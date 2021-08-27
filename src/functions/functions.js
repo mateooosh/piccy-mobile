@@ -30,6 +30,7 @@ const displayTimeV2 = date => {
   if (now.getDay() === date.getDay()) {
     return `${date.getHours()}:${prefixTime(date.getMinutes())}`
   }
+
   return displayTime(date);
 }
 

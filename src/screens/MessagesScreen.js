@@ -81,7 +81,6 @@ export default function MessagesScreen({route, navigation}) {
   //
   //   setMessage('');
   // }
-
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView style={{ paddingHorizontal: 10 }}>

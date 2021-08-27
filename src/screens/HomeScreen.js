@@ -44,7 +44,7 @@ export default function HomeScreen({navigation}){
     setLoading(true);
     // http://localhost:3000/posts?idUser=39&onlyUserPosts=false&page=1
     console.log(API_URL)
-    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
+    const url = `http://localhost:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
     fetch(url)
     .then(response => response.json())
     .then(response => {
@@ -94,7 +94,7 @@ export default function HomeScreen({navigation}){
 
     const socket = io(API_URL_WS, { transports : ['websocket']});
 
-    socket.emit('new user', store.getState().username);
+    socket.emit('new-user', store.getState().username);
 
     // socket.on('test', (v) => {
     //   console.log('test', v)

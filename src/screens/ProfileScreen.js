@@ -11,6 +11,7 @@ import {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { API_URL } from "@env";
 import { useStore, useSelector } from "react-redux";
+import colors from "../colors/colors";
 
 export default function AccountScreen({ route, navigation }) {
   const store = useStore();
@@ -130,64 +131,38 @@ export default function AccountScreen({ route, navigation }) {
               padding: 10,
             }}
           >
-            <View style={{ width: "33%" }}>
-              <View>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontWeight: "700",
-                    fontSize: 18,
-                  }}
-                >
-                  {item.postsAmount}
-                </Text>
-              </View>
-              <View>
-                <Text style={{ textAlign: "center", fontSize: 16 }}>Posts</Text>
-              </View>
+            <View style={{width: '31%', backgroundColor: '#e5e5e5', paddingVertical: 10, borderRadius: 8}}>
+              <View><Text style={{
+                textAlign: 'center',
+                fontWeight: '700',
+                fontSize: 18,
+                color: colors.main
+              }}>{item.postsAmount}</Text></View>
+              <View><Text style={{textAlign: 'center', fontSize: 16}}>Posts</Text></View>
             </View>
             <TouchableOpacity
-              style={{ width: "33%" }}
-              onPress={() => navigation.push("Followers", { id: item.id })}
+              style={{width: '31%', backgroundColor: '#e5e5e5', paddingVertical: 10, borderRadius: 8}}
+              onPress={() => navigation.push('Followers', {id: item.id})}
             >
-              <View>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontWeight: "700",
-                    fontSize: 18,
-                  }}
-                >
-                  {item.followers}
-                </Text>
-              </View>
-              <View>
-                <Text style={{ textAlign: "center", fontSize: 16 }}>
-                  Followers
-                </Text>
-              </View>
+              <View><Text style={{
+                textAlign: 'center',
+                fontWeight: '700',
+                fontSize: 18,
+                color: colors.main
+              }}>{item.followers}</Text></View>
+              <View><Text style={{textAlign: 'center', fontSize: 16}}>Followers</Text></View>
             </TouchableOpacity>
-
             <TouchableOpacity
-              style={{ width: "33%" }}
-              onPress={() => navigation.push("Following", { id: item.id })}
+              style={{width: '31%', backgroundColor: '#e5e5e5', paddingVertical: 10, borderRadius: 8}}
+              onPress={() => navigation.push('Following', {id: item.id})}
             >
-              <View>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontWeight: "700",
-                    fontSize: 18,
-                  }}
-                >
-                  {item.following}
-                </Text>
-              </View>
-              <View>
-                <Text style={{ textAlign: "center", fontSize: 16 }}>
-                  Following
-                </Text>
-              </View>
+              <View><Text style={{
+                textAlign: 'center',
+                fontWeight: '700',
+                fontSize: 18,
+                color: colors.main
+              }}>{item.following}</Text></View>
+              <View><Text style={{textAlign: 'center', fontSize: 16}}>Following</Text></View>
             </TouchableOpacity>
           </View>
 

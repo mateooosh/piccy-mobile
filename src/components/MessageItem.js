@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {useStore} from "react-redux";
-import colors from '../colors/colors'
+import colors from '../colors/colors';
 
 import fun from '../functions/functions';
 

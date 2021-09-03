@@ -4,6 +4,8 @@ import {StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Activit
 import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
 
+import Input from './components/Input';
+
 export default function LogIn({navigation}) {
   const store = useStore();
   const [username, setUsername] = useState('');
@@ -49,6 +51,7 @@ export default function LogIn({navigation}) {
       <ScrollView keyboardShouldPersistTaps='handled'
                   contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}>
         <View>
+          <Input/>
           <Text style={styles.label}>Username</Text>
           <TextInput
             onSubmitEditing={logIn.bind(this, username, password)}
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     // borderBottomColor: 'grey',
     // borderLeftWidth: 0,
 
-    backgroundColor: '#ddd', paddingHorizontal: 15, borderRadius: 10, fontSize: 16, paddingVertical: 8, marginTop: 10,
+    backgroundColor: '#ddd', paddingHorizontal: 15, borderRadius: 10, fontSize: 16, paddingVertical: 12, marginTop: 10,
     marginBottom: 30,
 
   },

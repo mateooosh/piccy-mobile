@@ -24,7 +24,7 @@ export default function MessageItem(props) {
             paddingHorizontal: 15,
             paddingVertical: 12,
             borderRadius: 20,
-            backgroundColor: colors.main,
+            backgroundColor: colors.primary,
             marginVertical: 5,
             marginLeft: '25%',
             textAlign: 'left'
@@ -32,7 +32,7 @@ export default function MessageItem(props) {
             <Text style={{color: '#fff', fontSize: 16}}>{item.message}</Text>
           </TouchableOpacity>
           {displayTime && (
-            <Text style={{marginHorizontal: 15, marginBottom: 5}}>{fun.displayTimeV2(item.createdAt)}</Text>
+            <Text style={{marginHorizontal: 10, marginBottom: 5, fontSize: 12, color: '#999'}}>{fun.displayTimeV2(item.createdAt)}</Text>
           )}
         </View>
       )}
@@ -51,7 +51,7 @@ export default function MessageItem(props) {
             <Text style={{color: 'black', fontSize: 16}}>{item.message}</Text>
           </TouchableOpacity>
           {displayTime && (
-            <Text style={{marginHorizontal: 15, marginBottom: 5}}>{fun.displayTimeV2(item.createdAt)}</Text>
+            <Text style={{marginHorizontal: 10, marginBottom: 5, fontSize: 12, color: '#999'}}>{fun.displayTimeV2(item.createdAt)}</Text>
           )}
         </View>
       )}

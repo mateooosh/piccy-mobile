@@ -10,7 +10,8 @@ import {
 
 import {useStore} from "react-redux";
 import {API_URL} from "@env";
-import colors from '../colors/colors'
+import colors from '../colors/colors';
+import styles from '../styles/style';
 
 
 import UserItem from "../components/UserItem";
@@ -119,88 +120,56 @@ export default function EditProfileScreen({route, navigation}) {
             )}
           </TouchableOpacity>
 
-          <Text style={{fontWeight: '700', fontSize: 16}}>
+          <Text style={styles.label}>
             Username
           </Text>
           <TextInput
             onSubmitEditing={() => console.log('submit')}
             onChangeText={(str) => setUsername(str)}
-            style={{
-              backgroundColor: '#ddd',
-              paddingHorizontal: 15,
-              borderRadius: 10,
-              fontSize: 16,
-              paddingVertical: 10,
-              marginVertical: 10
-            }}
+            style={styles.input}
             placeholder="Username"
             value={username}
           />
 
-          <Text style={{fontWeight: '700', fontSize: 16}}>
+          <Text style={styles.label}>
             E-mail
           </Text>
           <TextInput
             onSubmitEditing={() => console.log('submit')}
             onChangeText={(str) => setEmail(str)}
-            style={{
-              backgroundColor: '#ddd',
-              paddingHorizontal: 15,
-              borderRadius: 10,
-              fontSize: 16,
-              paddingVertical: 10,
-              marginVertical: 10
-            }}
+            style={styles.input}
             placeholder="E-mail"
             value={email}
           />
 
-          <Text style={{fontWeight: '700', fontSize: 16}}>
+          <Text style={styles.label}>
             Name
           </Text>
           <TextInput
             onSubmitEditing={() => console.log('submit')}
             onChangeText={(str) => setName(str)}
-            style={{
-              backgroundColor: '#ddd',
-              paddingHorizontal: 15,
-              borderRadius: 10,
-              fontSize: 16,
-              paddingVertical: 10,
-              marginVertical: 10
-            }}
+            style={styles.input}
             placeholder="Name"
             value={name}
           />
 
-          <Text style={{fontWeight: '700', fontSize: 16}}>
+          <Text style={styles.label}>
             Description
           </Text>
           <TextInput
             onChangeText={(str) => setDescription(str)}
             style={{
-              backgroundColor: '#ddd',
-              paddingHorizontal: 15,
-              borderRadius: 10,
-              fontSize: 16,
-              paddingVertical: 8,
-              marginVertical: 10,
-              textAlignVertical: 'top'
+              textAlignVertical: 'top',
             }}
+            style={styles.input}
             multiline={true}
-            numberOfLines={ 3 }
+            numberOfLines={ 5 }
             placeholder="Description"
             value={description}
           />
 
 
-          <TouchableOpacity onPress={editProfile} style={{
-            padding: 10,
-            borderRadius: 6,
-            backgroundColor: colors.main,
-            color: 'white',
-            marginTop: 10
-          }}>
+          <TouchableOpacity onPress={editProfile} style={styles.button}>
             {!loading && (
               <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>
                 Save changes

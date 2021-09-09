@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 
 //STORE
 const initialState = {
-  logged: false,
+  logged: true,
   token: '',
   username: 'xroomanx',
   id: '39',

@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Divider } from 'react-native-elements';
 import {API_URL} from '@env';
+import colors from "./colors/colors";
+import styles from './styles/style'
 
 export default function Register({ navigation }) {
   const [username, setUsername] = useState('');
@@ -32,7 +34,7 @@ export default function Register({ navigation }) {
   }
 
   return (
-    <View style={styles.container} >
+    <View style={{flex: 1}} >
       <ScrollView 
         keyboardShouldPersistTaps='handled' 
         contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}
@@ -82,41 +84,10 @@ export default function Register({ navigation }) {
         
         <View style={{marginTop: 40}}>
           <Divider style={{ backgroundColor: 'black'}} />
-          <Text style={{textAlign:'center', marginVertical: 20}}>Already a Piccy member? <Text onPress={()=>navigation.push('Home')} style={{color: '#2196F3', fontWeight:'700'}}>Log in here</Text></Text>
+          <Text style={{textAlign:'center', marginVertical: 20}}>Already a Piccy member? <Text onPress={()=>navigation.push('Home')} style={{color: colors.primary, fontWeight:'700'}}>Log in here</Text></Text>
         </View>
         
       </ScrollView>
     </View>
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  label:{
-    fontWeight: '700',
-    fontSize: 16
-  },
-  input: {
-    // paddingVertical: 8,
-    // fontSize: 16,
-    // marginBottom: 30,
-    // borderBottomWidth: 1,
-    // borderBottomColor: 'grey',
-    // borderLeftWidth: 0,
-
-    backgroundColor: '#ddd', paddingHorizontal: 15, borderRadius: 10, fontSize: 16, paddingVertical: 8, marginTop: 10,
-    marginBottom: 30,
-    
-  },
-  button: {
-    marginTop: 50,
-    padding: 10,
-    borderRadius: 6,
-    backgroundColor: '#2196F3',
-    color: 'white',
-  },
-});
-

@@ -105,7 +105,7 @@ export default function BottomTab(){
   return(
     <Tab.Navigator  
       tabBarOptions={{
-        activeTintColor: colors.main,
+        activeTintColor: colors.primary,
         inactiveTintColor: 'black',
         showLabel: true,
         keyboardHidesTabBar: true,

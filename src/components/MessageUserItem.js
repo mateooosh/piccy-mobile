@@ -16,15 +16,15 @@ export default function MessageUserItem(props) {
 
   return (
     <TouchableOpacity onPress={() => props.navigation.push('Channel', {idChannel: props.channel.idChannel})}
-                      style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 15}}>
+                      style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: 'white'}}>
       {props.channel.photo !== null && (
         <Image
           source={{uri: props.channel.photo}}
-          style={{width: 60, height: 60, borderRadius: 60}}
+          style={{width: 50, height: 50, borderRadius: 50}}
         />
       )}
       {props.channel.photo === null && (
-        <MaterialIcons name="account-circle" color={"black"} size={60}/>
+        <MaterialIcons name="account-circle" color={"black"} size={50}/>
       )}
 
       <View style={{flexGrow: 1, marginLeft: 10, flex: 1, justifyContent: 'space-between'}}>

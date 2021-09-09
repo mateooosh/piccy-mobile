@@ -48,7 +48,7 @@ export default function PostScreen({route, navigation}) {
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
       <ScrollView keyboardShouldPersistTaps="always">
         {post.length < 1 &&
-          <ActivityIndicator size={60} color={colors.main} style={{marginVertical: 40}}/>
+          <ActivityIndicator size={60} color={colors.primary} style={{marginVertical: 40}}/>
         }
         {post.map((post, idx) =>
           <Post

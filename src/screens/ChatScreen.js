@@ -2,13 +2,14 @@ import React, {useState, useEffect, useRef} from "react";
 import {
   View,
   ScrollView,
-  Text, TextInput, TouchableOpacity, Image
+  Text, TextInput, TouchableOpacity, Image, ActivityIndicator
 } from "react-native";
 import {API_URL, API_URL_WS} from "@env";
 import {useStore, useSelector} from "react-redux";
 import {io} from "socket.io-client";
 import MessageItem from "../components/MessageItem";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import colors from "../colors/colors";
 
 export default function ChatScreen({route, navigation}) {
   const store = useStore();
@@ -16,6 +17,7 @@ export default function ChatScreen({route, navigation}) {
   const scrollViewRef = useRef();
 
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const refMessages = useRef(messages);
   const [userChattingWith, setUserChattingWith] = useState({});
 
@@ -31,8 +33,9 @@ export default function ChatScreen({route, navigation}) {
   }
 
   useEffect(() => {
-
     const url = `${API_URL}/messages/${route.params.idChannel}`;
+
+    setIsLoading(true);
 
     fetch(url)
       .then(response => response.json())
@@ -40,7 +43,6 @@ export default function ChatScreen({route, navigation}) {
         console.log('messages:', response);
         setMessages(response.messages);
 
-        console.log();
         // navigation.setOptions({headerTitle: findUserChattingWith(response.users).username});
 
         navigation.setOptions({
@@ -60,10 +62,11 @@ export default function ChatScreen({route, navigation}) {
         });
 
         setTimeout(() => {
-          scrollViewRef.current.scrollToEnd({animated: true})
+          scrollViewRef.current.scrollToEnd({animated: false})
         }, 0)
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setIsLoading(false))
 
     socket.on('message-from-server', handler)
 
@@ -113,32 +116,38 @@ export default function ChatScreen({route, navigation}) {
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10, paddingBottom: 10}}>
         <View>
-          {messages.map((mes, idx) =>
+          {!isLoading && messages.map((mes, idx) =>
             // <Text style={{padding: 50}} key={idx}>{mes.message}</Text>
             <MessageItem key={idx} item={mes}/>
           )}
+
+          {isLoading &&
+            <ActivityIndicator size={60} color={colors.primary} style={{marginVertical: 40}}/>
+          }
         </View>
       </ScrollView>
 
 
-      <View style={{position: 'relative', margin: 10}}>
+      <View style={{position: 'relative', marginBottom: 10, marginHorizontal: 10}}>
         <TextInput
           onChangeText={str => setMessage(str)}
           onSubmitEditing={send}
           style={{
-            backgroundColor: '#ddd',
-            paddingHorizontal: 20,
-            borderRadius: 15,
-            fontSize: 16,
             minHeight: 46,
-            flexGrow: 1
+            flexGrow: 1,
+            backgroundColor: '#eee',
+            paddingLeft: 8,
+            paddingRight: 50,
+            fontSize: 16,
+            borderRadius: 12,
+            paddingVertical: 8,
           }}
           placeholder="Type here..."
           value={message}
         />
         <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)'}}
                           onPress={send}>
-          <MaterialIcons name="send" color={'#444'} size={35} style={{marginLeft: 20}}/>
+          <MaterialIcons name="send" color={'#444'} size={35}/>
         </TouchableOpacity>
       </View>
     </View>

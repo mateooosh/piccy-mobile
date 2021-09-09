@@ -3,6 +3,8 @@ import {useStore} from 'react-redux';
 import {StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
+import colors from './colors/colors'
+import styles from './styles/style'
 
 import Input from './components/Input';
 
@@ -47,11 +49,11 @@ export default function LogIn({navigation}) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1}}>
       <ScrollView keyboardShouldPersistTaps='handled'
                   contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}>
         <View>
-          <Input/>
+          {/*<Input/>*/}
           <Text style={styles.label}>Username</Text>
           <TextInput
             onSubmitEditing={logIn.bind(this, username, password)}
@@ -84,42 +86,11 @@ export default function LogIn({navigation}) {
         <View style={{marginTop: 40}}>
           <Divider style={{backgroundColor: 'black'}}/>
           <Text style={{textAlign: 'center', marginVertical: 20}}>You don't have an account on Piccy? <Text
-            onPress={() => navigation.push('Register')} style={{color: '#2196F3', fontWeight: '700'}}>Sign up
+            onPress={() => navigation.push('Register')} style={{color: colors.primary, fontWeight: '700'}}>Sign up
             here</Text></Text>
         </View>
 
       </ScrollView>
     </View>
   );
-
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // backgroundColor: 'white'
-  },
-  label: {
-    fontWeight: '700',
-    fontSize: 16
-  },
-  input: {
-    // paddingVertical: 8,
-    // fontSize: 16,
-    // marginBottom: 30,
-    // borderBottomWidth: 1,
-    // borderBottomColor: 'grey',
-    // borderLeftWidth: 0,
-
-    backgroundColor: '#ddd', paddingHorizontal: 15, borderRadius: 10, fontSize: 16, paddingVertical: 12, marginTop: 10,
-    marginBottom: 30,
-
-  },
-  button: {
-    marginTop: 50,
-    padding: 10,
-    borderRadius: 6,
-    backgroundColor: '#2196F3',
-    color: 'white'
-  }
-});

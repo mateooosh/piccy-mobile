@@ -151,8 +151,8 @@ export default function AccountScreen({route, navigation}) {
                   onPress={follow.bind(this, store.getState().id, item.id)}
                   style={{
                     paddingVertical: 6,
-                    flexGrow: 1,
-                    backgroundColor: "#2196F3",
+                    flex: 1,
+                    backgroundColor: colors.primary,
                     borderRadius: 6,
                     marginVertical: 20,
                   }}
@@ -173,7 +173,7 @@ export default function AccountScreen({route, navigation}) {
                   onPress={unfollow.bind(this, store.getState().id, item.id)}
                   style={{
                     paddingVertical: 6,
-                    flexGrow: 1,
+                    flex: 1,
                     backgroundColor: "#ccc",
                     borderRadius: 6,
                     marginVertical: 20,
@@ -194,8 +194,8 @@ export default function AccountScreen({route, navigation}) {
                 onPress={() => alert("send message")}
                 style={{
                   paddingVertical: 6,
-                  flexGrow: 1,
-                  backgroundColor: "#2196F3",
+                  flex: 1,
+                  backgroundColor: colors.primary,
                   borderRadius: 6,
                   marginVertical: 20,
                 }}

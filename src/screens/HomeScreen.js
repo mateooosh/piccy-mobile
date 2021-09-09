@@ -113,13 +113,13 @@ export default function HomeScreen({navigation}){
         <ScrollView
           keyboardShouldPersistTaps="always"
           refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={onRefresh} colors={[colors.main]} />
+            <RefreshControl refreshing={loading} onRefresh={onRefresh} colors={[colors.primary]} />
           }
         >
           {posts.length < 1 && (
             <ActivityIndicator
               size={60}
-              color={colors.main}
+              color={colors.primary}
               style={{ marginVertical: 40 }}
             />
           )}
@@ -142,7 +142,7 @@ export default function HomeScreen({navigation}){
                 marginVertical: 10,
                 padding: 10,
                 borderRadius: 6,
-                backgroundColor: colors.main,
+                backgroundColor: colors.primary,
                 color: "white",
               }}
             >

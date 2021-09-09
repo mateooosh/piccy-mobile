@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {
   Text,
   View,
@@ -6,7 +6,8 @@ import {
   Dimensions,
   Image,
   ToastAndroid,
-  TextInput, Linking
+  TextInput,
+  Animated
 } from "react-native";
 
 import {
@@ -32,6 +33,8 @@ const fun = require("../functions/functions");
 export default function Post(props) {
 
   const {isOpen, onOpen, onClose} = useDisclose();
+  const fadeAnim = useRef(new Animated.Value(0)).current
+  const likeAnim = useRef(new Animated.Value(1)).current
 
   const [isOpenAlert, setIsOpenAlert] = React.useState(false);
   const onCloseAlert = () => setIsOpenAlert(false);
@@ -46,6 +49,14 @@ export default function Post(props) {
 
   useEffect(() => {
     setPost(props.post);
+
+    Animated.timing(
+      fadeAnim,
+      {
+        toValue: 1,
+        duration: 1000,
+      }
+    ).start();
 
 
     getPhoto(props.post.id);
@@ -67,6 +78,24 @@ export default function Post(props) {
 
   }, [])
 
+  function animateHeartIcon () {
+    Animated.timing(
+      likeAnim,
+      {
+        toValue: 1.4,
+        duration: 500,
+      }
+    ).start(() => {
+      Animated.timing(
+        likeAnim,
+        {
+          toValue: 1,
+          duration: 500
+        }
+      ).start();
+    });
+  }
+
   function likePost(idUser, idPost, index) {
     const url = `${API_URL}/likes`;
     console.log(JSON.stringify({idUser: idUser, idPost: idPost}));
@@ -83,6 +112,8 @@ export default function Post(props) {
         deepCopy.likes++;
         deepCopy.liked = 1;
         setPost(deepCopy);
+
+        animateHeartIcon();
 
         // ToastAndroid.showWithGravityAndOffset(
         //   "Liked",
@@ -162,7 +193,7 @@ export default function Post(props) {
     <View
       key={post.id}
       style={{
-        marginBottom: 10,
+        marginBottom: 8,
         backgroundColor: "white",
         paddingVertical: 12,
         borderRadius: 5
@@ -218,7 +249,7 @@ export default function Post(props) {
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button
-              style={{backgroundColor: colors.main}}
+              style={{backgroundColor: colors.primary}}
               ref={cancelRefAlert}
               onPress={onCloseAlert}
             >
@@ -227,7 +258,7 @@ export default function Post(props) {
 
             {reason.length > 3 && (
               <Button
-                style={{backgroundColor: colors.main}}
+                style={{backgroundColor: colors.primary}}
                 onPress={() => {
                   console.log("report");
                   reportPost();
@@ -307,11 +338,12 @@ export default function Post(props) {
           height: Dimensions.get("window").width,
           backgroundColor: '#eee'
         }}>
-          <Image
+          <Animated.Image
             source={{uri: photo}}
             style={{
               width: Dimensions.get("window").width,
-              height: Dimensions.get("window").width
+              height: Dimensions.get("window").width,
+              opacity: fadeAnim
             }}
           />
         </View>
@@ -320,11 +352,11 @@ export default function Post(props) {
       <View
         style={{
           flexDirection: "row",
-          marginVertical: 10,
-          justifyContent: "space-around",
+          paddingVertical: 10,
+          justifyContent: "space-around"
         }}
       >
-        <View style={{flexDirection: "row", alignItems: "center"}}>
+        <Animated.View style={{flexDirection: "row", alignItems: "center", transform: [{scale: likeAnim}]}}>
           {post.liked === 0 && (
             <MaterialCommunityIcons
               onPress={likePost.bind(
@@ -352,7 +384,7 @@ export default function Post(props) {
               size={30}
             />
           )}
-        </View>
+        </Animated.View>
         <View style={{flexDirection: "row", alignItems: "center"}}>
           <MaterialCommunityIcons
             onPress={() => alert("Comment")}
@@ -413,25 +445,24 @@ export default function Post(props) {
         </Text>
       )}
 
-      {
-        comments.map((comment, idx) => (
-          <View
-            onPress={() =>
-              props.navigation.push("Profile", {
-                username: comment.username,
-              })
-            }
-            key={idx}
-            style={{
-              marginHorizontal: 15,
-              marginVertical: 2,
-            }}
-          >
-            <Text style={{fontWeight: "700", fontSize: 13, marginRight: 5}}>{comment.username}
-              <Text style={{fontSize: 13, fontWeight: "500"}}> {comment.content}</Text>
-            </Text>
-          </View>
-        ))}
+      {comments.map((comment, idx) => (
+        <View
+          onPress={() =>
+            props.navigation.push("Profile", {
+              username: comment.username,
+            })
+          }
+          key={idx}
+          style={{
+            marginHorizontal: 15,
+            marginVertical: 4,
+          }}
+        >
+          <Text style={{fontWeight: "700", fontSize: 13, marginRight: 5}}>{comment.username}
+            <Text style={{fontSize: 13, fontWeight: "500"}}> {comment.content}</Text>
+          </Text>
+        </View>
+      ))}
     </View>
   );
 }

@@ -185,7 +185,7 @@ export default function AddScreen({navigation}) {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
 
       <ScrollView
         keyboardShouldPersistTaps='handled'
@@ -226,7 +226,7 @@ export default function AddScreen({navigation}) {
               marginBottom: 20,
               padding: 10,
               borderRadius: 6,
-              backgroundColor: colors.main,
+              backgroundColor: colors.primary,
             }}
           >
             <Text style={{color: 'white', textAlign: 'center'}}>Add new post</Text>
@@ -321,7 +321,7 @@ export default function AddScreen({navigation}) {
             marginHorizontal: 20,
             padding: 10,
             borderRadius: 6,
-            backgroundColor: colors.main,
+            backgroundColor: colors.primary,
           }}
         >
           <Text style={{color: 'white', textAlign: 'center'}}>Take picture again</Text>
@@ -335,7 +335,7 @@ export default function AddScreen({navigation}) {
             marginHorizontal: 20,
             padding: 10,
             borderRadius: 6,
-            backgroundColor: colors.main,
+            backgroundColor: colors.primary,
           }}>
           <Text style={{color: 'white', textAlign: 'center'}}>Pick an image from your gallery</Text>
         </TouchableOpacity>

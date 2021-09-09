@@ -17,6 +17,7 @@ import {useStore} from 'react-redux'
 import {API_URL} from '@env';
 import ProfileStats from "../components/ProfileStats";
 import ProfilePosts from "../components/ProfilePosts";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 
 export default function AccountScreen({navigation}) {
@@ -56,7 +57,7 @@ export default function AccountScreen({navigation}) {
   }
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
       {profile.map((item) =>
         <ScrollView
           key={item.id}
@@ -93,15 +94,18 @@ export default function AccountScreen({navigation}) {
             <TouchableOpacity
               onPress={() => navigation.push('EditProfile')}
               style={{
-                paddingLeft: 20,
                 paddingVertical: 6,
                 width: '100%',
-                backgroundColor: colors.main,
+                backgroundColor: colors.primary,
                 borderRadius: 6,
                 marginVertical: 20
               }}
             >
-              <Text style={{textAlign: 'center', color: 'white'}}>Edit Profile</Text>
+              <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8}}>
+                <MaterialCommunityIcons name="account-edit" color='white'
+                                        size={20}/>
+                <Text style={{textAlign: 'center', color: 'white'}}>Edit Profile</Text>
+              </View>
             </TouchableOpacity>
           </View>
 

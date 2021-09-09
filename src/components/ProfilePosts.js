@@ -18,7 +18,7 @@ export default function ProfilePosts({posts, loading, navigation}) {
       {posts.length < 1 && loading &&
       <ActivityIndicator
         size={60}
-        color={colors.main}
+        color={colors.primary}
         style={{marginVertical: 40}}
       />
       }

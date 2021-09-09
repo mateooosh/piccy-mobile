@@ -31,7 +31,25 @@ const displayTimeV2 = date => {
     return `${date.getHours()}:${prefixTime(date.getMinutes())}`
   }
 
-  return displayTime(date);
+  return displayTimeV3(date);
+}
+
+const displayTimeV3 = date => {
+  date = new Date(date);
+
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+
+  let hours = date.getHours() + 1;
+  let minutes = date.getMinutes() + 1;
+
+  day = (day < 10) ? `0${day}` : day;
+  month = (month < 10) ? `0${month}` : month;
+  hours = (hours < 10) ? `0${hours}` : hours;
+  minutes = (minutes < 10) ? `0${minutes}` : minutes;
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
 const prefixTime = value => {
@@ -44,3 +62,4 @@ const prefixTime = value => {
 
 module.exports.displayTime = displayTime
 module.exports.displayTimeV2 = displayTimeV2
+module.exports.displayTimeV3 = displayTimeV3

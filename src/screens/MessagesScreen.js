@@ -83,7 +83,11 @@ export default function MessagesScreen({route, navigation}) {
   // }
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView style={{ paddingHorizontal: 10 }}>
+      <ScrollView contentContainerStyle={{display: 'flex', flexDirection: 'column', gap: 1, backgroundColor: '#ccc'}}>
+        {channels.map((channel, idx) =>
+          <MessageUserItem navigation={navigation} channel={channel} key={idx}></MessageUserItem>
+        )}
+
         {channels.map((channel, idx) =>
           <MessageUserItem navigation={navigation} channel={channel} key={idx}></MessageUserItem>
         )}

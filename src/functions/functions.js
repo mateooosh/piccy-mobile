@@ -59,7 +59,22 @@ const prefixTime = value => {
   return value;
 }
 
+const validation = {
+  min6Chars: (string) => {
+    return string.length > 5;
+  }
+}
+
+const displayToast = (toast, title, duration = 3000) => {
+  toast.show({
+    title: title,
+    duration: 3000
+  })
+}
+
 
 module.exports.displayTime = displayTime
 module.exports.displayTimeV2 = displayTimeV2
 module.exports.displayTimeV3 = displayTimeV3
+module.exports.validation = validation
+module.exports.displayToast = displayToast

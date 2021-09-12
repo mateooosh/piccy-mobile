@@ -129,7 +129,7 @@ export default function HomeScreen({navigation}){
               idx={idx}
               key={idx}
               navigation={navigation}
-              displayComments={false}
+              homeScreen={true}
               updatePosts={updatePosts}
             />
           ))}

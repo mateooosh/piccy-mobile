@@ -56,7 +56,7 @@ export default function PostScreen({route, navigation}) {
             idx={idx}
             key={idx}
             navigation={navigation}
-            displayComments={true}
+            homeScreen={false}
             updatePosts={updatePosts}
           />
         )}

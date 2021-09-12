@@ -25,6 +25,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {useStore} from "react-redux";
 import {API_URL} from "@env";
+import styles from "../styles/style";
 
 
 // //import my functions
@@ -44,6 +45,8 @@ export default function Post(props) {
   const [photo, setPhoto] = useState(null);
   const [comments, setComments] = useState([]);
   const [reason, setReason] = useState('');
+  const [commentInput, setCommentInput] = useState('');
+  const [commentInputVisible, setCommentInputVisible] = useState(true);
 
   const store = useStore();
 
@@ -61,16 +64,7 @@ export default function Post(props) {
 
     getPhoto(props.post.id);
 
-    if (props.displayComments) {
-      const url = `${API_URL}/comments/${props.post.id}`;
-      fetch(url)
-        .then((response) => response.json())
-        .then((response) => {
-          console.log('comments', response);
-          setComments(response);
-        })
-        .catch((err) => console.log(err));
-    }
+    getComments(props.post.id);
 
     return function cleanup() {
       console.log('destroy')
@@ -78,12 +72,12 @@ export default function Post(props) {
 
   }, [])
 
-  function animateHeartIcon () {
+  function animateHeartIcon() {
     Animated.timing(
       likeAnim,
       {
         toValue: 1.4,
-        duration: 500,
+        duration: 300,
       }
     ).start(() => {
       Animated.timing(
@@ -166,6 +160,19 @@ export default function Post(props) {
       .catch(err => console.log(err))
   }
 
+  function getComments(id) {
+    if (!props.homeScreen) {
+      const url = `${API_URL}/comments/${id}`;
+      fetch(url)
+        .then((response) => response.json())
+        .then((response) => {
+          console.log('comments', response);
+          setComments(response);
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
   function reportPost() {
     const url = `${API_URL}/reports`;
     const obj = {
@@ -187,6 +194,35 @@ export default function Post(props) {
       })
       .catch(err => console.log(err))
       .finally(() => setIsOpenAlert(false))
+  }
+
+  function createComment() {
+    const url = `${API_URL}/comments/${post.id}`;
+    const obj = {
+      idUser: store.getState().id,
+      content: commentInput
+    }
+
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response.message);
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        setCommentInput('');
+        getComments(props.post.id);
+      })
+  }
+
+  function onCommentPress() {
+    console.log('comment press');
   }
 
   return (
@@ -387,7 +423,7 @@ export default function Post(props) {
         </Animated.View>
         <View style={{flexDirection: "row", alignItems: "center"}}>
           <MaterialCommunityIcons
-            onPress={() => alert("Comment")}
+            onPress={onCommentPress}
             name="comment-outline"
             color={"black"}
             size={30}
@@ -439,7 +475,7 @@ export default function Post(props) {
         })}
       </Text>
 
-      {props.displayComments === true && comments.length > 0 && (
+      {props.homeScreen === false && comments.length > 0 && (
         <Text style={{color: "#555", marginHorizontal: 15, marginTop: 10}}>
           <Text>Comments</Text>
         </Text>
@@ -463,6 +499,31 @@ export default function Post(props) {
           </Text>
         </View>
       ))}
+
+      {!props.homeScreen && commentInputVisible &&
+      <View style={{position: 'relative', marginBottom: 10, marginTop: 8, marginHorizontal: 10}}>
+        <TextInput
+          onChangeText={str => setCommentInput(str)}
+          onSubmitEditing={createComment}
+          style={{
+            minHeight: 46,
+            flexGrow: 1,
+            backgroundColor: '#eee',
+            paddingLeft: 8,
+            paddingRight: 50,
+            fontSize: 16,
+            borderRadius: 12,
+            paddingVertical: 8,
+          }}
+          placeholder="Type here..."
+          value={commentInput}
+        />
+        <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)'}}
+                          onPress={createComment}>
+          <MaterialIcons name="send" color={'#444'} size={35}/>
+        </TouchableOpacity>
+      </View>
+      }
     </View>
   );
 }

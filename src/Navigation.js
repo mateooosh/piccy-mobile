@@ -15,6 +15,8 @@ import FollowersScreen from './screens/FollowersScreen.js';
 import FollowingScreen from './screens/FollowingScreen.js';
 import EditProfileScreen from './screens/EditProfileScreen.js';
 import ChatScreen from './screens/ChatScreen.js';
+import ResetPasswordScreen from './screens/ResetPasswordScreen.js';
+import ReportBugScreen from './screens/ReportBugScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -50,7 +52,9 @@ export default function Navigation() {
       Post: 'post/:id',
       Followers: 'followers/:id',
       Following: 'following/:id',
-      EditProfile: 'edit-profile',
+      EditProfile: 'edit/profile',
+      ResetPassword: 'reset/password',
+      ReportBug: 'report/bug',
       Channel: 'channel/:idChannel',
       Home: '/',
     },
@@ -85,13 +89,17 @@ export default function Navigation() {
             <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: 'Followers'})}/>
             <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: 'Following'})}/>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}
-                          options={() => ({headerTitle: 'Edit profile'})}/>
+                          options={() => ({headerTitle: 'Edit Profile'})}/>
+            <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}
+                          options={() => ({headerTitle: 'Reset Password'})}/>
+            <Stack.Screen name="ReportBug" component={ReportBugScreen}
+                          options={() => ({headerTitle: 'Report Bug'})}/>
             <Stack.Screen name="Channel" component={ChatScreen}
                           options={() => ({
                             headerTitle: 'Chat',
                             headerRight: () => (
                               <MaterialCommunityIcons name="dots-vertical" color='black'
-                                             size={30}/>
+                                                      size={30}/>
                             ),
                             headerRightContainerStyle: {
                               paddingRight: 15

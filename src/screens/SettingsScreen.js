@@ -1,9 +1,10 @@
 import React from 'react';
 import { useStore } from 'react-redux';
 import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function SettingsScreen(){
+export default function SettingsScreen({navigation}){
   const store = useStore();
 
   function logOut() {
@@ -17,51 +18,50 @@ export default function SettingsScreen(){
     <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'stretch', backgroundColor: 'white' }}>
       <ScrollView  contentContainerStyle={{display: 'flex', flexDirection: 'column', gap: 1, backgroundColor: '#ddd'}}>
         <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="settings-applications" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="settings-applications" color={'black'} size={30}/>
           <Text style={{fontSize: 16}}>Option</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="electrical-services" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="electrical-services" color={'black'} size={30}/>
           <Text style={{fontSize: 16}}>Option</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="drive-folder-upload" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="drive-folder-upload" color={'black'} size={30}/>
           <Text style={{fontSize: 16}}>Option</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="psychology" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="psychology" color={'black'} size={30}/>
           <Text style={{fontSize: 16}}>Option</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="settings-applications" color={'black'} size={30}/>
-          <Text style={{fontSize: 16}}>Option</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="electrical-services" color={'black'} size={30}/>
+          <MaterialCommunityIcons style={styles.icon} name="account-remove" color={'black'} size={30}/>
+          <Text style={{fontSize: 16}}>Delete account</Text>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.option} onPress={() => navigation.push('ReportBug')}>
+          <MaterialIcons style={styles.icon} name="bug-report" color={'black'} size={30}/>
           <Text style={{fontSize: 16}}>Report bug</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="drive-folder-upload" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="language" color={'black'} size={30}/>
           <Text style={{fontSize: 16}}>Language</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.option}>
-          <MaterialCommunityIcons style={styles.icon} name="psychology" color={'black'} size={30}/>
+        <TouchableOpacity style={styles.option} onPress={() => navigation.push('ResetPassword')}>
+          <MaterialIcons style={styles.icon} name="lock-outline" color={'black'} size={30}/>
           <Text style={{fontSize: 16}}>Reset password</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.option} onPress={logOut}>
-          <MaterialCommunityIcons style={styles.icon} name="logout" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="logout" color={'black'} size={30}/>
           <Text style={{fontSize: 16, fontWeight: '700'}}>Log out</Text>
-          <MaterialCommunityIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
+          <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'} size={30}/>
         </TouchableOpacity>
       </ScrollView>
     </View>

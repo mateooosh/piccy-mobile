@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useStore} from "react-redux";
 import {
   Text,
   View,
@@ -9,8 +10,9 @@ import { API_URL } from "@env";
 
 import UserItem from "../components/UserItem";
 
+
 export default function FollowersScreen({ route, navigation }) {
-  // const store = useStore();
+  const store = useStore();
 
   // const [profile, setProfile] = useState([]);
   // const [posts, setPosts] = useState([]);
@@ -19,7 +21,7 @@ export default function FollowersScreen({ route, navigation }) {
   const [hasData, setHasData] = useState(false);
 
   useEffect(() => {
-    const url = `${API_URL}/followers/${route.params.id}`;
+    const url = `${API_URL}/followers/${route.params.id}?token=${store.getState().token}`;
     fetch(url)
       .then((response) => response.json())
       .then((response) => {

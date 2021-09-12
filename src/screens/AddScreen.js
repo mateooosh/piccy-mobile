@@ -156,7 +156,8 @@ export default function AddScreen({navigation}) {
     let obj = {
       idUser: store.getState().id,
       description: description,
-      photo: base64
+      photo: base64,
+      token: store.getState().token
     };
     console.log(obj)
 

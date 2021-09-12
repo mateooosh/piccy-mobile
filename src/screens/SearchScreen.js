@@ -58,7 +58,7 @@ function SearchAccounts(props) {
 
   function getAccounts() {
     // console.log(API_URL)
-    const url = `${API_URL}/users/${props.query}`;
+    const url = `${API_URL}/users/${props.query}?token=${store.getState().token}`;
     console.log(url)
     fetch(url)
       .then(response => response.json())

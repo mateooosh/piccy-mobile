@@ -45,12 +45,12 @@ export default function LogIn({navigation}) {
       .then(response => response.json())
       .then(response => {
         // alert(response.message);
+        console.log('token:', response.token)
         store.dispatch({type: "logged/true"});
         store.dispatch({type: "tokenSet", payload: response.token});
         store.dispatch({type: "usernameSet", payload: response.username});
         store.dispatch({type: "idSet", payload: response.id});
         setLoading(false);
-        console.log(store.getState());
       })
       .catch(err => {
         setLoading(false);
@@ -80,7 +80,7 @@ export default function LogIn({navigation}) {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView keyboardShouldPersistTaps='handled'
                   contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}>
         <View style={{display: 'flex', flexDirection: 'column', gap: 30}}>

@@ -33,7 +33,7 @@ export default function ChatScreen({route, navigation}) {
   }
 
   useEffect(() => {
-    const url = `${API_URL}/messages/${route.params.idChannel}`;
+    const url = `${API_URL}/messages/${route.params.idChannel}?token=${store.getState().token}`;
 
     setIsLoading(true);
 

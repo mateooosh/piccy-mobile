@@ -17,7 +17,8 @@ export default function ReportBugScreen() {
     const url = `${API_URL}/report/bug`;
     const obj = {
       idReporter: store.getState().id,
-      description: bugDescription
+      description: bugDescription,
+      token: store.getState().token
     }
 
     setLoading(true);

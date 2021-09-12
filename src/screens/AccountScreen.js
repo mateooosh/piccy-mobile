@@ -35,7 +35,7 @@ export default function AccountScreen({navigation}) {
 
   function getProfile() {
     console.log('get profile')
-    const url = `${API_URL}/users?idUser=${store.getState().id}`;
+    const url = `${API_URL}/users?idUser=${store.getState().id}&token=${store.getState().token}`;
     setLoading(true);
     fetch(url)
       .then(response => response.json())
@@ -43,7 +43,7 @@ export default function AccountScreen({navigation}) {
         // console.log(response);
         setProfile(response);
 
-        fetch(`${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=true`)
+        fetch(`${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=true&token=${store.getState().token}`)
           .then(response => response.json())
           .then(response => {
             // console.log(response);

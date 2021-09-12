@@ -44,7 +44,7 @@ export default function HomeScreen({navigation}){
     setLoading(true);
     // http://localhost:3000/posts?idUser=39&onlyUserPosts=false&page=1
     console.log(API_URL)
-    const url = `http://localhost:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}`;
+    const url = `http://localhost:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}&token=${store.getState().token}`;
     fetch(url)
     .then(response => response.json())
     .then(response => {

@@ -95,7 +95,7 @@ export default function Post(props) {
     console.log(JSON.stringify({idUser: idUser, idPost: idPost}));
     fetch(url, {
       method: "POST",
-      body: JSON.stringify({idUser: idUser, idPost: idPost}),
+      body: JSON.stringify({idUser: idUser, idPost: idPost, token: store.getState().token}),
       headers: {
         "Content-Type": "application/json",
       },
@@ -125,7 +125,7 @@ export default function Post(props) {
     const url = `${API_URL}/likes`;
     fetch(url, {
       method: "DELETE",
-      body: JSON.stringify({idUser: idUser, idPost: idPost}),
+      body: JSON.stringify({idUser: idUser, idPost: idPost, token: store.getState().token}),
       headers: {
         "Content-Type": "application/json",
       },
@@ -149,7 +149,7 @@ export default function Post(props) {
   }
 
   function getPhoto(id) {
-    const url = `${API_URL}/posts/${id}/photo`;
+    const url = `${API_URL}/posts/${id}/photo?token=${store.getState().token}`;
 
     fetch(url)
       .then(response => response.json())
@@ -162,7 +162,7 @@ export default function Post(props) {
 
   function getComments(id) {
     if (!props.homeScreen) {
-      const url = `${API_URL}/comments/${id}`;
+      const url = `${API_URL}/comments/${id}?token=${store.getState().token}`;
       fetch(url)
         .then((response) => response.json())
         .then((response) => {
@@ -178,7 +178,8 @@ export default function Post(props) {
     const obj = {
       idPost: post.id,
       idReporter: store.getState().id,
-      reason: reason
+      reason: reason,
+      token: store.getState().token
     }
 
     fetch(url, {
@@ -200,7 +201,8 @@ export default function Post(props) {
     const url = `${API_URL}/comments/${post.id}`;
     const obj = {
       idUser: store.getState().id,
-      content: commentInput
+      content: commentInput,
+      token: store.getState().token
     }
 
     fetch(url, {

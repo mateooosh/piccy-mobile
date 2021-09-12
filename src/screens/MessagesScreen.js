@@ -15,7 +15,7 @@ export default function MessagesScreen({route, navigation}) {
   const [channels, setChannels] = useState([]);
 
   useEffect(() => {
-    const url = `${API_URL}/channels?idUser=${store.getState().id}`;
+    const url = `${API_URL}/channels?idUser=${store.getState().id}&token=${store.getState().token}`;
 
     fetch(url)
       .then(response => response.json())
@@ -23,7 +23,7 @@ export default function MessagesScreen({route, navigation}) {
         console.log(response);
         setChannels(response);
       })
-      .catch(err => log(err));
+      .catch(err => console.log(err));
 
   }, [])
 

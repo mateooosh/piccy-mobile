@@ -31,7 +31,7 @@ export default function EditProfileScreen({route, navigation}) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const url = `${API_URL}/users/${store.getState().id}/get`;
+    const url = `${API_URL}/users/${store.getState().id}/get?token=${store.getState().token}`;
 
 
     fetch(url)
@@ -59,7 +59,8 @@ export default function EditProfileScreen({route, navigation}) {
       email: email,
       name: name,
       description: description,
-      photo: base64
+      photo: base64,
+      token: store.getState().token
     }
 
     if (loading)

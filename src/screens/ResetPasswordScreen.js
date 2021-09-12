@@ -5,6 +5,7 @@ import styles from "../styles/style";
 import {API_URL} from "@env";
 import {validation, displayToast} from '../functions/functions';
 import {useToast} from 'native-base';
+import Input from "../components/Input";
 
 export default function ResetPasswordScreen() {
   const store = useStore();
@@ -19,7 +20,8 @@ export default function ResetPasswordScreen() {
     const obj = {
       idUser: store.getState().id,
       oldPassword: oldPassword,
-      newPassword: newPassword
+      newPassword: newPassword,
+      token: store.getState().token
     }
 
     setLoading(true);
@@ -72,32 +74,12 @@ export default function ResetPasswordScreen() {
 
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView keyboardShouldPersistTaps='handled'
-                  contentContainerStyle={{paddingHorizontal: 20, paddingTop: 20}}>
-        <View>
-          <Text style={styles.label}>Old password</Text>
-          <TextInput
-            value={oldPassword}
-            onSubmitEditing={resetPassword}
-            onChangeText={(str) => setOldPassword(str)}
-            style={styles.input}
-            secureTextEntry={true}
-            placeholder="Old password"
-            autoCompleteType="password"
-          />
-
-          <Text style={styles.label}>New password</Text>
-          <TextInput
-            value={newPassword}
-            onSubmitEditing={resetPassword}
-            onChangeText={(str) => setNewPassword(str)}
-            style={styles.input}
-            secureTextEntry={true}
-            placeholder="New password"
-            autoCompleteType="password"
-          />
-
-          {getButton()}
-        </View>
+                  contentContainerStyle={{paddingHorizontal: 20, paddingTop: 20, gap: 30}}>
+        <Input value={oldPassword} label="Old password" onSubmitEditing={resetPassword} onChangeText={setOldPassword}
+               secureTextEntry={true} placeholder="Old password"/>
+        <Input value={newPassword} label="New password" onSubmitEditing={resetPassword} onChangeText={setNewPassword}
+               secureTextEntry={true} placeholder="New password"/>
+        {getButton()}
       </ScrollView>
     </View>
   )

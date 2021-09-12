@@ -32,7 +32,7 @@ export default function AccountScreen({route, navigation}) {
       return;
     } else {
       // get information about profile
-      const url = `${API_URL}/users?username=${route.params.username}&myIdUser=${store.getState().id}`;
+      const url = `${API_URL}/users?username=${route.params.username}&myIdUser=${store.getState().id}&token=${store.getState().token}`;
       setLoading(true)
       fetch(url)
         .then((response) => response.json())
@@ -42,7 +42,7 @@ export default function AccountScreen({route, navigation}) {
 
           // get user's posts
           fetch(
-            `${API_URL}/posts?username=${route.params.username}&onlyUserPosts=true`
+            `${API_URL}/posts?username=${route.params.username}&onlyUserPosts=true&token=${store.getState().token}`
           )
             .then((response) => response.json())
             .then((response) => {
@@ -65,7 +65,7 @@ export default function AccountScreen({route, navigation}) {
     deepCopy[0].followers++;
     setProfile(deepCopy);
 
-    const url = `${API_URL}/users/${idUser}/follow/${idFollower}`;
+    const url = `${API_URL}/users/${idUser}/follow/${idFollower}?token=${store.getState().token}`;
     fetch(url, {
       method: "POST",
       headers: {
@@ -86,7 +86,7 @@ export default function AccountScreen({route, navigation}) {
     deepCopy[0].followers--;
     setProfile(deepCopy);
 
-    const url = `${API_URL}/users/${idUser}/follow/${idFollower}`;
+    const url = `${API_URL}/users/${idUser}/follow/${idFollower}?token=${store.getState().token}`;
     fetch(url, {
       method: "DELETE",
       headers: {

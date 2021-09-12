@@ -5,9 +5,9 @@ import colors from '../colors/colors';
 import styles from "../styles/style";
 
 
-export default function Input({label, placeholder, autoCompleteType, onSubmitEditing, onChangeText, secureTextEntry, isCorrect, errorMessage}) {
+export default function Input({label, placeholder, autoCompleteType, onSubmitEditing, onChangeText, secureTextEntry, isCorrect, errorMessage, value}) {
 
-  const [value, setValue] = useState('');
+  // const [value, setValue] = useState('');
 
   return (
     <View>
@@ -15,7 +15,7 @@ export default function Input({label, placeholder, autoCompleteType, onSubmitEdi
       <TextInput
         value={value}
         onSubmitEditing={onSubmitEditing}
-        onChangeText={(str) => {setValue(str); onChangeText(str);}}
+        onChangeText={(str) => {onChangeText(str);}}
         style={styles.input}
         placeholder={placeholder}
         autoCompleteType={autoCompleteType || ''}

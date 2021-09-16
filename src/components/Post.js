@@ -37,11 +37,18 @@ export default function Post(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current
   const likeAnim = useRef(new Animated.Value(1)).current
 
-  const [isOpenAlert, setIsOpenAlert] = React.useState(false);
-  const onCloseAlert = () => setIsOpenAlert(false);
-  const cancelRefAlert = React.useRef();
+  const [isOpenReport, setIsOpenReport] = React.useState(false);
+  const onCloseReport = () => setIsOpenReport(false);
+  const cancelRefReport = React.useRef();
 
+  const [isOpenRemove, setIsOpenRemove] = React.useState(false);
+  const onCloseRemove = () => setIsOpenRemove(false);
+  const cancelRefRemove = React.useRef();
+
+  // const [isOpenRemovePost, setIsOpenRemovePost] = React.useState(false);
+  // const onCloseRemovePost = () => setIsOpenRemovePost(false);
   const [post, setPost] = useState({});
+
   const [photo, setPhoto] = useState(null);
   const [comments, setComments] = useState([]);
   const [reason, setReason] = useState('');
@@ -52,6 +59,7 @@ export default function Post(props) {
 
   useEffect(() => {
     setPost(props.post);
+    console.log(props)
 
     Animated.timing(
       fadeAnim,
@@ -186,7 +194,7 @@ export default function Post(props) {
       method: "POST",
       body: JSON.stringify(obj),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       }
     })
       .then(response => response.json())
@@ -194,7 +202,19 @@ export default function Post(props) {
         console.log(response.message);
       })
       .catch(err => console.log(err))
-      .finally(() => setIsOpenAlert(false))
+      .finally(() => setIsOpenReport(false))
+  }
+
+  function removePost() {
+    const url = `${API_URL}/posts/${post.id}`;
+    fetch(url, {
+      method: 'DELETE'
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => alert(err))
   }
 
   function createComment() {
@@ -239,9 +259,19 @@ export default function Post(props) {
     >
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
+          {post.username === store.getState().username &&
           <Actionsheet.Item
             onPress={() => {
-              setIsOpenAlert(!isOpenAlert);
+              setIsOpenRemove(!isOpenRemove);
+              onClose();
+            }}
+          >
+            <Text style={{fontSize: 16, fontWeight: "600"}}>Remove post</Text>
+          </Actionsheet.Item>
+          }
+          <Actionsheet.Item
+            onPress={() => {
+              setIsOpenReport(!isOpenReport);
               onClose();
             }}
           >
@@ -257,9 +287,46 @@ export default function Post(props) {
       </Actionsheet>
 
       <AlertDialog
-        leastDestructiveRef={cancelRefAlert}
-        isOpen={isOpenAlert}
-        onClose={onCloseAlert}
+        leastDestructiveRef={cancelRefRemove}
+        isOpen={isOpenRemove}
+        onClose={onCloseRemove}
+        motionPreset={"fade"}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.Header fontSize="lg" fontWeight="bold">
+            Remove post
+          </AlertDialog.Header>
+          <AlertDialog.Body>
+            Are you sure You want to remove this post?
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button
+              style={{backgroundColor: colors.primary}}
+              ref={cancelRefRemove}
+              onPress={onCloseRemove}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{backgroundColor: colors.danger}}
+              onPress={() => {
+                console.log("remove");
+                removePost();
+              }}
+              ml={3}
+            >
+              Remove
+            </Button>
+
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+
+      <AlertDialog
+        leastDestructiveRef={cancelRefReport}
+        isOpen={isOpenReport}
+        onClose={onCloseReport}
         motionPreset={"fade"}
       >
         <AlertDialog.Content>
@@ -288,8 +355,8 @@ export default function Post(props) {
           <AlertDialog.Footer>
             <Button
               style={{backgroundColor: colors.primary}}
-              ref={cancelRefAlert}
-              onPress={onCloseAlert}
+              ref={cancelRefReport}
+              onPress={onCloseReport}
             >
               Cancel
             </Button>

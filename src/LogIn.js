@@ -84,10 +84,10 @@ export default function LogIn({navigation}) {
       <ScrollView keyboardShouldPersistTaps='handled'
                   contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}>
         <View style={{display: 'flex', flexDirection: 'column', gap: 30}}>
-          <Input label={'Username'} placeholder={'Username'} onChangeText={setUsername}
+          <Input value={username} label={'Username'} placeholder={'Username'} onChangeText={setUsername}
                  onSubmitEditing={logIn.bind(this, username, password)} isCorrect={correctUsername()}
                  autoCompleteType="username" errorMessage="Username must be at least 6 characters long"/>
-          <Input label={'Password'} placeholder={'Password'} onChangeText={setPassword}
+          <Input value={password} label={'Password'} placeholder={'Password'} onChangeText={setPassword}
                  onSubmitEditing={logIn.bind(this, username, password)} isCorrect={correctPassword()}
                  autoCompleteType="password" errorMessage="Password must be at least 6 characters long"
                  secureTextEntry={true}/>

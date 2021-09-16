@@ -1,18 +1,21 @@
-
 import React, {useState} from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView } from 'react-native';
-import { Divider } from 'react-native-elements';
+import {StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
+import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
 import colors from "./colors/colors";
-import styles from './styles/style'
+import styles from './styles/style';
+import Input from './components/Input';
+import {validation} from "./functions/functions";
 
-export default function Register({ navigation }) {
+export default function Register({navigation}) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
-  function createAccount(username,email,password,name){
+  const [loading, setLoading] = useState(false);
+
+  function createAccount(username, email, password, name) {
     let obj = {
       username: username,
       email: email,
@@ -20,73 +23,143 @@ export default function Register({ navigation }) {
       name: name
     };
 
+    setLoading(true);
+
     const url = `${API_URL}/users`;
     fetch(url, {
       method: 'POST',
       body: JSON.stringify(obj),
       headers: {
-      'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
     })
-    .then(response => response.json())
-    .then(response => alert(response.message))
-    .catch(err => console.log(err))
+      .then(response => response.json())
+      .then(response => {
+        alert(response.message);
+        navigation.push('Home');
+      })
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false))
   }
 
+  function correctEmail() {
+    return validation.email(email);
+  }
+
+  function correctUsername() {
+    return validation.min6Chars(username);
+  }
+
+  function correctPassword() {
+    return validation.min6Chars(password);
+  }
+
+  function correctName() {
+    return validation.min6Chars(name);
+  }
+
+  function allCorrect() {
+    return correctEmail() && correctUsername() && correctPassword() && correctName();
+  }
+
+  function getButton() {
+    if (allCorrect()) {
+      return (
+        <TouchableOpacity onPress={createAccount.bind(this, username, email, password, name)} style={styles.button}>
+          {!loading &&
+          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>
+          }
+          {loading &&
+          <ActivityIndicator size={19} color="white"/>
+          }
+        </TouchableOpacity>
+      )
+    } else {
+      return (
+        <TouchableOpacity style={styles.buttonDisabled}>
+          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>
+        </TouchableOpacity>
+      )
+    }
+  }
+
+
   return (
-    <View style={{flex: 1}} >
-      <ScrollView 
-        keyboardShouldPersistTaps='handled' 
+    <View style={{flex: 1}}>
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
         contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}
       >
-        <View>
-          <Text style={styles.label}>E-mail</Text>
-          <TextInput 
-            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
-            onChangeText={(str) => setEmail(str)} 
-            style={styles.input} 
-            placeholder="E-mail" 
-            autoCompleteType="email"
-          />
+        <View style={{display: 'flex', flexDirection: 'column', gap: 30}}>
+          {/*<Text style={styles.label}>E-mail</Text>*/}
+          {/*<TextInput */}
+          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
+          {/*  onChangeText={(str) => setEmail(str)} */}
+          {/*  style={styles.input} */}
+          {/*  placeholder="E-mail" */}
+          {/*  autoCompleteType="email"*/}
+          {/*/>*/}
 
-          <Text style={styles.label}>Username</Text>
-          <TextInput 
-            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
-            onChangeText={(str) => setUsername(str)} 
-            style={styles.input} 
-            placeholder="Username" 
-            autoCompleteType="username"
-          />
-          
-          <Text style={styles.label}>Password</Text>
-          <TextInput 
-            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
-            onChangeText={(str) => setPassword(str)} 
-            style={styles.input} 
-            secureTextEntry={true} 
-            placeholder="Password" 
-            autoCompleteType="password"
-          />
+          <Input value={email} label={'E-mail'} placeholder={'E-mail'} onChangeText={setEmail}
+                 onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctEmail()}
+                 autoCompleteType="email" errorMessage="E-mail is not valid"/>
 
-          <Text style={styles.label}>Name</Text>
-          <TextInput 
-            onSubmitEditing={createAccount.bind(this,username,email,password,name)} 
-            onChangeText={(str) => setName(str)} 
-            style={styles.input} 
-            placeholder="Name" 
-            autoCompleteType="name"
-          />
-          
-          <TouchableOpacity onPress={createAccount.bind(this,username,email,password,name)} style={styles.button}>
-            <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>
-          </TouchableOpacity>
+          <Input value={username} label={'Username'} placeholder={'Username'} onChangeText={setUsername}
+                 onSubmitEditing={createAccount.bind(this, username, email, password, name)}
+                 isCorrect={correctUsername()}
+                 autoCompleteType="username" errorMessage="Username must be at least 6 characters long"/>
+
+          <Input value={password} label={'Password'} placeholder={'Password'} onChangeText={setPassword}
+                 onSubmitEditing={createAccount.bind(this, username, password)} isCorrect={correctPassword()}
+                 autoCompleteType="password" errorMessage="Password must be at least 6 characters long"
+                 secureTextEntry={true}/>
+
+          <Input value={name} label={'Name'} placeholder={'Name'} onChangeText={setName}
+                 onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctName()}
+                 autoCompleteType="name" errorMessage="Name must be at least 6 characters long"/>
+
+          {/*<Text style={styles.label}>Username</Text>*/}
+          {/*<TextInput */}
+          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
+          {/*  onChangeText={(str) => setUsername(str)} */}
+          {/*  style={styles.input} */}
+          {/*  placeholder="Username" */}
+          {/*  autoCompleteType="username"*/}
+          {/*/>*/}
+
+          {/*<Text style={styles.label}>Password</Text>*/}
+          {/*<TextInput */}
+          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
+          {/*  onChangeText={(str) => setPassword(str)} */}
+          {/*  style={styles.input} */}
+          {/*  secureTextEntry={true} */}
+          {/*  placeholder="Password" */}
+          {/*  autoCompleteType="password"*/}
+          {/*/>*/}
+
+          {/*<Text style={styles.label}>Name</Text>*/}
+          {/*<TextInput */}
+          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
+          {/*  onChangeText={(str) => setName(str)} */}
+          {/*  style={styles.input} */}
+          {/*  placeholder="Name" */}
+          {/*  autoCompleteType="name"*/}
+          {/*/>*/}
+
+          {getButton()}
+
+          {/*<TouchableOpacity onPress={createAccount.bind(this, username, email, password, name)} style={styles.button}>*/}
+          {/*  <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>*/}
+          {/*</TouchableOpacity>*/}
         </View>
-        
+
         <View style={{marginTop: 40}}>
-          <Divider style={{ backgroundColor: 'black'}} />
-          <Text style={{textAlign:'center', marginVertical: 20}}>Already a Piccy member? <Text onPress={()=>navigation.push('Home')} style={{color: colors.primary, fontWeight:'700'}}>Log in here</Text></Text>
+          <Divider style={{backgroundColor: 'black'}}/>
+          <Text style={{textAlign: 'center', marginVertical: 20}}>Already a Piccy member? <Text
+            onPress={() => navigation.push('Home')} style={{color: colors.primary, fontWeight: '700'}}>Log in
+            here</Text></Text>
         </View>
-        
+
       </ScrollView>
     </View>
   );

@@ -47,6 +47,7 @@ export default function Navigation() {
 
   const config = {
     screens: {
+      Register: 'register',
       Settings: 'settings',
       Profile: ':username',
       Post: 'post/:id',

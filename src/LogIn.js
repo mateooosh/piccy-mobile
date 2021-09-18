@@ -18,6 +18,7 @@ export default function LogIn({navigation}) {
   function correctUsername() {
     return validation.min6Chars(username);
   }
+
   function correctPassword() {
     return validation.min6Chars(password);
   }

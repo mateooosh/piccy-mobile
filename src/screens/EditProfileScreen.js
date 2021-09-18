@@ -8,18 +8,20 @@ import {
   ActivityIndicator, TextInput,
 } from "react-native";
 
-import {useStore} from "react-redux";
+import Input from '../components/Input';
+
+import {useStore, useSelector} from "react-redux";
 import {API_URL} from "@env";
-import colors from '../colors/colors';
 import styles from '../styles/style';
+import {t} from '../translations/translations';
 
-
-import UserItem from "../components/UserItem";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker";
+import {validation} from "../functions/functions";
 
 export default function EditProfileScreen({route, navigation}) {
   const store = useStore();
+  const lang = useSelector(state => state.lang);
 
   const [photo, setPhoto] = useState('');
   const [hasData, setHasData] = useState(false);
@@ -30,9 +32,9 @@ export default function EditProfileScreen({route, navigation}) {
 
   const [loading, setLoading] = useState(false);
 
+
   useEffect(() => {
     const url = `${API_URL}/users/${store.getState().id}/get?token=${store.getState().token}`;
-
 
     fetch(url)
       .then(response => response.json())
@@ -96,7 +98,27 @@ export default function EditProfileScreen({route, navigation}) {
     if (!result.cancelled) {
       setPhoto(`data:image/webp;base64,${result.base64}`);
     }
-  };
+  }
+
+  function correctEmail() {
+    return validation.email(email);
+  }
+
+  function correctUsername() {
+    return validation.min6Chars(username);
+  }
+
+  function correctPassword() {
+    return validation.min6Chars(password);
+  }
+
+  function correctName() {
+    return validation.min6Chars(name);
+  }
+
+  function allCorrect() {
+    return correctEmail() && correctUsername() && correctPassword() && correctName();
+  }
 
   return (
     <ScrollView
@@ -104,11 +126,11 @@ export default function EditProfileScreen({route, navigation}) {
     >
       {hasData && (
         <View>
-          <TouchableOpacity style={{alignItems: 'center'}} onPress={pickImage}>
+          <TouchableOpacity style={{alignItems: 'center', marginBottom: 20}} onPress={pickImage}>
             {photo !== null && (
               <Image
-                source={{ uri: photo }}
-                style={{ width: 150, height: 150, borderRadius: 150, marginBottom: 10 }}
+                source={{uri: photo}}
+                style={{width: 150, height: 150, borderRadius: 150}}
               />
             )}
             {photo === null && (
@@ -116,58 +138,45 @@ export default function EditProfileScreen({route, navigation}) {
                 name="account-circle"
                 color={"black"}
                 size={150}
-                style={{ margin: 10 }}
+                style={{margin: 10}}
               />
             )}
           </TouchableOpacity>
 
-          <Text style={styles.label}>
-            Username
-          </Text>
-          <TextInput
-            onSubmitEditing={() => console.log('submit')}
-            onChangeText={(str) => setUsername(str)}
-            style={styles.input}
-            placeholder="Username"
-            value={username}
-          />
+          <View style={{marginBottom: 20}}>
+            <Input value={email} label={'E-mail'} placeholder={'E-mail'} onChangeText={setEmail}
+                   onSubmitEditing={() => console.log('submit')} isCorrect={correctEmail()}
+                   autoCompleteType="email" errorMessage="E-mail is not valid"/>
+          </View>
 
-          <Text style={styles.label}>
-            E-mail
-          </Text>
-          <TextInput
-            onSubmitEditing={() => console.log('submit')}
-            onChangeText={(str) => setEmail(str)}
-            style={styles.input}
-            placeholder="E-mail"
-            value={email}
-          />
+          <View style={{marginBottom: 20}}>
+            <Input value={username} label={t.username[lang]} placeholder={t.username[lang]} onChangeText={setUsername}
+                   onSubmitEditing={() => console.log('submit')} isCorrect={correctUsername()}
+                   autoCompleteType="username" errorMessage="Username must be at least 6 characters long"/>
+          </View>
 
-          <Text style={styles.label}>
-            Name
-          </Text>
-          <TextInput
-            onSubmitEditing={() => console.log('submit')}
-            onChangeText={(str) => setName(str)}
-            style={styles.input}
-            placeholder="Name"
-            value={name}
-          />
+          <View style={{marginBottom: 20}}>
+            <Input value={name} label={'Name'} placeholder={'Name'} onChangeText={setName}
+                   onSubmitEditing={() => console.log('submit')} isCorrect={correctName()}
+                   autoCompleteType="name" errorMessage="Name must be at least 6 characters long"/>
+          </View>
 
-          <Text style={styles.label}>
-            Description
-          </Text>
-          <TextInput
-            onChangeText={(str) => setDescription(str)}
-            style={{
-              textAlignVertical: 'top',
-            }}
-            style={styles.input}
-            multiline={true}
-            numberOfLines={ 5 }
-            placeholder="Description"
-            value={description}
-          />
+          <View style={{marginBottom: 20}}>
+            <Text style={styles.label}>
+              Description
+            </Text>
+            <TextInput
+              onChangeText={(str) => setDescription(str)}
+              style={{
+                textAlignVertical: 'top',
+              }}
+              style={styles.input}
+              multiline={true}
+              numberOfLines={5}
+              placeholder="Description"
+              value={description}
+            />
+          </View>
 
 
           <TouchableOpacity onPress={editProfile} style={styles.button}>

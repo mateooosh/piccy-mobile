@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Alert, Text, ActivityIndicator, View, TouchableOpacity, ScrollView, RefreshControl, ToastAndroid } from 'react-native';
-import { useStore } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  Text,
+  ActivityIndicator,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+  ToastAndroid
+} from 'react-native';
+import {useStore} from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
-import { io } from "socket.io-client";
+import {io} from "socket.io-client";
 import Post from '../components/Post';
 import colors from '../colors/colors';
 
-import { useToast } from 'native-base';
+import {useToast} from 'native-base';
 
 // import { theme } from 'native-base';
 
 console.log(API_URL)
 
-export default function HomeScreen({navigation}){
+export default function HomeScreen({navigation}) {
   const store = useStore();
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
@@ -34,6 +43,7 @@ export default function HomeScreen({navigation}){
       0,
       150
     );
+
     // setTimeout(()=> {
     //   setRefreshing(false);
     // }, 2000)
@@ -42,37 +52,36 @@ export default function HomeScreen({navigation}){
   function getPosts() {
     let temp = page + 1;
     setLoading(true);
-    // http://localhost:3000/posts?idUser=39&onlyUserPosts=false&page=1
-    console.log(API_URL)
-    const url = `http://localhost:3000/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}&token=${store.getState().token}`;
+    console.log('ti', API_URL)
+
+    const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}&token=${store.getState().token}`;
     fetch(url)
-    .then(response => response.json())
-    .then(response => {
-      console.log(response);
-      setLoading(false);
-      //push new posts to array
-      response.map(item => setPosts(posts => [...posts, item]));
-      
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        setLoading(false);
+        //push new posts to array
+        response.map(item => setPosts(posts => [...posts, item]));
 
-      if(!!response.length){
-        setPage(temp);
-      }
-      else{
-        setEmptyPosts(true);
 
-        // ToastAndroid.showWithGravityAndOffset(
-        //   'No more posts',
-        //   ToastAndroid.SHORT,
-        //   ToastAndroid.BOTTOM,
-        //   0,
-        //   150
-        // );
-      }
-    })
-    .catch(err => console.log(err));
+        if (!!response.length) {
+          setPage(temp);
+        } else {
+          setEmptyPosts(true);
+
+          // ToastAndroid.showWithGravityAndOffset(
+          //   'No more posts',
+          //   ToastAndroid.SHORT,
+          //   ToastAndroid.BOTTOM,
+          //   0,
+          //   150
+          // );
+        }
+      })
+      .catch(err => console.log(err));
   }
 
-  function updatePosts (post) {
+  function updatePosts(post) {
     let deepCopy = JSON.parse(JSON.stringify(posts));
     deepCopy.forEach((item) => {
       if (item.id == post.id) {
@@ -92,7 +101,7 @@ export default function HomeScreen({navigation}){
 
     console.log('home mounted');
 
-    const socket = io(API_URL_WS, { transports : ['websocket']});
+    const socket = io(API_URL_WS, {transports: ['websocket']});
 
     socket.emit('new-user', store.getState().username);
 
@@ -109,58 +118,58 @@ export default function HomeScreen({navigation}){
 
 
   return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ScrollView
-          keyboardShouldPersistTaps="always"
-          refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={onRefresh} colors={[colors.primary]} />
-          }
-        >
-          {posts.length < 1 && (
-            <ActivityIndicator
-              size={60}
-              color={colors.primary}
-              style={{ marginVertical: 40 }}
-            />
-          )}
-          {posts.map((post, idx) => (
-            <Post
-              post={post}
-              idx={idx}
-              key={idx}
-              navigation={navigation}
-              homeScreen={true}
-              updatePosts={updatePosts}
-            />
-          ))}
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} colors={[colors.primary]}/>
+        }
+      >
+        {posts.length < 1 && (
+          <ActivityIndicator
+            size={60}
+            color={colors.primary}
+            style={{marginVertical: 40}}
+          />
+        )}
+        {posts.map((post, idx) => (
+          <Post
+            post={post}
+            idx={idx}
+            key={idx}
+            navigation={navigation}
+            homeScreen={true}
+            updatePosts={updatePosts}
+          />
+        ))}
 
-          {!!posts.length && !emptyPosts && (
-            <TouchableOpacity
-              onPress={getPosts}
-              style={{
-                marginHorizontal: 15,
-                marginVertical: 10,
-                padding: 10,
-                borderRadius: 6,
-                backgroundColor: colors.primary,
-                color: "white",
-              }}
-            >
-              {!loading && (
-                <Text
-                  style={{
-                    color: "white",
-                    textAlign: "center",
-                    fontWeight: "700",
-                  }}
-                >
-                  More
-                </Text>
-              )}
-              {loading && <ActivityIndicator size={19} color="white" />}
-            </TouchableOpacity>
-          )}
-        </ScrollView>
-      </View>
+        {!!posts.length && !emptyPosts && (
+          <TouchableOpacity
+            onPress={getPosts}
+            style={{
+              marginHorizontal: 15,
+              marginVertical: 10,
+              padding: 10,
+              borderRadius: 6,
+              backgroundColor: colors.primary,
+              color: "white",
+            }}
+          >
+            {!loading && (
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  fontWeight: "700",
+                }}
+              >
+                More
+              </Text>
+            )}
+            {loading && <ActivityIndicator size={19} color="white"/>}
+          </TouchableOpacity>
+        )}
+      </ScrollView>
+    </View>
   );
 }

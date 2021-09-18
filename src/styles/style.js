@@ -29,6 +29,21 @@ const styles = {
     borderRadius: 6,
     backgroundColor: '#ccc',
     color: 'white'
+  },
+  option: {
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    display:'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  optionActive: {
+    backgroundColor: colors.primary,
+  },
+  icon:{
+    color: '#333',
+    marginRight: 20
   }
 }
 

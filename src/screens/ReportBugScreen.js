@@ -84,6 +84,7 @@ export default function ReportBugScreen() {
               fontSize: 16,
               paddingVertical: 8,
               marginBottom: 30,
+              textAlignVertical: 'top'
             }}
             multiline={true}
             numberOfLines={14}

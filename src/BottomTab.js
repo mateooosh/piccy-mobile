@@ -119,9 +119,9 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="home" color={color} size={25}/>
           ),
-          title: "Home",
+          title: "Piccy",
         }} 
-        name="Home" 
+        name="Home"
         component={HomeScreen}
       />
 

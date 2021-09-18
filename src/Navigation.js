@@ -7,6 +7,8 @@ import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import {t} from './translations/translations';
+
 import SettingsScreen from './screens/SettingsScreen.js';
 import BottomTab from './BottomTab.js';
 import ProfileScreen from './screens/ProfileScreen.js';
@@ -17,6 +19,7 @@ import EditProfileScreen from './screens/EditProfileScreen.js';
 import ChatScreen from './screens/ChatScreen.js';
 import ResetPasswordScreen from './screens/ResetPasswordScreen.js';
 import ReportBugScreen from './screens/ReportBugScreen.js';
+import LanguageScreen from './screens/LanguageScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -29,7 +32,7 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Home':
-      return 'Home'
+      return 'Piccy'
     case 'search':
       return 'Search'
     case 'create-post':
@@ -44,6 +47,7 @@ function getHeaderTitle(route) {
 
 export default function Navigation() {
   const logged = useSelector(state => state.logged);
+  const lang = useSelector(state => state.lang);
 
   const config = {
     screens: {
@@ -57,6 +61,7 @@ export default function Navigation() {
       ResetPassword: 'reset/password',
       ReportBug: 'report/bug',
       Channel: 'channel/:idChannel',
+      Language: 'language',
       Home: '/',
     },
   };
@@ -105,6 +110,10 @@ export default function Navigation() {
                             headerRightContainerStyle: {
                               paddingRight: 15
                             }
+                          })}/>
+            <Stack.Screen name="Language" component={LanguageScreen}
+                          options={() => ({
+                            headerTitle: t.language[lang]
                           })}/>
           </>
         ) : (

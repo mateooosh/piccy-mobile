@@ -18,7 +18,7 @@ export default function Input({label, placeholder, autoCompleteType, onSubmitEdi
         onChangeText={(str) => {onChangeText(str);}}
         style={styles.input}
         placeholder={placeholder}
-        autoCompleteType={autoCompleteType || ''}
+        autoCompleteType={autoCompleteType || null}
         secureTextEntry={secureTextEntry}
       />
       {!isCorrect && value.length !== 0 &&

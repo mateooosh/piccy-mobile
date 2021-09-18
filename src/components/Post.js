@@ -66,6 +66,7 @@ export default function Post(props) {
       {
         toValue: 1,
         duration: 1000,
+        useNativeDriver: true
       }
     ).start();
 
@@ -86,13 +87,15 @@ export default function Post(props) {
       {
         toValue: 1.4,
         duration: 300,
+        useNativeDriver: true
       }
     ).start(() => {
       Animated.timing(
         likeAnim,
         {
           toValue: 1,
-          duration: 500
+          duration: 500,
+          useNativeDriver: true
         }
       ).start();
     });
@@ -587,9 +590,9 @@ export default function Post(props) {
           placeholder="Type here..."
           value={commentInput}
         />
-        <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)'}}
+        <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: [{translateY: -18}]}}
                           onPress={createComment}>
-          <MaterialIcons name="send" color={'#444'} size={35}/>
+          <MaterialIcons name="send" color={'#444'} size={36}/>
         </TouchableOpacity>
       </View>
       }

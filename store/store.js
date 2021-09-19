@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 
 //STORE
 const initialState = {
-  logged: true,
+  logged: false,
   token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImlhdCI6MTYzMTQ2NjE5MSwiZXhwIjoxNjMxNTUyNTkxfQ.5wTXB5pPvS3cF2jasWIlft_Pb6rSf81cv2qgkNemS-A',
   username: 'xroomanx',
   id: '39',

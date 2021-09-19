@@ -1,6 +1,5 @@
 import React from 'react';
-import Register from './Register.js';
-import LogIn from './LogIn.js';
+
 import {NavigationContainer, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createStackNavigator,} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
@@ -9,6 +8,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import {t} from './translations/translations';
 
+import RegisterScreen from './screens/RegisterScreen.js';
+import LoginScreen from './screens/LoginScreen.js';
 import SettingsScreen from './screens/SettingsScreen.js';
 import BottomTab from './BottomTab.js';
 import ProfileScreen from './screens/ProfileScreen.js';
@@ -31,7 +32,7 @@ function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
 
   switch (routeName) {
-    case 'Home':
+    case 'Piccy':
       return 'Piccy'
     case 'search':
       return 'Search'
@@ -62,7 +63,7 @@ export default function Navigation() {
       ReportBug: 'report/bug',
       Channel: 'channel/:idChannel',
       Language: 'language',
-      Home: '/',
+      Piccy: '/',
     },
   };
 
@@ -77,7 +78,7 @@ export default function Navigation() {
         {logged ? (
           <>
             <Stack.Screen
-              name="Home" component={BottomTab}
+              name="Piccy" component={BottomTab}
               options={({route, navigation}) => ({
                 headerTitle: getHeaderTitle(route),
                 headerRight: () => (
@@ -97,7 +98,7 @@ export default function Navigation() {
             <Stack.Screen name="EditProfile" component={EditProfileScreen}
                           options={() => ({headerTitle: 'Edit Profile'})}/>
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}
-                          options={() => ({headerTitle: 'Reset Password'})}/>
+                          options={() => ({headerTitle: t.resetPassword[lang]})}/>
             <Stack.Screen name="ReportBug" component={ReportBugScreen}
                           options={() => ({headerTitle: 'Report Bug'})}/>
             <Stack.Screen name="Channel" component={ChatScreen}
@@ -118,8 +119,8 @@ export default function Navigation() {
           </>
         ) : (
           <>
-            <Stack.Screen name="Home" component={LogIn}/>
-            <Stack.Screen name="Register" component={Register}/>
+            <Stack.Screen name="Piccy" component={LoginScreen}/>
+            <Stack.Screen name="Register" component={RegisterScreen}/>
           </>
         )
         }

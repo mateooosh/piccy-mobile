@@ -1,20 +1,16 @@
-import {StyleSheet} from "react-native";
 import colors from "../colors/colors";
 
 const styles = {
   label: {
     fontWeight: '700',
     fontSize: 16,
-    color: '#777'
+    color: '#444'
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: 'grey',
-    // paddingHorizontal: 8,
+    borderBottomColor: '#ccc',
     fontSize: 16,
-    paddingVertical: 8,
-    // marginTop: 4,
-    // marginBottom: 30,
+    paddingVertical: 8
   },
   button: {
     marginVertical: 10,
@@ -44,6 +40,9 @@ const styles = {
   icon:{
     color: '#333',
     marginRight: 20
+  },
+  p4: {
+    padding: 4
   }
 }
 

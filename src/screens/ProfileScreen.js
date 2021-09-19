@@ -4,9 +4,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Dimensions,
-  Image,
-  ActivityIndicator,
+  Image
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {API_URL} from "@env";
@@ -27,8 +25,8 @@ export default function AccountScreen({route, navigation}) {
   useEffect(() => {
     //if this is my account
     if (route.params.username === store.getState().username) {
-      console.log("teraz");
-      navigation.navigate("Home", {screen: "account"});
+      console.log('teraz');
+      navigation.navigate('Piccy', {screen: 'account'});
       return;
     } else {
       // get information about profile
@@ -101,7 +99,7 @@ export default function AccountScreen({route, navigation}) {
   }
 
   return (
-    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: 'white'}}>
       {profile.map((item) => (
         <ScrollView
           key={item.id}
@@ -150,7 +148,7 @@ export default function AccountScreen({route, navigation}) {
                 <TouchableOpacity
                   onPress={follow.bind(this, store.getState().id, item.id)}
                   style={{
-                    paddingVertical: 6,
+                    paddingVertical: 8,
                     flex: 1,
                     backgroundColor: colors.primary,
                     borderRadius: 6,
@@ -172,7 +170,7 @@ export default function AccountScreen({route, navigation}) {
                 <TouchableOpacity
                   onPress={unfollow.bind(this, store.getState().id, item.id)}
                   style={{
-                    paddingVertical: 6,
+                    paddingVertical: 8,
                     flex: 1,
                     backgroundColor: "#ccc",
                     borderRadius: 6,
@@ -193,7 +191,7 @@ export default function AccountScreen({route, navigation}) {
               <TouchableOpacity
                 onPress={() => alert("send message")}
                 style={{
-                  paddingVertical: 6,
+                  paddingVertical: 8,
                   flex: 1,
                   backgroundColor: colors.primary,
                   borderRadius: 6,

@@ -1,15 +1,20 @@
 import React, {useState} from 'react';
-import {useStore} from 'react-redux';
-import {Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator} from 'react-native';
+import {useSelector, useStore} from 'react-redux';
+import {Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import styles from "../styles/style";
 import {API_URL} from "@env";
 import {validation, displayToast} from '../functions/functions';
 import {useToast} from 'native-base';
 import Input from "../components/Input";
 
+import {t} from '../translations/translations';
+
 export default function ResetPasswordScreen() {
   const store = useStore();
   const toast = useToast();
+
+  const lang = useSelector(state => state.lang);
+
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -54,7 +59,7 @@ export default function ResetPasswordScreen() {
       return (
         <TouchableOpacity onPress={resetPassword} style={styles.button}>
           {!loading &&
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Reset password</Text>
+          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>{t.resetPassword[lang]}</Text>
           }
           {loading &&
           <ActivityIndicator size={19} color="white"/>
@@ -64,7 +69,7 @@ export default function ResetPasswordScreen() {
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Reset password</Text>
+          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>{t.resetPassword[lang]}</Text>
         </TouchableOpacity>
       )
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {useStore} from "react-redux";
 import {
   Text,
@@ -6,12 +6,12 @@ import {
   ScrollView
 } from "react-native";
 
-import { API_URL } from "@env";
+import {API_URL} from "@env";
 
 import UserItem from "../components/UserItem";
 
 
-export default function FollowersScreen({ route, navigation }) {
+export default function FollowersScreen({route, navigation}) {
   const store = useStore();
 
   // const [profile, setProfile] = useState([]);
@@ -38,10 +38,10 @@ export default function FollowersScreen({ route, navigation }) {
 
   return (
     <ScrollView
-      style={{ paddingHorizontal: 10, paddingVertical: 20, height: "100%" }}
+      style={{paddingHorizontal: 10, height: "100%", backgroundColor: 'white'}}
     >
       {followers.map((item, idx) => (
-        <UserItem item={item} key={idx} navigation={navigation} />
+        <UserItem item={item} key={idx} navigation={navigation}/>
       ))}
 
       {hasData && followers.length === 0 && (

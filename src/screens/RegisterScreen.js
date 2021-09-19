@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
-import colors from "./colors/colors";
-import styles from './styles/style';
-import Input from './components/Input';
-import {validation} from "./functions/functions";
+import colors from "../colors/colors";
+import styles from '../styles/style';
+import Input from '../components/Input';
+import {validation} from "../functions/functions";
 
-export default function Register({navigation}) {
+export default function RegisterScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,7 +55,7 @@ export default function Register({navigation}) {
   }
 
   function correctName() {
-    return validation.min6Chars(name);
+    return validation.min3Chars(name);
   }
 
   function allCorrect() {
@@ -116,45 +116,13 @@ export default function Register({navigation}) {
 
           <Input value={name} label={'Name'} placeholder={'Name'} onChangeText={setName}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctName()}
-                 autoCompleteType="name" errorMessage="Name must be at least 6 characters long"/>
-
-          {/*<Text style={styles.label}>Username</Text>*/}
-          {/*<TextInput */}
-          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
-          {/*  onChangeText={(str) => setUsername(str)} */}
-          {/*  style={styles.input} */}
-          {/*  placeholder="Username" */}
-          {/*  autoCompleteType="username"*/}
-          {/*/>*/}
-
-          {/*<Text style={styles.label}>Password</Text>*/}
-          {/*<TextInput */}
-          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
-          {/*  onChangeText={(str) => setPassword(str)} */}
-          {/*  style={styles.input} */}
-          {/*  secureTextEntry={true} */}
-          {/*  placeholder="Password" */}
-          {/*  autoCompleteType="password"*/}
-          {/*/>*/}
-
-          {/*<Text style={styles.label}>Name</Text>*/}
-          {/*<TextInput */}
-          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
-          {/*  onChangeText={(str) => setName(str)} */}
-          {/*  style={styles.input} */}
-          {/*  placeholder="Name" */}
-          {/*  autoCompleteType="name"*/}
-          {/*/>*/}
+                 autoCompleteType="name" errorMessage="Name must be at least 3 characters long"/>
 
           {getButton()}
-
-          {/*<TouchableOpacity onPress={createAccount.bind(this, username, email, password, name)} style={styles.button}>*/}
-          {/*  <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>*/}
-          {/*</TouchableOpacity>*/}
         </View>
 
         <View style={{marginTop: 40}}>
-          <Divider style={{backgroundColor: 'black'}}/>
+          <Divider style={{backgroundColor: '#ddd'}}/>
           <Text style={{textAlign: 'center', marginVertical: 20}}>Already a Piccy member? <Text
             onPress={() => navigation.push('Home')} style={{color: colors.primary, fontWeight: '700'}}>Log in
             here</Text></Text>

@@ -34,7 +34,7 @@ export default function FollowingScreen({route, navigation}) {
 
 
   return (
-    <ScrollView style={{paddingHorizontal: 10, paddingVertical: 20, height: '100%'}}>
+    <ScrollView style={{paddingHorizontal: 10, height: '100%', backgroundColor: 'white'}}>
       {following.map((item, idx) =>
         <UserItem item={item} key={idx} navigation={navigation}/>
       )}

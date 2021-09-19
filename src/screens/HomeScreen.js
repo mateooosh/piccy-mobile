@@ -6,8 +6,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  RefreshControl,
-  ToastAndroid
+  RefreshControl
 } from 'react-native';
 import {useStore} from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
@@ -36,13 +35,6 @@ export default function HomeScreen({navigation}) {
     setPosts([]);
     setEmptyPosts(false);
     getPosts();
-    ToastAndroid.showWithGravityAndOffset(
-      'Refreshed',
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM,
-      0,
-      150
-    );
 
     // setTimeout(()=> {
     //   setRefreshing(false);
@@ -69,13 +61,6 @@ export default function HomeScreen({navigation}) {
         } else {
           setEmptyPosts(true);
 
-          // ToastAndroid.showWithGravityAndOffset(
-          //   'No more posts',
-          //   ToastAndroid.SHORT,
-          //   ToastAndroid.BOTTOM,
-          //   0,
-          //   150
-          // );
         }
       })
       .catch(err => console.log(err));

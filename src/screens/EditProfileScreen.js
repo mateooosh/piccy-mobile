@@ -108,21 +108,40 @@ export default function EditProfileScreen({route, navigation}) {
     return validation.min6Chars(username);
   }
 
-  function correctPassword() {
-    return validation.min6Chars(password);
-  }
-
   function correctName() {
-    return validation.min6Chars(name);
+    return validation.min3Chars(name);
   }
 
   function allCorrect() {
-    return correctEmail() && correctUsername() && correctPassword() && correctName();
+    return correctEmail() && correctUsername() && correctName();
+  }
+
+  function getButton() {
+    if(allCorrect()) {
+      return(
+        <TouchableOpacity onPress={editProfile} style={styles.button}>
+          {!loading && (
+            <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>
+              Save changes
+            </Text>
+          )}
+          {loading && (
+            <ActivityIndicator size={19} color="white"/>
+          )}
+        </TouchableOpacity>
+      )
+    } else {
+      return(
+        <TouchableOpacity style={styles.buttonDisabled}>
+          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Save changes</Text>
+        </TouchableOpacity>
+      )
+    }
   }
 
   return (
     <ScrollView
-      style={{paddingHorizontal: 10, paddingVertical: 20, height: "100%"}}
+      style={{paddingHorizontal: 20, paddingVertical: 20, height: "100%"}}
     >
       {hasData && (
         <View>
@@ -158,7 +177,7 @@ export default function EditProfileScreen({route, navigation}) {
           <View style={{marginBottom: 20}}>
             <Input value={name} label={'Name'} placeholder={'Name'} onChangeText={setName}
                    onSubmitEditing={() => console.log('submit')} isCorrect={correctName()}
-                   autoCompleteType="name" errorMessage="Name must be at least 6 characters long"/>
+                   autoCompleteType="name" errorMessage="Name must be at least 3 characters long"/>
           </View>
 
           <View style={{marginBottom: 20}}>
@@ -179,16 +198,7 @@ export default function EditProfileScreen({route, navigation}) {
           </View>
 
 
-          <TouchableOpacity onPress={editProfile} style={styles.button}>
-            {!loading && (
-              <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>
-                Save changes
-              </Text>
-            )}
-            {loading && (
-              <ActivityIndicator size={19} color="white"/>
-            )}
-          </TouchableOpacity>
+          {getButton()}
 
         </View>
       )}

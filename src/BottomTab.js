@@ -3,6 +3,8 @@ import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
+import {useStore, useSelector} from "react-redux";
+import {t} from './translations/translations';
 
 import colors from './colors/colors'
 // // notifications
@@ -24,7 +26,7 @@ import SearchScreen from './screens/SearchScreen.js';
 import MessagesScreen from './screens/MessagesScreen.js';
 
 
-
+console.log(AddScreen)
 
 // async function schedulePushNotification() {
 //   await Notifications.scheduleNotificationAsync({
@@ -69,6 +71,8 @@ import MessagesScreen from './screens/MessagesScreen.js';
 // }
 
 export default function BottomTab(){
+  const lang = useSelector(state => state.lang);
+
   // const [expoPushToken, setExpoPushToken] = useState('');
   // const [notification, setNotification] = useState(false);
   // const notificationListener = useRef();
@@ -121,7 +125,7 @@ export default function BottomTab(){
           ),
           title: "Piccy",
         }} 
-        name="Home"
+        name="Piccy"
         component={HomeScreen}
       />
 
@@ -130,7 +134,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="search" color={color} size={25}/>
           ),
-          title: "Search"
+          title: t.search[lang]
         }} 
         name="search" 
         component={SearchScreen}
@@ -141,7 +145,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="add-circle" color={color} size={25}/>
           ),
-          title: "Create post"
+          title: t.createPost[lang]
         }} 
         name="create-post"
         component={AddScreen} 
@@ -152,7 +156,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="message" color={color} size={25}/>
           ),
-          title: "Messages"
+          title: t.messages[lang]
         }} 
         name="messages" 
         component={MessagesScreen} 
@@ -163,7 +167,7 @@ export default function BottomTab(){
           tabBarIcon: ({color}) => (
             <MaterialIcons name="account-circle" color={color} size={25}/>
           ),
-          title: "Account"
+          title: t.account[lang]
         }} 
         name="account" 
         component={AccountScreen} 

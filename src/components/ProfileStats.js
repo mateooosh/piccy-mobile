@@ -1,8 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
-import {useStore} from "react-redux";
 import colors from '../colors/colors';
-
 
 export default function ProfileStats({navigation, idUser, followers, following, postsAmount}) {
 
@@ -18,36 +16,36 @@ export default function ProfileStats({navigation, idUser, followers, following, 
         paddingHorizontal: 20
       }}
     >
-      <View style={{flex: 1, backgroundColor: '#e5e5e5', paddingVertical: 10, borderRadius: 8}}>
+      <View style={{flex: 1, backgroundColor: '#f1f1f1', paddingVertical: 10, borderRadius: 8}}>
         <View><Text style={{
           textAlign: 'center',
           fontWeight: '700',
           fontSize: 18,
-          color: colors.main
+          color: colors.primary
         }}>{postsAmount}</Text></View>
         <View><Text style={{textAlign: 'center', fontSize: 16}}>Posts</Text></View>
       </View>
       <TouchableOpacity
-        style={{flex: 1, backgroundColor: '#e5e5e5', paddingVertical: 10, borderRadius: 8}}
+        style={{flex: 1, backgroundColor: '#f1f1f1', paddingVertical: 10, borderRadius: 8}}
         onPress={() => navigation.push('Followers', {id: idUser})}
       >
         <View><Text style={{
           textAlign: 'center',
           fontWeight: '700',
           fontSize: 18,
-          color: colors.main
+          color: colors.primary
         }}>{followers}</Text></View>
         <View><Text style={{textAlign: 'center', fontSize: 16}}>Followers</Text></View>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{flex: 1, backgroundColor: '#e5e5e5', paddingVertical: 10, borderRadius: 8}}
+        style={{flex: 1, backgroundColor: '#f1f1f1', paddingVertical: 10, borderRadius: 8}}
         onPress={() => navigation.push('Following', {id: idUser})}
       >
         <View><Text style={{
           textAlign: 'center',
           fontWeight: '700',
           fontSize: 18,
-          color: colors.main
+          color: colors.primary
         }}>{following}</Text></View>
         <View><Text style={{textAlign: 'center', fontSize: 16}}>Following</Text></View>
       </TouchableOpacity>

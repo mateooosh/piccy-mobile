@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Text, TextInput, View, TouchableOpacity, ScrollView, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {API_URL, API_URL_WS} from '@env';
+import {useStore, useSelector} from "react-redux";
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import colors from '../colors/colors';
@@ -46,6 +47,7 @@ export default function SearchScreen({navigation}) {
 
 function SearchAccounts(props) {
   const [result, setResult] = useState([]);
+  const store = useStore();
 
   const [time, setTime] = useState(setTimeout(() => {
   }, 0));
@@ -71,7 +73,7 @@ function SearchAccounts(props) {
 
 
   return (
-    <ScrollView style={{paddingHorizontal: 10, paddingVertical: 20, backgroundColor: 'white'}}>
+    <ScrollView style={{paddingHorizontal: 10, backgroundColor: 'white'}}>
       {result.map((item, idx) =>
         <View key={idx} style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 10, marginHorizontal: 15}}>
           <TouchableOpacity

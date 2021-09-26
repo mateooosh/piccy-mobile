@@ -5,7 +5,11 @@ import {API_URL} from '@env';
 import colors from "../colors/colors";
 import styles from '../styles/style';
 import Input from '../components/Input';
-import {validation} from "../functions/functions";
+import {validation, displayToast} from "../functions/functions";
+import {useToast} from "native-base";
+import {Alert, Collapse} from 'native-base';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
 
 export default function RegisterScreen({navigation}) {
   const [username, setUsername] = useState('');
@@ -13,7 +17,12 @@ export default function RegisterScreen({navigation}) {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
+  const toast = useToast();
+
   const [loading, setLoading] = useState(false);
+
+  const [alertIsOpen, setAlertIsOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   function createAccount(username, email, password, name) {
     let obj = {
@@ -35,8 +44,14 @@ export default function RegisterScreen({navigation}) {
     })
       .then(response => response.json())
       .then(response => {
-        alert(response.message);
-        navigation.push('Home');
+        if(response.created) {
+          displayToast(toast, response.message);
+          navigation.navigate('Piccy');
+        }
+        else {
+          setAlertMessage(response.message);
+          setAlertIsOpen(true);
+        }
       })
       .catch(err => console.log(err))
       .finally(() => setLoading(false))
@@ -85,38 +100,42 @@ export default function RegisterScreen({navigation}) {
 
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView
         keyboardShouldPersistTaps='handled'
         contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}
       >
-        <View style={{display: 'flex', flexDirection: 'column', gap: 30}}>
-          {/*<Text style={styles.label}>E-mail</Text>*/}
-          {/*<TextInput */}
-          {/*  onSubmitEditing={createAccount.bind(this,username,email,password,name)} */}
-          {/*  onChangeText={(str) => setEmail(str)} */}
-          {/*  style={styles.input} */}
-          {/*  placeholder="E-mail" */}
-          {/*  autoCompleteType="email"*/}
-          {/*/>*/}
+        <View style={{display: 'flex', flexDirection: 'column'}}>
+
+          <Collapse isOpen={alertIsOpen}>
+            <Alert w="100%" status={'error'} marginBottom={2}>
+              <Alert.Icon/>
+              <Alert.Description>
+                <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                  <Text>{alertMessage}</Text>
+                  <MaterialIcons onPress={() => setAlertIsOpen(false)} name="close" color={'black'} size={30}/>
+                </View>
+              </Alert.Description>
+            </Alert>
+          </Collapse>
 
           <Input value={email} label={'E-mail'} placeholder={'E-mail'} onChangeText={setEmail}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctEmail()}
-                 autoCompleteType="email" errorMessage="E-mail is not valid"/>
+                 autoCompleteType="email" errorMessage="E-mail is not valid" marginBottom={30}/>
 
           <Input value={username} label={'Username'} placeholder={'Username'} onChangeText={setUsername}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)}
                  isCorrect={correctUsername()}
-                 autoCompleteType="username" errorMessage="Username must be at least 6 characters long"/>
+                 autoCompleteType="username" errorMessage="Username must be at least 6 characters long" marginBottom={30}/>
 
           <Input value={password} label={'Password'} placeholder={'Password'} onChangeText={setPassword}
                  onSubmitEditing={createAccount.bind(this, username, password)} isCorrect={correctPassword()}
                  autoCompleteType="password" errorMessage="Password must be at least 6 characters long"
-                 secureTextEntry={true}/>
+                 secureTextEntry={true} marginBottom={30}/>
 
           <Input value={name} label={'Name'} placeholder={'Name'} onChangeText={setName}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctName()}
-                 autoCompleteType="name" errorMessage="Name must be at least 3 characters long"/>
+                 autoCompleteType="name" errorMessage="Name must be at least 3 characters long" marginBottom={30}/>
 
           {getButton()}
         </View>
@@ -124,7 +143,7 @@ export default function RegisterScreen({navigation}) {
         <View style={{marginTop: 40}}>
           <Divider style={{backgroundColor: '#ddd'}}/>
           <Text style={{textAlign: 'center', marginVertical: 20}}>Already a Piccy member? <Text
-            onPress={() => navigation.push('Home')} style={{color: colors.primary, fontWeight: '700'}}>Log in
+            onPress={() => navigation.navigate('Piccy')} style={{color: colors.primary, fontWeight: '700'}}>Log in
             here</Text></Text>
         </View>
 

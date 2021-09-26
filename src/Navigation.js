@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {NavigationContainer, getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {createStackNavigator,} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -89,6 +89,7 @@ export default function Navigation() {
                 }
               })}
             />
+
             <Stack.Screen name="Settings" component={SettingsScreen}/>
             <Stack.Screen name="Profile" component={ProfileScreen}
                           options={({route}) => ({headerTitle: route.params.username})}/>

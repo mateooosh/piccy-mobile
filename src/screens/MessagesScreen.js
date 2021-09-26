@@ -8,6 +8,7 @@ import {useStore, useSelector} from "react-redux";
 import {io} from "socket.io-client";
 import MessageItem from "../components/MessageItem";
 import MessageUserItem from "../components/MessageUserItem";
+import {Divider} from 'react-native-elements';
 
 export default function MessagesScreen({route, navigation}) {
   const store = useStore();
@@ -83,14 +84,16 @@ export default function MessagesScreen({route, navigation}) {
   // }
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView contentContainerStyle={{display: 'flex', flexDirection: 'column', gap: 1, backgroundColor: '#ccc'}}>
+      <ScrollView contentContainerStyle={{display: 'flex', flexDirection: 'column'}}>
         {channels.map((channel, idx) =>
-          <MessageUserItem navigation={navigation} channel={channel} key={idx}></MessageUserItem>
+          <View>
+            <MessageUserItem navigation={navigation} channel={channel} key={idx}></MessageUserItem>
+            {idx !== channels.length - 1 &&
+            <Divider color={'#ddd'}/>
+            }
+          </View>
         )}
 
-        {channels.map((channel, idx) =>
-          <MessageUserItem navigation={navigation} channel={channel} key={idx}></MessageUserItem>
-        )}
       </ScrollView>
       {/*<ScrollView ref={scrollViewRef} style={{flexGrow: 1}}>*/}
       {/*  <View>*/}

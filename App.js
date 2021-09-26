@@ -9,11 +9,6 @@ import { NativeBaseProvider } from "native-base";
 
 export default function App() {
 
-  // store.dispatch({ type: "logged/true" });
-  // console.log(store.getState().logged);
-  // const logged = useSelector(state => state.logged);
-  // store.subscribe(handle);
-
   return (
     <NativeBaseProvider>
       <Provider store={store}>

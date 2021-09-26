@@ -5,12 +5,12 @@ import colors from '../colors/colors';
 import styles from "../styles/style";
 
 
-export default function Input({label, placeholder, autoCompleteType, onSubmitEditing, onChangeText, secureTextEntry, isCorrect, errorMessage, value}) {
+export default function Input({label, placeholder, autoCompleteType, onSubmitEditing, onChangeText, secureTextEntry, isCorrect, errorMessage, value, marginBottom}) {
 
   // const [value, setValue] = useState('');
 
   return (
-    <View>
+    <View style={{marginBottom: marginBottom || 0}}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
         value={value}

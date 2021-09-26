@@ -8,6 +8,8 @@ import {
   ActivityIndicator, TextInput,
 } from "react-native";
 
+import {useToast} from 'native-base';
+
 import Input from '../components/Input';
 
 import {useStore, useSelector} from "react-redux";
@@ -17,7 +19,7 @@ import {t} from '../translations/translations';
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker";
-import {validation} from "../functions/functions";
+import {validation, displayToast} from "../functions/functions";
 
 export default function EditProfileScreen({route, navigation}) {
   const store = useStore();
@@ -31,6 +33,8 @@ export default function EditProfileScreen({route, navigation}) {
   const [description, setDescription] = useState('');
 
   const [loading, setLoading] = useState(false);
+
+  const toast = useToast();
 
 
   useEffect(() => {
@@ -79,7 +83,8 @@ export default function EditProfileScreen({route, navigation}) {
     })
       .then(response => response.json())
       .then(response => {
-        alert(response.message);
+        displayToast(toast, response.message);
+        navigation.push('Piccy', {screen: 'account'});
       })
       .catch(err => console.log(err))
       .finally(() => setLoading(false))
@@ -141,7 +146,7 @@ export default function EditProfileScreen({route, navigation}) {
 
   return (
     <ScrollView
-      style={{paddingHorizontal: 20, paddingVertical: 20, height: "100%"}}
+      style={{paddingHorizontal: 20, paddingVertical: 20, height: "100%", backgroundColor: 'white'}}
     >
       {hasData && (
         <View>

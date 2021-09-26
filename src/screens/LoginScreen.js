@@ -5,7 +5,8 @@ import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
 import colors from '../colors/colors';
 import styles from '../styles/style';
-import {validation} from '../functions/functions';
+import {validation, displayToast} from '../functions/functions';
+import {useToast} from 'native-base';
 
 import {Alert, Collapse} from 'native-base';
 
@@ -17,6 +18,8 @@ export default function LoginScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const toast = useToast();
 
   const [alertIsOpen, setAlertIsOpen] = useState(false);
 
@@ -31,7 +34,7 @@ export default function LoginScreen({navigation}) {
   // const logged = useSelector(state => state.logged);
 
   function logIn(username, password) {
-    if(!correctUsername() || !correctPassword())
+    if (!correctUsername() || !correctPassword())
       return;
 
     setLoading(true);
@@ -59,12 +62,12 @@ export default function LoginScreen({navigation}) {
         store.dispatch({type: "tokenSet", payload: response.token});
         store.dispatch({type: "usernameSet", payload: response.username});
         store.dispatch({type: "idSet", payload: response.id});
-        setLoading(false);
+        displayToast(toast, response.message);
       })
       .catch(err => {
-        setLoading(false);
         setAlertIsOpen(true);
       })
+      .finally(() => setLoading(false))
   }
 
   function getButton() {
@@ -93,10 +96,10 @@ export default function LoginScreen({navigation}) {
       <ScrollView keyboardShouldPersistTaps='handled'
                   contentContainerStyle={{padding: 32}}>
 
-        <View style={{display: 'flex', flexDirection: 'column', gap: 30}}>
+        <View style={{display: 'flex', flexDirection: 'column'}}>
 
           <Collapse isOpen={alertIsOpen}>
-            <Alert w="100%" status={'error'}>
+            <Alert w="100%" status={'error'} marginBottom={2}>
               <Alert.Icon/>
               <Alert.Description>
                 <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
@@ -109,14 +112,15 @@ export default function LoginScreen({navigation}) {
 
           <Input value={username} label={'Username'} placeholder={'Username'} onChangeText={setUsername}
                  onSubmitEditing={logIn.bind(this, username, password)} isCorrect={correctUsername()}
-                 autoCompleteType="username" errorMessage="Username must be at least 6 characters long"/>
+                 autoCompleteType="username" errorMessage="Username must be at least 6 characters long"
+                 marginBottom={30}/>
           <Input value={password} label={'Password'} placeholder={'Password'} onChangeText={setPassword}
                  onSubmitEditing={logIn.bind(this, username, password)} isCorrect={correctPassword()}
                  autoCompleteType="password" errorMessage="Password must be at least 6 characters long"
-                 secureTextEntry={true}/>
+                 secureTextEntry={true}
+                 marginBottom={30}/>
 
           {getButton()}
-
 
 
         </View>

@@ -86,8 +86,8 @@ export default function MessagesScreen({route, navigation}) {
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView contentContainerStyle={{display: 'flex', flexDirection: 'column'}}>
         {channels.map((channel, idx) =>
-          <View>
-            <MessageUserItem navigation={navigation} channel={channel} key={idx}></MessageUserItem>
+          <View key={idx}>
+            <MessageUserItem navigation={navigation} channel={channel}></MessageUserItem>
             {idx !== channels.length - 1 &&
             <Divider color={'#ddd'}/>
             }

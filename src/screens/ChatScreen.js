@@ -17,6 +17,7 @@ export default function ChatScreen({route, navigation}) {
   const scrollViewRef = useRef();
 
   const [messages, setMessages] = useState([]);
+  const [idChannel, setIdChannel] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const refMessages = useRef(messages);
   const [userChattingWith, setUserChattingWith] = useState({});
@@ -33,7 +34,9 @@ export default function ChatScreen({route, navigation}) {
   }
 
   useEffect(() => {
-    const url = `${API_URL}/messages/${route.params.idChannel}?token=${store.getState().token}`;
+    socket.on(`message-to-user-${store.getState().id}`, handler)
+
+    const url = `${API_URL}/messages/${route.params.idUser}?myIdUser=${store.getState().id}&token=${store.getState().token}`;
 
     setIsLoading(true);
 
@@ -42,6 +45,7 @@ export default function ChatScreen({route, navigation}) {
       .then(response => {
         console.log('messages:', response);
         setMessages(response.messages);
+        setIdChannel(response.idChannel);
 
         // navigation.setOptions({headerTitle: findUserChattingWith(response.users).username});
 
@@ -68,15 +72,13 @@ export default function ChatScreen({route, navigation}) {
       .catch(err => console.log(err))
       .finally(() => setIsLoading(false))
 
-    socket.on('message-from-server', handler)
-
     return () => {
       socket.off('message-from-server', handler);
     }
   }, [])
 
   function handler(response) {
-    console.log('message-from-server', response);
+    console.log('message-to-user', response);
 
 
     let deepCopy = JSON.parse(JSON.stringify(refMessages.current));
@@ -95,8 +97,8 @@ export default function ChatScreen({route, navigation}) {
     const obj = {
       message: message,
       idSender: store.getState().id,
-      idChannel: route.params.idChannel,
-      createdAt: new Date()
+      idReciever: route.params.idUser,
+      idChannel: idChannel
     }
 
     let deepCopy = JSON.parse(JSON.stringify(messages));

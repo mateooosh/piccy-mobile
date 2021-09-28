@@ -61,7 +61,7 @@ export default function Navigation() {
       EditProfile: 'edit/profile',
       ResetPassword: 'reset/password',
       ReportBug: 'report/bug',
-      Channel: 'channel/:idChannel',
+      Channel: 'chat/:idUser',
       Language: 'language',
       Piccy: '/',
     },

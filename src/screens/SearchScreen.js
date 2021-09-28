@@ -26,7 +26,7 @@ export default function SearchScreen({navigation}) {
       <View style={{marginHorizontal: 20, marginTop: 20, marginBottom: 10}}>
         <TextInput
           onChangeText={(str) => setQuery(str)}
-          style={{backgroundColor: '#ddd', paddingHorizontal: 20, borderRadius: 15, fontSize: 16, height: 46}}
+          style={{backgroundColor: '#f1f1f1', paddingHorizontal: 20, borderRadius: 15, fontSize: 16, height: 46}}
           placeholder="Type here..."
           value={query}
         />

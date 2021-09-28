@@ -15,7 +15,7 @@ export default function MessageUserItem(props) {
   }, [props])
 
   return (
-    <TouchableOpacity onPress={() => props.navigation.push('Channel', {idChannel: props.channel.idChannel})}
+    <TouchableOpacity onPress={() => props.navigation.push('Channel', {idUser: props.channel.idUser})}
                       style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15, paddingVertical: 15, backgroundColor: 'white'}}>
       {props.channel.photo !== null && (
         <Image

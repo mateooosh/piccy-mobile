@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useStore} from 'react-redux';
 import {Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {Divider} from 'react-native-elements';
@@ -66,6 +66,10 @@ export default function LoginScreen({navigation}) {
       })
       .catch(err => {
         setAlertIsOpen(true);
+
+        setTimeout(() => {
+          setAlertIsOpen(false);
+        }, 3000);
       })
       .finally(() => setLoading(false))
   }
@@ -97,19 +101,6 @@ export default function LoginScreen({navigation}) {
                   contentContainerStyle={{padding: 32}}>
 
         <View style={{display: 'flex', flexDirection: 'column'}}>
-
-          <Collapse isOpen={alertIsOpen}>
-            <Alert w="100%" status={'error'} marginBottom={2}>
-              <Alert.Icon/>
-              <Alert.Description>
-                <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                  <Text>Username or password is invalid. Try again.</Text>
-                  <MaterialIcons onPress={() => setAlertIsOpen(false)} name="close" color={'black'} size={30}/>
-                </View>
-              </Alert.Description>
-            </Alert>
-          </Collapse>
-
           <Input value={username} label={'Username'} placeholder={'Username'} onChangeText={setUsername}
                  onSubmitEditing={logIn.bind(this, username, password)} isCorrect={correctUsername()}
                  autoCompleteType="username" errorMessage="Username must be at least 6 characters long"
@@ -122,8 +113,19 @@ export default function LoginScreen({navigation}) {
 
           {getButton()}
 
-
         </View>
+
+        <Collapse isOpen={alertIsOpen}>
+          <Alert w="100%" status={'error'} marginTop={7}>
+            <Alert.Icon/>
+            <Alert.Description>
+              <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                <Text>Username or password is invalid. Try again.</Text>
+                {/*<MaterialIcons onPress={() => setAlertIsOpen(false)} name="close" color={'black'} size={30}/>*/}
+              </View>
+            </Alert.Description>
+          </Alert>
+        </Collapse>
 
         <View style={{marginTop: 40}}>
           <Divider style={{backgroundColor: '#ddd'}}/>

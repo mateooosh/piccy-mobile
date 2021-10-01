@@ -18,6 +18,7 @@ import {API_URL} from '@env';
 import ProfileStats from "../components/ProfileStats";
 import ProfilePosts from "../components/ProfilePosts";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import styles from "../styles/style";
 
 
 export default function AccountScreen({navigation}) {
@@ -93,13 +94,22 @@ export default function AccountScreen({navigation}) {
 
             <TouchableOpacity
               onPress={() => navigation.push('EditProfile')}
-              style={{
-                paddingVertical: 6,
-                width: '100%',
-                backgroundColor: colors.primary,
-                borderRadius: 6,
-                marginVertical: 20
-              }}
+              style={{...styles.button, ...styles.shadow}}
+              // style={{
+              //   paddingVertical: 6,
+              //   width: '100%',
+              //   backgroundColor: colors.primary,
+              //   borderRadius: 6,
+              //   marginVertical: 20,
+              //   shadowColor: "#000",
+              //   shadowOffset: {
+              //     width: 0,
+              //     height: 3,
+              //   },
+              //   shadowOpacity: 0.27,
+              //   shadowRadius: 4.65,
+              //   elevation: 6
+              // }}
             >
               <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8}}>
                 <MaterialCommunityIcons name="account-edit" color='white'

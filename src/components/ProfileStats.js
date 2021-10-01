@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import colors from '../colors/colors';
+import styles from "../styles/style";
 
 export default function ProfileStats({navigation, idUser, followers, following, postsAmount}) {
 
@@ -9,14 +10,20 @@ export default function ProfileStats({navigation, idUser, followers, following, 
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        gap: 10,
         width: "100%",
         marginTop: 15,
         paddingVertical: 10,
         paddingHorizontal: 20
       }}
     >
-      <View style={{flex: 1, backgroundColor: '#f1f1f1', paddingVertical: 10, borderRadius: 8}}>
+      <View style={{
+        flex: 1,
+        paddingVertical: 10,
+        borderRadius: 8,
+        marginRight: 10,
+        backgroundColor: 'white',
+        ...styles.shadow
+      }}>
         <View><Text style={{
           textAlign: 'center',
           fontWeight: '700',
@@ -26,7 +33,14 @@ export default function ProfileStats({navigation, idUser, followers, following, 
         <View><Text style={{textAlign: 'center', fontSize: 16}}>Posts</Text></View>
       </View>
       <TouchableOpacity
-        style={{flex: 1, backgroundColor: '#f1f1f1', paddingVertical: 10, borderRadius: 8}}
+        style={{
+          flex: 1,
+          paddingVertical: 10,
+          borderRadius: 8,
+          marginRight: 10,
+          backgroundColor: 'white',
+          ...styles.shadow
+        }}
         onPress={() => navigation.push('Followers', {id: idUser})}
       >
         <View><Text style={{
@@ -38,7 +52,13 @@ export default function ProfileStats({navigation, idUser, followers, following, 
         <View><Text style={{textAlign: 'center', fontSize: 16}}>Followers</Text></View>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{flex: 1, backgroundColor: '#f1f1f1', paddingVertical: 10, borderRadius: 8}}
+        style={{
+          flex: 1,
+          paddingVertical: 10,
+          borderRadius: 8,
+          backgroundColor: 'white',
+          ...styles.shadow
+        }}
         onPress={() => navigation.push('Following', {id: idUser})}
       >
         <View><Text style={{

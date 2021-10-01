@@ -6,7 +6,8 @@ const initialState = {
   token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImlhdCI6MTYzMTQ2NjE5MSwiZXhwIjoxNjMxNTUyNTkxfQ.5wTXB5pPvS3cF2jasWIlft_Pb6rSf81cv2qgkNemS-A',
   username: 'asdasd',
   id: '40',
-  lang: 'en'
+  lang: 'en',
+  notificationAmount: 0
 };
 
 function Reducer(state = initialState, action) {
@@ -42,6 +43,9 @@ switch (action.type) {
 
   case "langReset":
     return { ...state, lang: '' };
+
+  case "notificationAmountSet":
+    return { ...state, notificationAmount: action.payload };
 
   default:
     // If the reducer doesn't care about this action type,

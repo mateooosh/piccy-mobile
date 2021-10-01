@@ -142,7 +142,7 @@ export default function AccountScreen({route, navigation}) {
             <Text style={{fontSize: 14}}>{item.description}</Text>
 
             <View
-              style={{flexDirection: "row", justifyContent: "space-between", gap: 10}}
+              style={{flexDirection: "row", justifyContent: "space-between"}}
             >
               {item.amIFollowing === 0 && (
                 <TouchableOpacity
@@ -153,6 +153,7 @@ export default function AccountScreen({route, navigation}) {
                     backgroundColor: colors.primary,
                     borderRadius: 6,
                     marginVertical: 20,
+                    marginRight: 10
                   }}
                 >
                   <Text
@@ -175,6 +176,7 @@ export default function AccountScreen({route, navigation}) {
                     backgroundColor: "#ccc",
                     borderRadius: 6,
                     marginVertical: 20,
+                    marginRight: 10
                   }}
                 >
                   <Text
@@ -189,7 +191,7 @@ export default function AccountScreen({route, navigation}) {
                 </TouchableOpacity>
               )}
               <TouchableOpacity
-                onPress={() => alert("send message")}
+                onPress={() => navigation.push('Chat', {idUser: item.id})}
                 style={{
                   paddingVertical: 8,
                   flex: 1,

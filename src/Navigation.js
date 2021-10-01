@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {NavigationContainer, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {useSelector} from 'react-redux';
+import {useSelector, useStore} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import {API_URL, API_URL_WS} from '@env';
 
 import {t} from './translations/translations';
 
@@ -21,6 +23,11 @@ import ChatScreen from './screens/ChatScreen.js';
 import ResetPasswordScreen from './screens/ResetPasswordScreen.js';
 import ReportBugScreen from './screens/ReportBugScreen.js';
 import LanguageScreen from './screens/LanguageScreen.js';
+import {io} from "socket.io-client";
+import {displayToast} from './functions/functions'
+
+import {useToast} from 'native-base';
+// import store from "../store/store";
 
 const Stack = createStackNavigator();
 
@@ -47,8 +54,25 @@ function getHeaderTitle(route) {
 
 
 export default function Navigation() {
+  const store = useStore();
+  const toast = useToast();
+
   const logged = useSelector(state => state.logged);
   const lang = useSelector(state => state.lang);
+
+  useEffect(() => {
+
+    const socket = io(API_URL_WS, {transports: ['websocket']});
+
+    socket.emit('new-user', store.getState().username);
+
+    socket.on(`message-to-user-${store.getState().id}`, (message) => {
+      console.log('message', message);
+      displayToast(toast, `New message`)
+      store.dispatch({type: 'notificationAmountSet', payload: store.getState().notificationAmount + 1});
+      // await schedulePushNotification();
+    })
+  }, [])
 
   const config = {
     screens: {
@@ -61,7 +85,7 @@ export default function Navigation() {
       EditProfile: 'edit/profile',
       ResetPassword: 'reset/password',
       ReportBug: 'report/bug',
-      Channel: 'chat/:idUser',
+      Chat: 'chat/:idUser',
       Language: 'language',
       Piccy: '/',
     },
@@ -102,9 +126,9 @@ export default function Navigation() {
                           options={() => ({headerTitle: t.resetPassword[lang]})}/>
             <Stack.Screen name="ReportBug" component={ReportBugScreen}
                           options={() => ({headerTitle: 'Report Bug'})}/>
-            <Stack.Screen name="Channel" component={ChatScreen}
+            <Stack.Screen name="Chat" component={ChatScreen}
                           options={() => ({
-                            headerTitle: 'Chat',
+                            headerTitle: '',
                             headerRight: () => (
                               <MaterialCommunityIcons name="dots-vertical" color='black'
                                                       size={30}/>

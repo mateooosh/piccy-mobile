@@ -4,6 +4,7 @@ import {useStore} from "react-redux";
 import colors from '../colors/colors';
 
 import fun from '../functions/functions';
+import {Alert, Collapse} from "native-base";
 
 export default function MessageItem(props) {
 
@@ -31,9 +32,10 @@ export default function MessageItem(props) {
           }}>
             <Text style={{color: '#fff', fontSize: 16}}>{item.message}</Text>
           </TouchableOpacity>
-          {displayTime && (
+
+          <Collapse isOpen={displayTime}>
             <Text style={{marginHorizontal: 10, marginBottom: 5, fontSize: 12, color: '#999'}}>{fun.displayTimeV2(item.createdAt)}</Text>
-          )}
+          </Collapse>
         </View>
       )}
 
@@ -50,9 +52,10 @@ export default function MessageItem(props) {
           }}>
             <Text style={{color: 'black', fontSize: 16}}>{item.message}</Text>
           </TouchableOpacity>
-          {displayTime && (
+
+          <Collapse isOpen={displayTime}>
             <Text style={{marginHorizontal: 10, marginBottom: 5, fontSize: 12, color: '#999'}}>{fun.displayTimeV2(item.createdAt)}</Text>
-          )}
+          </Collapse>
         </View>
       )}
 

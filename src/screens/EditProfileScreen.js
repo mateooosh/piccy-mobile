@@ -59,6 +59,7 @@ export default function EditProfileScreen({route, navigation}) {
 
     const index = photo.indexOf(',');
     let base64 = photo.slice(index + 1, (photo.length));
+    console.log(photo)
 
     const obj = {
       username: username,
@@ -146,7 +147,7 @@ export default function EditProfileScreen({route, navigation}) {
 
   return (
     <ScrollView
-      style={{paddingHorizontal: 20, paddingVertical: 20, height: "100%", backgroundColor: 'white'}}
+      style={{paddingHorizontal: 20, paddingVertical: 20, minHeight: '100%', backgroundColor: 'white'}}
     >
       {hasData && (
         <View>

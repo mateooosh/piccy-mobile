@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Alert,
   Text,
@@ -10,27 +10,28 @@ import {
 } from 'react-native';
 import {useStore} from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
-import {io} from "socket.io-client";
 import Post from '../components/Post';
 import colors from '../colors/colors';
 
 import {useToast} from 'native-base';
+import styles from "../styles/style";
 
 // import { theme } from 'native-base';
 
-console.log(API_URL)
+console.log('home', API_URL)
+
 
 export default function HomeScreen({navigation}) {
   const store = useStore();
+  const toast = useToast();
+
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [emptyPosts, setEmptyPosts] = useState(false);
 
-  const toast = useToast();
 
-
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setPage(0);
     setPosts([]);
     setEmptyPosts(false);
@@ -84,20 +85,6 @@ export default function HomeScreen({navigation}) {
       duration: 3000
     })
 
-    console.log('home mounted');
-
-    const socket = io(API_URL_WS, {transports: ['websocket']});
-
-    socket.emit('new-user', store.getState().username);
-
-    // socket.on('test', (v) => {
-    //   console.log('test', v)
-    // })
-
-    socket.on('message', (v) => {
-      console.log('message', v)
-    })
-
     getPosts();
   }, [])
 
@@ -131,14 +118,7 @@ export default function HomeScreen({navigation}) {
         {!!posts.length && !emptyPosts && (
           <TouchableOpacity
             onPress={getPosts}
-            style={{
-              marginHorizontal: 15,
-              marginVertical: 10,
-              padding: 10,
-              borderRadius: 6,
-              backgroundColor: colors.primary,
-              color: "white",
-            }}
+            style={{...styles.button, marginHorizontal: 10, marginTop: 0}}
           >
             {!loading && (
               <Text

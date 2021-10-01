@@ -22,7 +22,7 @@ export default function Input({label, placeholder, autoCompleteType, onSubmitEdi
         secureTextEntry={secureTextEntry}
       />
       {!isCorrect && value.length !== 0 &&
-      <Text style={{color: 'red', position: 'absolute', top: 62, fontSize: 12}}>{errorMessage}</Text>
+      <Text style={{color: 'red', position: 'absolute', bottom: -20, fontSize: 12}}>{errorMessage}</Text>
       }
     </View>
   )

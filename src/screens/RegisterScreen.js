@@ -51,6 +51,10 @@ export default function RegisterScreen({navigation}) {
         else {
           setAlertMessage(response.message);
           setAlertIsOpen(true);
+
+          setTimeout(() => {
+            setAlertIsOpen(false);
+          }, 3000);
         }
       })
       .catch(err => console.log(err))
@@ -107,18 +111,6 @@ export default function RegisterScreen({navigation}) {
       >
         <View style={{display: 'flex', flexDirection: 'column'}}>
 
-          <Collapse isOpen={alertIsOpen}>
-            <Alert w="100%" status={'error'} marginBottom={2}>
-              <Alert.Icon/>
-              <Alert.Description>
-                <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                  <Text>{alertMessage}</Text>
-                  <MaterialIcons onPress={() => setAlertIsOpen(false)} name="close" color={'black'} size={30}/>
-                </View>
-              </Alert.Description>
-            </Alert>
-          </Collapse>
-
           <Input value={email} label={'E-mail'} placeholder={'E-mail'} onChangeText={setEmail}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctEmail()}
                  autoCompleteType="email" errorMessage="E-mail is not valid" marginBottom={30}/>
@@ -139,6 +131,18 @@ export default function RegisterScreen({navigation}) {
 
           {getButton()}
         </View>
+
+        <Collapse isOpen={alertIsOpen}>
+          <Alert w="100%" status={'error'} marginTop={7}>
+            <Alert.Icon/>
+            <Alert.Description>
+              <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                <Text>{alertMessage}</Text>
+                {/*<MaterialIcons onPress={() => setAlertIsOpen(false)} name="close" color={'black'} size={30}/>*/}
+              </View>
+            </Alert.Description>
+          </Alert>
+        </Collapse>
 
         <View style={{marginTop: 40}}>
           <Divider style={{backgroundColor: '#ddd'}}/>

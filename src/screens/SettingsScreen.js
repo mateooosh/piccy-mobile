@@ -62,7 +62,7 @@ export default function SettingsScreen({navigation}) {
               Delete account
             </AlertDialog.Header>
             <AlertDialog.Body>
-              Are you sure You want to delete your account?
+              Are you sure You want to delete your account? Your every post, comment, message and many, many others will be removed. It will not be possible to restore it.
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button

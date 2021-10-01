@@ -13,15 +13,17 @@ const styles = {
     paddingVertical: 8
   },
   button: {
-    marginVertical: 10,
-    padding: 10,
+    marginVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     borderRadius: 6,
     backgroundColor: colors.primary,
     color: 'white'
   },
   buttonDisabled: {
-    marginVertical: 10,
-    padding: 10,
+    marginVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     borderRadius: 6,
     backgroundColor: '#ccc',
     color: 'white'
@@ -29,7 +31,7 @@ const styles = {
   option: {
     paddingVertical: 14,
     paddingHorizontal: 20,
-    display:'flex',
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
@@ -37,12 +39,18 @@ const styles = {
   optionActive: {
     backgroundColor: colors.primary,
   },
-  icon:{
+  icon: {
     color: '#333',
     marginRight: 20
   },
   p4: {
     padding: 4
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6
   }
 }
 

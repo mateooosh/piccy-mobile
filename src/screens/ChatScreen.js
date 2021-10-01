@@ -23,7 +23,7 @@ export default function ChatScreen({route, navigation}) {
   const [userChattingWith, setUserChattingWith] = useState({});
 
   const [message, setMessage] = useState('');
-  const [socket, setSocket] = useState(io('ws://localhost:3000', {transports: ['websocket']}));
+  const [socket, setSocket] = useState(io(API_URL_WS, {transports: ['websocket']}));
 
   useEffect(() => {
     refMessages.current = messages;
@@ -56,10 +56,15 @@ export default function ChatScreen({route, navigation}) {
                 username: findUserChattingWith(response.users).username,
               })
             } style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-              <Image
-                source={{uri: findUserChattingWith(response.users).photo}}
-                style={{width: 40, height: 40, borderRadius: 50}}
-              />
+              {findUserChattingWith(response.users).photo ? (
+                <Image
+                  source={{uri: findUserChattingWith(response.users).photo}}
+                  style={{width: 40, height: 40, borderRadius: 50}}
+                />
+              ) : (
+                <MaterialIcons name="account-circle" color={"black"} size={40}/>
+              )}
+
               <Text style={{fontWeight: '700', fontSize: 15}}>{findUserChattingWith(response.users).username}</Text>
             </TouchableOpacity>
           )
@@ -73,7 +78,7 @@ export default function ChatScreen({route, navigation}) {
       .finally(() => setIsLoading(false))
 
     return () => {
-      socket.off('message-from-server', handler);
+      socket.off(`message-to-user-${store.getState().id}`, handler);
     }
   }, [])
 
@@ -98,7 +103,8 @@ export default function ChatScreen({route, navigation}) {
       message: message,
       idSender: store.getState().id,
       idReciever: route.params.idUser,
-      idChannel: idChannel
+      idChannel: idChannel,
+      createdAt: new Date()
     }
 
     let deepCopy = JSON.parse(JSON.stringify(messages));
@@ -138,7 +144,7 @@ export default function ChatScreen({route, navigation}) {
             minHeight: 46,
             flexGrow: 1,
             backgroundColor: '#eee',
-            paddingLeft: 8,
+            paddingLeft: 16,
             paddingRight: 50,
             fontSize: 16,
             borderRadius: 12,
@@ -147,7 +153,7 @@ export default function ChatScreen({route, navigation}) {
           placeholder="Type here..."
           value={message}
         />
-        <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)'}}
+        <TouchableOpacity style={{position: 'absolute', right: 10, top: 5}}
                           onPress={send}>
           <MaterialIcons name="send" color={'#444'} size={35}/>
         </TouchableOpacity>

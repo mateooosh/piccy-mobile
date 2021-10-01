@@ -79,11 +79,17 @@ export default function ResetPasswordScreen() {
 
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView keyboardShouldPersistTaps='handled'
-                  contentContainerStyle={{paddingHorizontal: 20, paddingTop: 20, gap: 30}}>
-        <Input value={oldPassword} label="Old password" onSubmitEditing={resetPassword} onChangeText={setOldPassword}
-               secureTextEntry={true} placeholder="Old password"/>
-        <Input value={newPassword} label="New password" onSubmitEditing={resetPassword} onChangeText={setNewPassword}
-               secureTextEntry={true} placeholder="New password"/>
+                  contentContainerStyle={{paddingHorizontal: 20, paddingTop: 20}}>
+        <View style={{marginBottom: 30}}>
+          <Input value={oldPassword} label="Old password" onSubmitEditing={resetPassword} onChangeText={setOldPassword}
+                 secureTextEntry={true} placeholder="Old password"/>
+        </View>
+
+        <View style={{marginBottom: 30}}>
+          <Input value={newPassword} label="New password" onSubmitEditing={resetPassword} onChangeText={setNewPassword}
+                 secureTextEntry={true} placeholder="New password"/>
+        </View>
+
         {getButton()}
       </ScrollView>
     </View>

@@ -14,7 +14,7 @@ import {
   Button,
   Actionsheet,
   useDisclose,
-  AlertDialog
+  AlertDialog, useToast
 } from "native-base";
 
 // import colors
@@ -26,6 +26,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import {useStore} from "react-redux";
 import {API_URL} from "@env";
 import styles from "../styles/style";
+import {displayToast} from "../functions/functions";
 
 
 // //import my functions
@@ -33,17 +34,26 @@ const fun = require("../functions/functions");
 
 export default function Post(props) {
 
+  const store = useStore();
+  const toast = useToast();
+
   const {isOpen, onOpen, onClose} = useDisclose();
   const fadeAnim = useRef(new Animated.Value(0)).current
   const likeAnim = useRef(new Animated.Value(1)).current
 
-  const [isOpenReport, setIsOpenReport] = React.useState(false);
+  const [isOpenReport, setIsOpenReport] = useState(false);
   const onCloseReport = () => setIsOpenReport(false);
-  const cancelRefReport = React.useRef();
+  const cancelRefReport = useRef();
 
-  const [isOpenRemove, setIsOpenRemove] = React.useState(false);
+  const [isOpenRemove, setIsOpenRemove] = useState(false);
   const onCloseRemove = () => setIsOpenRemove(false);
-  const cancelRefRemove = React.useRef();
+  const cancelRefRemove = useRef();
+
+  const [isOpenComment, setIsOpenComment] = useState(false);
+  const onCloseComment = () => setIsOpenComment(false);
+  const cancelRefComment = useRef();
+
+  const inputCommentRef = useRef();
 
   // const [isOpenRemovePost, setIsOpenRemovePost] = React.useState(false);
   // const onCloseRemovePost = () => setIsOpenRemovePost(false);
@@ -54,8 +64,6 @@ export default function Post(props) {
   const [reason, setReason] = useState('');
   const [commentInput, setCommentInput] = useState('');
   const [commentInputVisible, setCommentInputVisible] = useState(true);
-
-  const store = useStore();
 
   useEffect(() => {
     setPost(props.post);
@@ -216,6 +224,8 @@ export default function Post(props) {
       .then(response => response.json())
       .then(response => {
         console.log(response);
+        setIsOpenRemove(!isOpenRemove);
+        onClose();
       })
       .catch(err => alert(err))
   }
@@ -237,17 +247,27 @@ export default function Post(props) {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response.message);
+        displayToast(toast, response.message);
       })
       .catch(err => console.log(err))
       .finally(() => {
         setCommentInput('');
+        setIsOpenComment(false);
         getComments(props.post.id);
       })
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (isOpenComment)
+        inputCommentRef.current.focus();
+        // console.log(inputCommentRef)
+    }, 0)
+  }, [isOpenComment])
+
   function onCommentPress() {
-    console.log('comment press');
+    setIsOpenComment(true);
+    // inputCommentRef.current.focus();
   }
 
   return (
@@ -265,8 +285,7 @@ export default function Post(props) {
           {post.username === store.getState().username &&
           <Actionsheet.Item
             onPress={() => {
-              setIsOpenRemove(!isOpenRemove);
-              onClose();
+              removePost()
             }}
           >
             <Text style={{fontSize: 16, fontWeight: "600"}}>Remove post</Text>
@@ -289,102 +308,11 @@ export default function Post(props) {
         </Actionsheet.Content>
       </Actionsheet>
 
-      <AlertDialog
-        leastDestructiveRef={cancelRefRemove}
-        isOpen={isOpenRemove}
-        onClose={onCloseRemove}
-        motionPreset={"fade"}
-      >
-        <AlertDialog.Content>
-          <AlertDialog.Header fontSize="lg" fontWeight="bold">
-            Remove post
-          </AlertDialog.Header>
-          <AlertDialog.Body>
-            Are you sure You want to remove this post?
-          </AlertDialog.Body>
-          <AlertDialog.Footer>
-            <Button
-              style={{backgroundColor: colors.primary}}
-              ref={cancelRefRemove}
-              onPress={onCloseRemove}
-            >
-              Cancel
-            </Button>
 
-            <Button
-              style={{backgroundColor: colors.danger}}
-              onPress={() => {
-                console.log("remove");
-                removePost();
-              }}
-              ml={3}
-            >
-              Remove
-            </Button>
+      {AlertDialogComment()}
+      {AlertDialogRemovePost()}
+      {AlertDialogReportPost()}
 
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
-
-      <AlertDialog
-        leastDestructiveRef={cancelRefReport}
-        isOpen={isOpenReport}
-        onClose={onCloseReport}
-        motionPreset={"fade"}
-      >
-        <AlertDialog.Content>
-          <AlertDialog.Header fontSize="lg" fontWeight="bold">
-            Report post
-          </AlertDialog.Header>
-          <AlertDialog.Body>
-            Are you sure You want to report this post?
-            <TextInput
-              onSubmitEditing={reportPost.bind(this, post.id)}
-              onChangeText={(reason) => setReason(reason)}
-              style={{
-                backgroundColor: "#ddd",
-                paddingHorizontal: 15,
-                borderRadius: 10,
-                fontSize: 16,
-                paddingVertical: 8,
-                marginTop: 10,
-                textAlignVertical: 'top'
-              }}
-              multiline={true}
-              numberOfLines={4}
-              placeholder="Reason"
-            />
-          </AlertDialog.Body>
-          <AlertDialog.Footer>
-            <Button
-              style={{backgroundColor: colors.primary}}
-              ref={cancelRefReport}
-              onPress={onCloseReport}
-            >
-              Cancel
-            </Button>
-
-            {reason.length > 3 && (
-              <Button
-                style={{backgroundColor: colors.primary}}
-                onPress={() => {
-                  console.log("report");
-                  reportPost();
-                }}
-                ml={3}
-              >
-                Report
-              </Button>
-            )}
-
-            {reason.length <= 3 && (
-              <Button style={{backgroundColor: "#ccc"}} ml={3}>
-                Report
-              </Button>
-            )}
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
 
       <View
         style={{
@@ -572,30 +500,192 @@ export default function Post(props) {
         </View>
       ))}
 
-      {!props.homeScreen && commentInputVisible &&
-      <View style={{position: 'relative', marginBottom: 10, marginTop: 8, marginHorizontal: 10}}>
-        <TextInput
-          onChangeText={str => setCommentInput(str)}
-          onSubmitEditing={createComment}
-          style={{
-            minHeight: 46,
-            flexGrow: 1,
-            backgroundColor: '#eee',
-            paddingLeft: 8,
-            paddingRight: 50,
-            fontSize: 16,
-            borderRadius: 12,
-            paddingVertical: 8,
-          }}
-          placeholder="Type here..."
-          value={commentInput}
-        />
-        <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: [{translateY: -18}]}}
-                          onPress={createComment}>
-          <MaterialIcons name="send" color={'#444'} size={36}/>
-        </TouchableOpacity>
-      </View>
-      }
+      {/*{!props.homeScreen && commentInputVisible &&*/}
+      {/*<View style={{position: 'relative', marginBottom: 10, marginTop: 8, marginHorizontal: 10}}>*/}
+      {/*  <TextInput*/}
+      {/*    onChangeText={str => setCommentInput(str)}*/}
+      {/*    onSubmitEditing={createComment}*/}
+      {/*    style={{*/}
+      {/*      minHeight: 46,*/}
+      {/*      flexGrow: 1,*/}
+      {/*      backgroundColor: '#eee',*/}
+      {/*      paddingLeft: 8,*/}
+      {/*      paddingRight: 50,*/}
+      {/*      fontSize: 16,*/}
+      {/*      borderRadius: 12,*/}
+      {/*      paddingVertical: 8,*/}
+      {/*    }}*/}
+      {/*    placeholder="Type here..."*/}
+      {/*    value={commentInput}*/}
+      {/*  />*/}
+      {/*  <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: [{translateY: -18}]}}*/}
+      {/*                    onPress={createComment}>*/}
+      {/*    <MaterialIcons name="send" color={'#444'} size={36}/>*/}
+      {/*  </TouchableOpacity>*/}
+      {/*</View>*/}
+      {/*}*/}
     </View>
   );
+
+  function AlertDialogComment() {
+    return(
+      <AlertDialog
+        leastDestructiveRef={cancelRefComment}
+        isOpen={isOpenComment}
+        onClose={onCloseComment}
+        motionPreset={"fade"}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.Header fontSize="lg" fontWeight="bold">
+            Comment post
+          </AlertDialog.Header>
+          <AlertDialog.Body>
+            {/*<View style={{position: 'relative', marginBottom: 10, marginTop: 8, marginHorizontal: 10}}>*/}
+            <TextInput
+              onChangeText={str => setCommentInput(str)}
+              onSubmitEditing={createComment}
+              ref={inputCommentRef}
+              style={{
+                minHeight: 46,
+                flexGrow: 1,
+                backgroundColor: '#eee',
+                paddingLeft: 8,
+                paddingRight: 50,
+                fontSize: 16,
+                borderRadius: 12,
+                paddingVertical: 8,
+              }}
+              placeholder="Type here..."
+              value={commentInput}
+            />
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button
+              style={{backgroundColor: 'white'}}
+              variant='outline'
+              colorScheme='gray'
+              ref={cancelRefComment}
+              onPress={onCloseComment}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{backgroundColor: colors.primary}}
+              onPress={createComment}
+              ml={3}
+            >
+              Comment
+            </Button>
+
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+    )
+  }
+
+  function AlertDialogRemovePost() {
+    return(
+      <AlertDialog
+        leastDestructiveRef={cancelRefRemove}
+        isOpen={isOpenRemove}
+        onClose={onCloseRemove}
+        motionPreset={"fade"}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.Header fontSize="lg" fontWeight="bold">
+            Remove post
+          </AlertDialog.Header>
+          <AlertDialog.Body>
+            Are you sure You want to remove this post?
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button
+              style={{backgroundColor: colors.primary}}
+              ref={cancelRefRemove}
+              onPress={onCloseRemove}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{backgroundColor: colors.danger}}
+              onPress={() => {
+                console.log("remove");
+                removePost();
+              }}
+              ml={3}
+            >
+              Remove
+            </Button>
+
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+    )
+  }
+
+  function AlertDialogReportPost() {
+    return(
+      <AlertDialog
+        leastDestructiveRef={cancelRefReport}
+        isOpen={isOpenReport}
+        onClose={onCloseReport}
+        motionPreset={"fade"}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.Header fontSize="lg" fontWeight="bold">
+            Report post
+          </AlertDialog.Header>
+          <AlertDialog.Body>
+            Type here what is the reason, that You want to report this post?
+            <TextInput
+              onSubmitEditing={reportPost.bind(this, post.id)}
+              onChangeText={(reason) => setReason(reason)}
+              style={{
+                backgroundColor: "#e9e9e9",
+                paddingHorizontal: 15,
+                borderRadius: 10,
+                fontSize: 16,
+                paddingVertical: 8,
+                marginTop: 10,
+                textAlignVertical: 'top'
+              }}
+              multiline={true}
+              numberOfLines={4}
+              placeholder="Reason"
+            />
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button
+              style={{backgroundColor: colors.primary}}
+              ref={cancelRefReport}
+              onPress={onCloseReport}
+            >
+              Cancel
+            </Button>
+
+            {reason.length > 3 && (
+              <Button
+                style={{backgroundColor: colors.primary}}
+                onPress={() => {
+                  console.log("report");
+                  reportPost();
+                }}
+                ml={3}
+              >
+                Report
+              </Button>
+            )}
+
+            {reason.length <= 3 && (
+              <Button style={{backgroundColor: "#ccc"}} ml={3}>
+                Report
+              </Button>
+            )}
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+    )
+  }
 }

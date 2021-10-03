@@ -2,7 +2,11 @@ import React, {useState, useEffect, useRef} from "react";
 import {
   View,
   ScrollView,
-  Text, TextInput, TouchableOpacity, Image, ActivityIndicator
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator, Dimensions
 } from "react-native";
 import {API_URL, API_URL_WS} from "@env";
 import {useStore, useSelector} from "react-redux";
@@ -10,9 +14,11 @@ import {io} from "socket.io-client";
 import MessageItem from "../components/MessageItem";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors from "../colors/colors";
+import {useToast} from "native-base";
 
 export default function ChatScreen({route, navigation}) {
   const store = useStore();
+  const toast = useToast();
 
   const scrollViewRef = useRef();
 
@@ -20,7 +26,6 @@ export default function ChatScreen({route, navigation}) {
   const [idChannel, setIdChannel] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const refMessages = useRef(messages);
-  const [userChattingWith, setUserChattingWith] = useState({});
 
   const [message, setMessage] = useState('');
   const [socket, setSocket] = useState(io(API_URL_WS, {transports: ['websocket']}));
@@ -122,21 +127,21 @@ export default function ChatScreen({route, navigation}) {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10, paddingBottom: 10}}>
+      <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10}}>
         <View>
           {!isLoading && messages.map((mes, idx) =>
-            // <Text style={{padding: 50}} key={idx}>{mes.message}</Text>
             <MessageItem key={idx} item={mes}/>
           )}
 
           {isLoading &&
-            <ActivityIndicator size={60} color={colors.primary} style={{marginVertical: 40}}/>
+          <ActivityIndicator size={60} color={colors.primary} style={{marginVertical: 40}}/>
           }
         </View>
       </ScrollView>
 
 
-      <View style={{position: 'relative', marginBottom: 10, marginHorizontal: 10}}>
+      {!isLoading &&
+      <View style={{position: 'relative', margin: 10}}>
         <TextInput
           onChangeText={str => setMessage(str)}
           onSubmitEditing={send}
@@ -158,6 +163,7 @@ export default function ChatScreen({route, navigation}) {
           <MaterialIcons name="send" color={'#444'} size={35}/>
         </TouchableOpacity>
       </View>
+      }
     </View>
   );
 }

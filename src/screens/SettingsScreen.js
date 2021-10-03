@@ -66,7 +66,9 @@ export default function SettingsScreen({navigation}) {
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button
-                style={{backgroundColor: colors.primary}}
+                style={{backgroundColor: 'white'}}
+                variant='outline'
+                colorScheme='gray'
                 ref={cancelRefDelete}
                 onPress={onCloseDelete}
               >

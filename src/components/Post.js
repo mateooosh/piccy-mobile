@@ -226,6 +226,7 @@ export default function Post(props) {
         console.log(response);
         setIsOpenRemove(!isOpenRemove);
         onClose();
+        displayToast(toast, response.message);
       })
       .catch(err => alert(err))
   }
@@ -253,6 +254,7 @@ export default function Post(props) {
       .finally(() => {
         setCommentInput('');
         setIsOpenComment(false);
+        displayToast(toast, response.message);
         getComments(props.post.id);
       })
   }
@@ -270,6 +272,19 @@ export default function Post(props) {
     // inputCommentRef.current.focus();
   }
 
+  function onSharePress() {
+    const url = `http://localhost:19006/post/${post.id}`
+
+
+    // let el = document.createElement('textarea');
+    // el.value = url;
+    // document.body.appendChild(el);
+    // el.select();
+    // document.execCommand('copy');
+    // document.body.removeChild(el);
+    // alert('copied')
+  }
+
   return (
     <View
       key={post.id}
@@ -285,7 +300,7 @@ export default function Post(props) {
           {post.username === store.getState().username &&
           <Actionsheet.Item
             onPress={() => {
-              removePost()
+              setIsOpenRemove(true);
             }}
           >
             <Text style={{fontSize: 16, fontWeight: "600"}}>Remove post</Text>
@@ -431,7 +446,7 @@ export default function Post(props) {
         </View>
         <View style={{flexDirection: "row", alignItems: "center"}}>
           <MaterialIcons
-            onPress={() => alert("Share")}
+            onPress={onSharePress}
             name="share"
             color={"black"}
             size={30}
@@ -601,7 +616,9 @@ export default function Post(props) {
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button
-              style={{backgroundColor: colors.primary}}
+              style={{backgroundColor: 'white'}}
+              variant='outline'
+              colorScheme='gray'
               ref={cancelRefRemove}
               onPress={onCloseRemove}
             >
@@ -611,7 +628,6 @@ export default function Post(props) {
             <Button
               style={{backgroundColor: colors.danger}}
               onPress={() => {
-                console.log("remove");
                 removePost();
               }}
               ml={3}
@@ -658,7 +674,9 @@ export default function Post(props) {
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button
-              style={{backgroundColor: colors.primary}}
+              style={{backgroundColor: 'white'}}
+              variant='outline'
+              colorScheme='gray'
               ref={cancelRefReport}
               onPress={onCloseReport}
             >

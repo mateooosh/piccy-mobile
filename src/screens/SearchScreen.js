@@ -32,13 +32,16 @@ export default function SearchScreen({navigation}) {
         />
         {getIcon()}
       </View>
-      <TopTab.Navigator tabBarOptions={{
+      <TopTab.Navigator
+        tabBarOptions={{
         activeTintColor: colors.primary,
         inactiveTintColor: 'black',
-        style: {backgroundColor: '#white'}
+        indicatorStyle: {
+          backgroundColor: colors.primary,
+        }
       }}>
         <TopTab.Screen name="Accounts" children={() => <SearchAccounts query={query} navigation={navigation}/>}/>
-        <TopTab.Screen name="Tags" children={() => <SearchTags query={query}/>}/>
+        <TopTab.Screen name="Tags" children={() => <SearchTags query={query} navigation={navigation}/>}/>
       </TopTab.Navigator>
 
     </View>
@@ -120,10 +123,35 @@ function SearchAccounts(props) {
 }
 
 function SearchTags(props) {
+  const [result, setResult] = useState([]);
+  const store = useStore();
+
+  const [time, setTime] = useState(setTimeout(() => {
+  }, 0));
+
+  useEffect(() => {
+    console.log('props', props)
+    clearTimeout(time);
+    setTime(setTimeout(getTags, 250));
+    return () => clearTimeout(time);
+  }, [props])
+
+  function getTags() {
+    // console.log(API_URL)
+    const url = `${API_URL}/tags?query=${props.query}&token=${store.getState().token}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(response => {
+        setResult(response);
+      })
+      .catch(err => console.log(err));
+  }
+
   return (
     <ScrollView style={{padding: 20, backgroundColor: 'white'}}>
-      <Text>Tags</Text>
-      <Text>{props.query}</Text>
+      {result.map((tag, index) =>
+        <Text key={index} style={{fontSize: 16, color: colors.hashtag, fontWeight: 'bold', marginBottom: 10}}>{tag}</Text>
+      )}
     </ScrollView>
   )
 }

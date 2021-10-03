@@ -9,6 +9,7 @@ import colors from '../colors/colors';
 import {Camera} from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import {API_URL} from '@env';
+import {displayToast} from "../functions/functions";
 
 export default function AddScreen({navigation}) {
   const store = useStore();
@@ -171,7 +172,8 @@ export default function AddScreen({navigation}) {
     })
       .then(response => response.json())
       .then(response => {
-        alert(response.message);
+        displayToast(toast, response.message);
+        navigation.push('Piccy', {screen: 'account'});
         // ToastAndroid.showWithGravityAndOffset(
         //   'Created new post',
         //   ToastAndroid.SHORT,

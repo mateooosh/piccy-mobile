@@ -20,13 +20,12 @@ import {
 // import colors
 import colors from '../colors/colors'
 
-
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import {useStore} from "react-redux";
+import {useSelector, useStore} from "react-redux";
 import {API_URL} from "@env";
-import styles from "../styles/style";
 import {displayToast} from "../functions/functions";
+import {t} from "../translations/translations";
 
 
 // //import my functions
@@ -35,6 +34,7 @@ const fun = require("../functions/functions");
 export default function Post(props) {
 
   const store = useStore();
+  const lang = useSelector(state => state.lang);
   const toast = useToast();
 
   const {isOpen, onOpen, onClose} = useDisclose();
@@ -55,15 +55,12 @@ export default function Post(props) {
 
   const inputCommentRef = useRef();
 
-  // const [isOpenRemovePost, setIsOpenRemovePost] = React.useState(false);
-  // const onCloseRemovePost = () => setIsOpenRemovePost(false);
   const [post, setPost] = useState({});
 
   const [photo, setPhoto] = useState(null);
   const [comments, setComments] = useState([]);
   const [reason, setReason] = useState('');
   const [commentInput, setCommentInput] = useState('');
-  const [commentInputVisible, setCommentInputVisible] = useState(true);
 
   useEffect(() => {
     setPost(props.post);
@@ -120,22 +117,13 @@ export default function Post(props) {
       },
     })
       .then((response) => response.json())
-      .then((response) => {
+      .then(response => {
         let deepCopy = JSON.parse(JSON.stringify(post));
         deepCopy.likes++;
         deepCopy.liked = 1;
         setPost(deepCopy);
 
         animateHeartIcon();
-
-        // ToastAndroid.showWithGravityAndOffset(
-        //   "Liked",
-        //   ToastAndroid.SHORT,
-        //   ToastAndroid.BOTTOM,
-        //   0,
-        //   150
-        // );
-        // alert(response.message);
       })
       .catch((err) => console.log(err));
   }
@@ -155,14 +143,6 @@ export default function Post(props) {
         deepCopy.likes--;
         deepCopy.liked = 0;
         setPost(deepCopy);
-
-        ToastAndroid.showWithGravityAndOffset(
-          "Disliked",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-          0,
-          150
-        );
       })
       .catch((err) => console.log(err));
   }
@@ -273,16 +253,8 @@ export default function Post(props) {
   }
 
   function onSharePress() {
-    const url = `http://localhost:19006/post/${post.id}`
+    console.log('share');
 
-
-    // let el = document.createElement('textarea');
-    // el.value = url;
-    // document.body.appendChild(el);
-    // el.select();
-    // document.execCommand('copy');
-    // document.body.removeChild(el);
-    // alert('copied')
   }
 
   return (
@@ -303,7 +275,7 @@ export default function Post(props) {
               setIsOpenRemove(true);
             }}
           >
-            <Text style={{fontSize: 16, fontWeight: "600"}}>Remove post</Text>
+            <Text style={{fontSize: 16, fontWeight: "600"}}>{t.removePost[lang]}</Text>
           </Actionsheet.Item>
           }
           <Actionsheet.Item
@@ -312,13 +284,13 @@ export default function Post(props) {
               onClose();
             }}
           >
-            <Text style={{fontSize: 16, fontWeight: "600"}}>Report post</Text>
+            <Text style={{fontSize: 16, fontWeight: "600"}}>{t.reportPost[lang]}</Text>
           </Actionsheet.Item>
           <Actionsheet.Item onPress={() => {
             onClose();
             alert('download photo')
           }}>
-            Download photo
+            {t.downloadPhoto[lang]}
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
@@ -456,10 +428,10 @@ export default function Post(props) {
 
       <View style={{flexDirection: "row", marginBottom: 10}}>
         <Text style={{marginHorizontal: 15, fontWeight: "700", fontSize: 13}}>
-          {post.likes} likes
+          {post.likes} {t.likes[lang]}
         </Text>
         <Text style={{fontWeight: "700", fontSize: 13}}>
-          {post.comments} comments
+          {post.comments} {t.comments[lang]}
         </Text>
       </View>
 
@@ -492,7 +464,7 @@ export default function Post(props) {
 
       {props.homeScreen === false && comments.length > 0 && (
         <Text style={{color: "#555", marginHorizontal: 15, marginTop: 10}}>
-          <Text>Comments</Text>
+          <Text>{t.Comments[lang]}</Text>
         </Text>
       )}
 
@@ -515,30 +487,6 @@ export default function Post(props) {
         </View>
       ))}
 
-      {/*{!props.homeScreen && commentInputVisible &&*/}
-      {/*<View style={{position: 'relative', marginBottom: 10, marginTop: 8, marginHorizontal: 10}}>*/}
-      {/*  <TextInput*/}
-      {/*    onChangeText={str => setCommentInput(str)}*/}
-      {/*    onSubmitEditing={createComment}*/}
-      {/*    style={{*/}
-      {/*      minHeight: 46,*/}
-      {/*      flexGrow: 1,*/}
-      {/*      backgroundColor: '#eee',*/}
-      {/*      paddingLeft: 8,*/}
-      {/*      paddingRight: 50,*/}
-      {/*      fontSize: 16,*/}
-      {/*      borderRadius: 12,*/}
-      {/*      paddingVertical: 8,*/}
-      {/*    }}*/}
-      {/*    placeholder="Type here..."*/}
-      {/*    value={commentInput}*/}
-      {/*  />*/}
-      {/*  <TouchableOpacity style={{position: 'absolute', right: 10, top: '50%', transform: [{translateY: -18}]}}*/}
-      {/*                    onPress={createComment}>*/}
-      {/*    <MaterialIcons name="send" color={'#444'} size={36}/>*/}
-      {/*  </TouchableOpacity>*/}
-      {/*</View>*/}
-      {/*}*/}
     </View>
   );
 
@@ -552,7 +500,7 @@ export default function Post(props) {
       >
         <AlertDialog.Content>
           <AlertDialog.Header fontSize="lg" fontWeight="bold">
-            Comment post
+            {t.commentPost[lang]}
           </AlertDialog.Header>
           <AlertDialog.Body>
             {/*<View style={{position: 'relative', marginBottom: 10, marginTop: 8, marginHorizontal: 10}}>*/}
@@ -570,7 +518,7 @@ export default function Post(props) {
                 borderRadius: 12,
                 paddingVertical: 8,
               }}
-              placeholder="Type here..."
+              placeholder={t.typeHere[lang]}
               value={commentInput}
             />
           </AlertDialog.Body>
@@ -590,7 +538,7 @@ export default function Post(props) {
               onPress={createComment}
               ml={3}
             >
-              Comment
+              {t.comment[lang]}
             </Button>
 
           </AlertDialog.Footer>
@@ -609,10 +557,10 @@ export default function Post(props) {
       >
         <AlertDialog.Content>
           <AlertDialog.Header fontSize="lg" fontWeight="bold">
-            Remove post
+            {t.removePost[lang]}
           </AlertDialog.Header>
           <AlertDialog.Body>
-            Are you sure You want to remove this post?
+            {t.areYouSureYouWantToRemoveThisPost[lang]}
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button
@@ -622,7 +570,7 @@ export default function Post(props) {
               ref={cancelRefRemove}
               onPress={onCloseRemove}
             >
-              Cancel
+              {t.cancel[lang]}
             </Button>
 
             <Button
@@ -632,7 +580,7 @@ export default function Post(props) {
               }}
               ml={3}
             >
-              Remove
+              {t.remove[lang]}
             </Button>
 
           </AlertDialog.Footer>
@@ -651,10 +599,10 @@ export default function Post(props) {
       >
         <AlertDialog.Content>
           <AlertDialog.Header fontSize="lg" fontWeight="bold">
-            Report post
+            {t.reportPost[lang]}
           </AlertDialog.Header>
           <AlertDialog.Body>
-            Type here what is the reason, that You want to report this post?
+            {t.typeHereWhatIsTheReasonReportPost[lang]}
             <TextInput
               onSubmitEditing={reportPost.bind(this, post.id)}
               onChangeText={(reason) => setReason(reason)}
@@ -680,25 +628,24 @@ export default function Post(props) {
               ref={cancelRefReport}
               onPress={onCloseReport}
             >
-              Cancel
+              {t.cancel[lang]}
             </Button>
 
             {reason.length > 3 && (
               <Button
                 style={{backgroundColor: colors.primary}}
                 onPress={() => {
-                  console.log("report");
                   reportPost();
                 }}
                 ml={3}
               >
-                Report
+                {t.report[lang]}
               </Button>
             )}
 
             {reason.length <= 3 && (
               <Button style={{backgroundColor: "#ccc"}} ml={3}>
-                Report
+                {t.report[lang]}
               </Button>
             )}
           </AlertDialog.Footer>

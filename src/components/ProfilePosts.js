@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Text, View, TouchableOpacity, ActivityIndicator, Image, Dimensions} from 'react-native';
-import {useStore} from "react-redux";
+import {useSelector} from "react-redux";
 import colors from '../colors/colors';
 
 
 export default function ProfilePosts({posts, loading, navigation}) {
+  const lang = useSelector(state => state.lang);
 
   return (
     <View style={{width: '100%'}}>
@@ -14,7 +15,7 @@ export default function ProfilePosts({posts, loading, navigation}) {
         textAlign: 'left',
         paddingLeft: 20,
         marginBottom: 10
-      }}>Posts</Text>
+      }}>{t.posts[lang]}</Text>
       {posts.length < 1 && loading &&
       <ActivityIndicator
         size={60}
@@ -47,7 +48,7 @@ export default function ProfilePosts({posts, loading, navigation}) {
 
       {posts.length < 1 && !loading &&
       <View style={{paddingHorizontal: 20}}>
-        <Text>User has no posts</Text>
+        <Text>{t.userHasNoPosts[lang]}</Text>
       </View>
       }
 

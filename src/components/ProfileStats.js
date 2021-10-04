@@ -2,8 +2,10 @@ import React from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import colors from '../colors/colors';
 import styles from "../styles/style";
+import {useSelector} from "react-redux";
 
 export default function ProfileStats({navigation, idUser, followers, following, postsAmount}) {
+  const lang = useSelector(state => state.lang);
 
   return (
     <View
@@ -30,7 +32,7 @@ export default function ProfileStats({navigation, idUser, followers, following, 
           fontSize: 18,
           color: colors.primary
         }}>{postsAmount}</Text></View>
-        <View><Text style={{textAlign: 'center', fontSize: 16}}>Posts</Text></View>
+        <View><Text style={{textAlign: 'center', fontSize: 16}}>{t.posts2[lang]}</Text></View>
       </View>
       <TouchableOpacity
         style={{
@@ -49,7 +51,7 @@ export default function ProfileStats({navigation, idUser, followers, following, 
           fontSize: 18,
           color: colors.primary
         }}>{followers}</Text></View>
-        <View><Text style={{textAlign: 'center', fontSize: 16}}>Followers</Text></View>
+        <View><Text style={{textAlign: 'center', fontSize: 16}}>{t.followers[lang]}</Text></View>
       </TouchableOpacity>
       <TouchableOpacity
         style={{
@@ -67,7 +69,7 @@ export default function ProfileStats({navigation, idUser, followers, following, 
           fontSize: 18,
           color: colors.primary
         }}>{following}</Text></View>
-        <View><Text style={{textAlign: 'center', fontSize: 16}}>Following</Text></View>
+        <View><Text style={{textAlign: 'center', fontSize: 16}}>{t.following[lang]}</Text></View>
       </TouchableOpacity>
     </View>
 

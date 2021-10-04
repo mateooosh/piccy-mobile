@@ -20,32 +20,6 @@ function MessageItem(props) {
     setItem(props.item);
   }, [props])
 
-  // function displayMessage(message, color) {
-  //   let arr = []
-  //   if(message) {
-  //     arr = message.split(' ')
-  //
-  //     for(let i=0; i<arr.length; i++) {
-  //       if(arr[i].startsWith('http')) {
-  //         const link = arr[i];
-  //         arr[i] = <Text onPress={async () => {
-  //           if(await Linking.canOpenURL(link)) {
-  //             await Linking.openURL(link);
-  //           }
-  //           else {
-  //             alert(`Don't know how to open this URL: ${link}`);
-  //           }
-  //         }}
-  //         style={{textDecoration: 'underline'}}>{arr[i]}</Text>
-  //       }
-  //     }
-  //   }
-  //   return arr.map((item, i) =>
-  //     <Text key={i} style={{color: color, fontSize: 16, wordBreak: 'break-word'}}>{item} </Text>
-  //   )
-  // }
-
-
   return (
     <View>
       {item.idSender == store.getState().id && (
@@ -99,7 +73,9 @@ function MessageItem(props) {
               marginBottom: 5,
               fontSize: 12,
               color: '#999'
-            }}>{fun.displayTimeV2(item.createdAt)}</Text>
+            }}>
+              {fun.displayTimeV2(item.createdAt)}
+            </Text>
           </Collapse>
         </View>
       )}

@@ -15,10 +15,12 @@ import MessageItem from "../components/MessageItem";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors from "../colors/colors";
 import {useToast} from "native-base";
+import {t} from "../translations/translations";
 
 export default function ChatScreen({route, navigation}) {
   const store = useStore();
   const toast = useToast();
+  const lang = useSelector(state => state.lang);
 
   const scrollViewRef = useRef();
 
@@ -155,7 +157,7 @@ export default function ChatScreen({route, navigation}) {
             borderRadius: 12,
             paddingVertical: 8,
           }}
-          placeholder="Type here..."
+          placeholder={t.typeHere[lang]}
           value={message}
         />
         <TouchableOpacity style={{position: 'absolute', right: 10, top: 5}}

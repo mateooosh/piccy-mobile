@@ -39,7 +39,7 @@ export default function BottomTab(){
       <Tab.Screen
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="home" color={color} size={30}/>
+            <MaterialIcons name="home" color={color} size={26}/>
           ),
           title: "Piccy",
         }}
@@ -50,7 +50,7 @@ export default function BottomTab(){
       <Tab.Screen
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="search" color={color} size={30}/>
+            <MaterialIcons name="search" color={color} size={26}/>
           ),
           title: t.search[lang]
         }}
@@ -61,7 +61,7 @@ export default function BottomTab(){
       <Tab.Screen
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="add-circle" color={color} size={30}/>
+            <MaterialIcons name="add-circle" color={color} size={26}/>
           ),
           title: t.createPost[lang]
         }}
@@ -72,7 +72,7 @@ export default function BottomTab(){
       <Tab.Screen
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="message" color={color} size={30}/>
+            <MaterialIcons name="message" color={color} size={26}/>
           ),
           tabBarBadge: notificationAmount ? notificationAmount : null,
           title: t.messages[lang]
@@ -84,7 +84,7 @@ export default function BottomTab(){
       <Tab.Screen
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialIcons name="account-circle" color={color} size={30}/>
+            <MaterialIcons name="account-circle" color={color} size={26}/>
           ),
           title: t.account[lang]
         }}

@@ -1,18 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Text, View, Image, TouchableOpacity} from 'react-native';
-import {useStore} from "react-redux";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import fun from '../functions/functions'
 
 export default function MessageUserItem(props) {
-
-  const store = useStore();
-
-  const [item, setItem] = useState({});
-
-  useEffect(() => {
-    setItem(props.item)
-  }, [props])
 
   return (
     <TouchableOpacity onPress={() => props.navigation.push('Chat', {idUser: props.channel.idUser})}
@@ -33,7 +24,6 @@ export default function MessageUserItem(props) {
           <Text style={{fontWeight: '700'}}>{fun.displayTimeV2(props.channel.createdAt)}</Text>
         </View>
         <Text numberOfLines={1} style={{color: '#444'}}>{props.channel.lastMessage}</Text>
-
       </View>
     </TouchableOpacity>
   )

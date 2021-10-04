@@ -4,25 +4,24 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Dimensions,
   Image,
-  ActivityIndicator,
   RefreshControl
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import colors from '../colors/colors';
-
-import {useStore} from 'react-redux'
+import {useSelector, useStore} from 'react-redux'
 import {API_URL} from '@env';
 import ProfileStats from "../components/ProfileStats";
 import ProfilePosts from "../components/ProfilePosts";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import styles from "../styles/style";
+import {t} from "../translations/translations";
 
 
 export default function AccountScreen({navigation}) {
   const store = useStore();
+  const lang = useSelector(state => state.lang);
+
 
   const [profile, setProfile] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -114,7 +113,7 @@ export default function AccountScreen({navigation}) {
               <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8}}>
                 <MaterialCommunityIcons name="account-edit" color='white'
                                         size={20}/>
-                <Text style={{textAlign: 'center', color: 'white'}}>Edit Profile</Text>
+                <Text style={{textAlign: 'center', color: 'white'}}>{t.editProfile[lang]}</Text>
               </View>
             </TouchableOpacity>
           </View>

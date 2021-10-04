@@ -1,18 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, TouchableOpacity, TextInput} from 'react-native';
-import {useStore} from "react-redux";
-import colors from '../colors/colors';
+import React from 'react';
+import {Text, View, TextInput} from 'react-native';
 import styles from "../styles/style";
 
 
-export default function Input({label, placeholder, autoCompleteType, onSubmitEditing, onChangeText, secureTextEntry, isCorrect, errorMessage, value, marginBottom}) {
-
-  // const [value, setValue] = useState('');
+export default function Input({label, placeholder, autoCompleteType, onSubmitEditing, onChangeText, secureTextEntry, isCorrect, errorMessage, value, marginBottom, editable = true}) {
 
   return (
     <View style={{marginBottom: marginBottom || 0}}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
+        editable={editable}
         value={value}
         onSubmitEditing={onSubmitEditing}
         onChangeText={(str) => {onChangeText(str);}}

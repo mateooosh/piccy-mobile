@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useStore} from 'react-redux';
+import {useSelector, useStore} from 'react-redux';
 
 import colors from '../colors/colors';
 
@@ -10,9 +10,11 @@ import {Camera} from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import {API_URL} from '@env';
 import {displayToast} from "../functions/functions";
+import {t} from "../translations/translations";
 
 export default function AddScreen({navigation}) {
   const store = useStore();
+  const lang = useSelector(state => state.lang);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -61,26 +63,9 @@ export default function AddScreen({navigation}) {
   function toggleType() {
     if (type === Camera.Constants.Type.back) {
       setType(Camera.Constants.Type.front);
-
-      // ToastAndroid.showWithGravityAndOffset(
-      //   'Changed to front camera',
-      //   ToastAndroid.SHORT,
-      //   ToastAndroid.BOTTOM,
-      //   0,
-      //   150
-      // );
-
     } else if (type === Camera.Constants.Type.front) {
       setType(Camera.Constants.Type.back);
-      // ToastAndroid.showWithGravityAndOffset(
-      //   'Changed to back camera',
-      //   ToastAndroid.SHORT,
-      //   ToastAndroid.BOTTOM,
-      //   0,
-      //   150
-      // );
     }
-
   }
 
   function setNextFlashMode() {
@@ -92,14 +77,6 @@ export default function AddScreen({navigation}) {
       setFlash('auto');
     else if (flash === 'auto')
       setFlash('off');
-
-    // ToastAndroid.showWithGravityAndOffset(
-    //   `Flash: ${flash}`,
-    //   ToastAndroid.SHORT,
-    //   ToastAndroid.BOTTOM,
-    //   0,
-    //   150
-    // );
   }
 
   async function takePicture() {
@@ -111,14 +88,6 @@ export default function AddScreen({navigation}) {
         setPhoto(data.base64);
       else
         setPhoto("data:image/webp;base64," + data.base64)
-
-      // ToastAndroid.showWithGravityAndOffset(
-      //   'Took picture',
-      //   ToastAndroid.SHORT,
-      //   ToastAndroid.BOTTOM,
-      //   0,
-      //   150
-      // );
     });
 
     setCameraVisible(false);
@@ -138,14 +107,6 @@ export default function AddScreen({navigation}) {
     if (!result.cancelled) {
       setPhoto(`data:image/webp;base64,${result.base64}`);
       setCameraVisible(false);
-
-      // ToastAndroid.showWithGravityAndOffset(
-      //   'Picked image',
-      //   ToastAndroid.SHORT,
-      //   ToastAndroid.BOTTOM,
-      //   0,
-      //   150
-      // );
     }
   };
 
@@ -174,13 +135,6 @@ export default function AddScreen({navigation}) {
       .then(response => {
         displayToast(toast, response.message);
         navigation.push('Piccy', {screen: 'account'});
-        // ToastAndroid.showWithGravityAndOffset(
-        //   'Created new post',
-        //   ToastAndroid.SHORT,
-        //   ToastAndroid.BOTTOM,
-        //   0,
-        //   150
-        // );
       })
       .catch(err => {
         alert('Something went wrong!')
@@ -201,7 +155,7 @@ export default function AddScreen({navigation}) {
             source={{uri: photo}}
             style={{width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginBottom: 20}}
           />
-          <Text style={{fontWeight: '700', fontSize: 16, marginHorizontal: '5%'}}>Caption</Text>
+          <Text style={{fontWeight: '700', fontSize: 16, marginHorizontal: '5%'}}>{t.caption[lang]}</Text>
           <TextInput
             style={{
               backgroundColor: '#ddd',
@@ -220,7 +174,7 @@ export default function AddScreen({navigation}) {
               setDescription(str);
               console.log(description);
             }}
-            placeholder="Write your caption..."
+            placeholder={t.typeHere[lang]}
           />
           <TouchableOpacity
             onPress={createPost}
@@ -232,7 +186,7 @@ export default function AddScreen({navigation}) {
               backgroundColor: colors.primary,
             }}
           >
-            <Text style={{color: 'white', textAlign: 'center'}}>Add new post</Text>
+            <Text style={{color: 'white', textAlign: 'center'}}>{t.addNewPost[lang]}</Text>
           </TouchableOpacity>
         </View>
         }
@@ -327,7 +281,7 @@ export default function AddScreen({navigation}) {
             backgroundColor: colors.primary,
           }}
         >
-          <Text style={{color: 'white', textAlign: 'center'}}>Take picture again</Text>
+          <Text style={{color: 'white', textAlign: 'center'}}>{t.takePictureAgain[lang]}</Text>
         </TouchableOpacity>
         }
 
@@ -340,7 +294,7 @@ export default function AddScreen({navigation}) {
             borderRadius: 6,
             backgroundColor: colors.primary,
           }}>
-          <Text style={{color: 'white', textAlign: 'center'}}>Pick an image from your gallery</Text>
+          <Text style={{color: 'white', textAlign: 'center'}}>{t.pickAnImage[lang]}</Text>
         </TouchableOpacity>
 
       </ScrollView>

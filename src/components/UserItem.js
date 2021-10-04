@@ -1,8 +1,12 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {t} from "../translations/translations";
+import {useSelector} from "react-redux";
 
 export default function UserItem (props) {
+  const lang = useSelector(state => state.lang);
+
   return (
     <View style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 10, marginHorizontal: 15}}>
       <TouchableOpacity 
@@ -38,7 +42,7 @@ export default function UserItem (props) {
           {props.item.followers}
         </Text>
         <Text style={{color: '#555'}}>
-          Followers
+          {t.followers[lang]}
         </Text>
       </View>
     </View>

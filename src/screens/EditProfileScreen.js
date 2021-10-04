@@ -59,11 +59,8 @@ export default function EditProfileScreen({route, navigation}) {
 
     const index = photo.indexOf(',');
     let base64 = photo.slice(index + 1, (photo.length));
-    console.log(photo)
 
     const obj = {
-      username: username,
-      email: email,
       name: name,
       description: description,
       photo: base64,
@@ -171,13 +168,13 @@ export default function EditProfileScreen({route, navigation}) {
           <View style={{marginBottom: 20}}>
             <Input value={email} label={'E-mail'} placeholder={'E-mail'} onChangeText={setEmail}
                    onSubmitEditing={() => console.log('submit')} isCorrect={correctEmail()}
-                   autoCompleteType="email" errorMessage="E-mail is not valid"/>
+                   autoCompleteType="email" errorMessage="E-mail is not valid" editable={false}/>
           </View>
 
           <View style={{marginBottom: 20}}>
             <Input value={username} label={t.username[lang]} placeholder={t.username[lang]} onChangeText={setUsername}
                    onSubmitEditing={() => console.log('submit')} isCorrect={correctUsername()}
-                   autoCompleteType="username" errorMessage="Username must be at least 6 characters long"/>
+                   autoCompleteType="username" errorMessage="Username must be at least 6 characters long" editable={false}/>
           </View>
 
           <View style={{marginBottom: 20}}>

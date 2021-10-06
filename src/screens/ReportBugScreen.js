@@ -49,7 +49,7 @@ export default function ReportBugScreen() {
       return (
         <TouchableOpacity onPress={reportBug} style={styles.button}>
           {!loading &&
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Report</Text>
+          <Text style={styles.button.text}>Report</Text>
           }
           {loading &&
           <ActivityIndicator size={19} color="white"/>
@@ -59,7 +59,7 @@ export default function ReportBugScreen() {
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Report</Text>
+          <Text style={styles.button.text}>Report</Text>
         </TouchableOpacity>
       )
     }

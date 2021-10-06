@@ -92,7 +92,7 @@ export default function SettingsScreen({navigation}) {
         </AlertDialog>
 
         <TouchableOpacity style={styles.option} onPress={() => setIsOpenDelete(true)}>
-          <MaterialCommunityIcons style={styles.icon} name="account-remove" color={'black'} size={30}/>
+          <MaterialCommunityIcons style={styles.icon} name="account-remove" size={30}/>
           <Text style={{fontSize: 16}}>Delete account</Text>
           <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'}
                          size={30}/>
@@ -101,7 +101,7 @@ export default function SettingsScreen({navigation}) {
         <Divider color={'#ddd'}/>
 
         <TouchableOpacity style={styles.option} onPress={() => navigation.push('ReportBug')}>
-          <MaterialIcons style={styles.icon} name="bug-report" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="bug-report" size={30}/>
           <Text style={{fontSize: 16}}>Report bug</Text>
           <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'}
                          size={30}/>
@@ -110,7 +110,7 @@ export default function SettingsScreen({navigation}) {
         <Divider color={'#ddd'}/>
 
         <TouchableOpacity style={styles.option} onPress={() => navigation.push('Language')}>
-          <MaterialIcons style={styles.icon} name="language" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="language" size={30}/>
           <Text style={{fontSize: 16}}>{t.language[lang]}</Text>
           <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'}
                          size={30}/>
@@ -119,7 +119,7 @@ export default function SettingsScreen({navigation}) {
         <Divider color={'#ddd'}/>
 
         <TouchableOpacity style={styles.option} onPress={() => navigation.push('ResetPassword')}>
-          <MaterialIcons style={styles.icon} name="lock-outline" color={'black'} size={30}/>
+          <MaterialIcons style={styles.icon} name="lock-outline" size={30}/>
           <Text style={{fontSize: 16}}>{t.resetPassword[lang]}</Text>
           <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'}
                          size={30}/>

@@ -3,6 +3,7 @@ import {Text, View, TouchableOpacity} from 'react-native';
 import colors from '../colors/colors';
 import styles from "../styles/style";
 import {useSelector} from "react-redux";
+import {t} from "../translations/translations";
 
 export default function ProfileStats({navigation, idUser, followers, following, postsAmount}) {
   const lang = useSelector(state => state.lang);

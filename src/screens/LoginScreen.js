@@ -79,7 +79,7 @@ export default function LoginScreen({navigation}) {
       return (
         <TouchableOpacity onPress={logIn.bind(this, username, password)} style={styles.button}>
           {!loading &&
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Log in</Text>
+          <Text style={styles.button.text}>Log in</Text>
           }
           {loading &&
           <ActivityIndicator size={19} color="white"/>
@@ -89,7 +89,7 @@ export default function LoginScreen({navigation}) {
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Log in</Text>
+          <Text style={styles.button.text}>Log in</Text>
         </TouchableOpacity>
       )
     }

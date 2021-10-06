@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useSelector, useStore} from 'react-redux';
 
 import colors from '../colors/colors';
+import styles from "../styles/style";
 
 import {Camera} from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
@@ -155,11 +156,11 @@ export default function AddScreen({navigation}) {
             source={{uri: photo}}
             style={{width: Dimensions.get('window').width, height: Dimensions.get('window').width, marginBottom: 20}}
           />
-          <Text style={{fontWeight: '700', fontSize: 16, marginHorizontal: '5%'}}>{t.caption[lang]}</Text>
+          <Text style={{fontWeight: '700', fontSize: 16, marginHorizontal: 16}}>{t.caption[lang]}</Text>
           <TextInput
             style={{
               backgroundColor: '#ddd',
-              marginHorizontal: '5%',
+              marginHorizontal: 16,
               paddingVertical: 5,
               marginBottom: 20,
               marginTop: 10,
@@ -178,15 +179,9 @@ export default function AddScreen({navigation}) {
           />
           <TouchableOpacity
             onPress={createPost}
-            style={{
-              marginHorizontal: 20,
-              marginBottom: 20,
-              padding: 10,
-              borderRadius: 6,
-              backgroundColor: colors.primary,
-            }}
+            style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
           >
-            <Text style={{color: 'white', textAlign: 'center'}}>{t.addNewPost[lang]}</Text>
+            <Text style={styles.button.text}>{t.addNewPost[lang]}</Text>
           </TouchableOpacity>
         </View>
         }
@@ -274,27 +269,17 @@ export default function AddScreen({navigation}) {
             setCameraVisible(true);
             setPhoto(null);
           }}
-          style={{
-            marginHorizontal: 20,
-            padding: 10,
-            borderRadius: 6,
-            backgroundColor: colors.primary,
-          }}
+          style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
         >
-          <Text style={{color: 'white', textAlign: 'center'}}>{t.takePictureAgain[lang]}</Text>
+          <Text style={styles.button.text}>{t.takePictureAgain[lang]}</Text>
         </TouchableOpacity>
         }
 
         <TouchableOpacity
           onPress={pickImage}
-          style={{
-            marginVertical: 20,
-            marginHorizontal: 20,
-            padding: 10,
-            borderRadius: 6,
-            backgroundColor: colors.primary,
-          }}>
-          <Text style={{color: 'white', textAlign: 'center'}}>{t.pickAnImage[lang]}</Text>
+          style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
+        >
+          <Text style={styles.button.text}>{t.pickAnImage[lang]}</Text>
         </TouchableOpacity>
 
       </ScrollView>

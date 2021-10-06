@@ -118,14 +118,13 @@ export default function HomeScreen({navigation}) {
         {!!posts.length && !emptyPosts && (
           <TouchableOpacity
             onPress={getPosts}
-            style={{...styles.button, marginHorizontal: 10, marginTop: 0}}
+            style={{...styles.button, marginHorizontal: 10, marginTop: 0, marginBottom: 8}}
           >
             {!loading && (
               <Text
                 style={{
-                  color: "white",
                   textAlign: "center",
-                  fontWeight: "700",
+                  ...styles.button.text
                 }}
               >
                 More

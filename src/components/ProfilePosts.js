@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View, TouchableOpacity, ActivityIndicator, Image, Dimensions} from 'react-native';
 import {useSelector} from "react-redux";
 import colors from '../colors/colors';
+import {t} from "../translations/translations";
 
 
 export default function ProfilePosts({posts, loading, navigation}) {
@@ -15,7 +16,10 @@ export default function ProfilePosts({posts, loading, navigation}) {
         textAlign: 'left',
         paddingLeft: 20,
         marginBottom: 10
-      }}>{t.posts[lang]}</Text>
+      }}>
+        {t.posts[lang]}
+      </Text>
+
       {posts.length < 1 && loading &&
       <ActivityIndicator
         size={60}

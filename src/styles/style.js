@@ -13,20 +13,39 @@ const styles = {
     paddingVertical: 8
   },
   button: {
-    marginVertical: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    // marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderRadius: 6,
     backgroundColor: colors.primary,
-    color: 'white'
+    text: {
+      fontSize: 16,
+      color: 'white',
+      fontWeight: '700',
+      textAlign: 'center'
+    }
+  },
+  buttonOutline: {
+    // marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 6,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    text: {
+      color: 'grey',
+      fontSize: 16,
+      fontWeight: '700',
+      textAlign: 'center'
+    }
   },
   buttonDisabled: {
-    marginVertical: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    // marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderRadius: 6,
-    backgroundColor: '#ccc',
-    color: 'white'
+    backgroundColor: '#ccc'
   },
   option: {
     paddingVertical: 14,
@@ -40,7 +59,7 @@ const styles = {
     backgroundColor: colors.primary,
   },
   icon: {
-    color: '#333',
+    // color: '#333',
     marginRight: 20
   },
   p4: {

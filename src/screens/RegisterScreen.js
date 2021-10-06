@@ -86,7 +86,7 @@ export default function RegisterScreen({navigation}) {
       return (
         <TouchableOpacity onPress={createAccount.bind(this, username, email, password, name)} style={styles.button}>
           {!loading &&
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>
+          <Text style={styles.button.text}>Create account</Text>
           }
           {loading &&
           <ActivityIndicator size={19} color="white"/>
@@ -96,7 +96,7 @@ export default function RegisterScreen({navigation}) {
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Create account</Text>
+          <Text style={styles.button.text}>Create account</Text>
         </TouchableOpacity>
       )
     }

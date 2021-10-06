@@ -23,6 +23,8 @@ import ChatScreen from './screens/ChatScreen.js';
 import ResetPasswordScreen from './screens/ResetPasswordScreen.js';
 import ReportBugScreen from './screens/ReportBugScreen.js';
 import LanguageScreen from './screens/LanguageScreen.js';
+import TagScreen from './screens/TagScreen.js';
+
 import {io} from "socket.io-client";
 import {displayToast} from './functions/functions'
 
@@ -87,13 +89,14 @@ export default function Navigation() {
       ReportBug: 'report/bug',
       Chat: 'chat/:idUser',
       Language: 'language',
-      Piccy: '/',
-    },
+      Tag: 'tag/:tag',
+      Piccy: '/'
+    }
   };
 
   const linking = {
     prefixes: ['http://localhost:19006/'],
-    config,
+    config
   };
 
   return (
@@ -140,6 +143,10 @@ export default function Navigation() {
             <Stack.Screen name="Language" component={LanguageScreen}
                           options={() => ({
                             headerTitle: t.language[lang]
+                          })}/>
+            <Stack.Screen name="Tag" component={TagScreen}
+                          options={({route}) => ({
+                            headerTitle: `#${route.params.tag}`
                           })}/>
           </>
         ) : (

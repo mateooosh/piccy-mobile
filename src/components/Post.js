@@ -26,6 +26,8 @@ import {useSelector, useStore} from "react-redux";
 import {API_URL} from "@env";
 import {displayToast} from "../functions/functions";
 import {t} from "../translations/translations";
+import styles from "../styles/style";
+import Input from "./Input";
 
 
 // //import my functions
@@ -234,7 +236,6 @@ export default function Post(props) {
       .finally(() => {
         setCommentInput('');
         setIsOpenComment(false);
-        displayToast(toast, response.message);
         getComments(props.post.id);
       })
   }
@@ -296,7 +297,7 @@ export default function Post(props) {
       </Actionsheet>
 
 
-      {AlertDialogComment()}
+      {AlertDialogComment(commentInput)}
       {AlertDialogRemovePost()}
       {AlertDialogReportPost()}
 
@@ -403,7 +404,7 @@ export default function Post(props) {
                 props.idx
               )}
               name="heart"
-              color={"#E40000"}
+              color={colors.danger}
               size={30}
             />
           )}
@@ -490,7 +491,24 @@ export default function Post(props) {
     </View>
   );
 
-  function AlertDialogComment() {
+  function AlertDialogComment(comment) {
+    function getButton (comment) {
+      if(comment.length > 2) {
+        return (
+          <TouchableOpacity style={{...styles.button, marginLeft: 12}}
+                            onPress={createComment}>
+            <Text style={styles.button.text}>{t.comment[lang]}</Text>
+          </TouchableOpacity>
+        )
+      } else {
+        return (
+          <TouchableOpacity style={{...styles.buttonDisabled, marginLeft: 12}}>
+            <Text style={styles.button.text}>{t.comment[lang]}</Text>
+          </TouchableOpacity>
+        )
+      }
+    }
+
     return(
       <AlertDialog
         leastDestructiveRef={cancelRefComment}
@@ -503,7 +521,6 @@ export default function Post(props) {
             {t.commentPost[lang]}
           </AlertDialog.Header>
           <AlertDialog.Body>
-            {/*<View style={{position: 'relative', marginBottom: 10, marginTop: 8, marginHorizontal: 10}}>*/}
             <TextInput
               onChangeText={str => setCommentInput(str)}
               onSubmitEditing={createComment}
@@ -523,24 +540,12 @@ export default function Post(props) {
             />
           </AlertDialog.Body>
           <AlertDialog.Footer>
-            <Button
-              style={{backgroundColor: 'white'}}
-              variant='outline'
-              colorScheme='gray'
-              ref={cancelRefComment}
-              onPress={onCloseComment}
-            >
-              Cancel
-            </Button>
+            <TouchableOpacity style={styles.buttonOutline} ref={cancelRefComment}
+                              onPress={onCloseComment}>
+              <Text style={styles.buttonOutline.text}>{t.cancel[lang]}</Text>
+            </TouchableOpacity>
 
-            <Button
-              style={{backgroundColor: colors.primary}}
-              onPress={createComment}
-              ml={3}
-            >
-              {t.comment[lang]}
-            </Button>
-
+            {getButton(comment)}
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>
@@ -563,26 +568,16 @@ export default function Post(props) {
             {t.areYouSureYouWantToRemoveThisPost[lang]}
           </AlertDialog.Body>
           <AlertDialog.Footer>
-            <Button
-              style={{backgroundColor: 'white'}}
-              variant='outline'
-              colorScheme='gray'
-              ref={cancelRefRemove}
-              onPress={onCloseRemove}
-            >
-              {t.cancel[lang]}
-            </Button>
 
-            <Button
-              style={{backgroundColor: colors.danger}}
-              onPress={() => {
-                removePost();
-              }}
-              ml={3}
-            >
-              {t.remove[lang]}
-            </Button>
+            <TouchableOpacity style={styles.buttonOutline} ref={cancelRefRemove}
+                              onPress={onCloseRemove}>
+              <Text style={styles.buttonOutline.text}>{t.cancel[lang]}</Text>
+            </TouchableOpacity>
 
+            <TouchableOpacity style={{...styles.button, marginLeft: 12, backgroundColor: colors.danger}}
+                              onPress={removePost}>
+              <Text style={styles.button.text}>{t.remove[lang]}</Text>
+            </TouchableOpacity>
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>
@@ -621,32 +616,33 @@ export default function Post(props) {
             />
           </AlertDialog.Body>
           <AlertDialog.Footer>
-            <Button
-              style={{backgroundColor: 'white'}}
-              variant='outline'
-              colorScheme='gray'
-              ref={cancelRefReport}
-              onPress={onCloseReport}
-            >
-              {t.cancel[lang]}
-            </Button>
+            <TouchableOpacity style={styles.buttonOutline} ref={cancelRefReport}
+                              onPress={onCloseReport}>
+              <Text style={styles.buttonOutline.text}>{t.cancel[lang]}</Text>
+            </TouchableOpacity>
 
             {reason.length > 3 && (
-              <Button
-                style={{backgroundColor: colors.primary}}
-                onPress={() => {
-                  reportPost();
-                }}
-                ml={3}
-              >
-                {t.report[lang]}
-              </Button>
+              // <Button
+              //   style={{backgroundColor: colors.primary}}
+              //   onPress={() => {
+              //     reportPost();
+              //   }}
+              //   ml={3}
+              // >
+              //   {t.report[lang]}
+              // </Button>
+
+              <TouchableOpacity style={{...styles.button, marginLeft: 12}}
+                                onPress={reportPost}>
+                <Text style={styles.button.text}>{t.report[lang]}</Text>
+              </TouchableOpacity>
             )}
 
             {reason.length <= 3 && (
-              <Button style={{backgroundColor: "#ccc"}} ml={3}>
-                {t.report[lang]}
-              </Button>
+              <TouchableOpacity style={{...styles.buttonDisabled, marginLeft: 12}}
+                                onPress={reportPost}>
+                <Text style={styles.button.text}>{t.report[lang]}</Text>
+              </TouchableOpacity>
             )}
           </AlertDialog.Footer>
         </AlertDialog.Content>

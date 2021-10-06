@@ -93,28 +93,9 @@ export default function AccountScreen({navigation}) {
 
             <TouchableOpacity
               onPress={() => navigation.push('EditProfile')}
-              style={{...styles.button, ...styles.shadow}}
-              // style={{
-              //   paddingVertical: 6,
-              //   width: '100%',
-              //   backgroundColor: colors.primary,
-              //   borderRadius: 6,
-              //   marginVertical: 20,
-              //   shadowColor: "#000",
-              //   shadowOffset: {
-              //     width: 0,
-              //     height: 3,
-              //   },
-              //   shadowOpacity: 0.27,
-              //   shadowRadius: 4.65,
-              //   elevation: 6
-              // }}
+              style={{...styles.button, ...styles.shadow, marginVertical: 12}}
             >
-              <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8}}>
-                <MaterialCommunityIcons name="account-edit" color='white'
-                                        size={20}/>
-                <Text style={{textAlign: 'center', color: 'white'}}>{t.editProfile[lang]}</Text>
-              </View>
+              <Text style={{textAlign: 'center', ...styles.button.text}}>{t.editProfile[lang]}</Text>
             </TouchableOpacity>
           </View>
 

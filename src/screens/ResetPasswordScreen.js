@@ -15,7 +15,6 @@ export default function ResetPasswordScreen() {
 
   const lang = useSelector(state => state.lang);
 
-
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,7 +58,7 @@ export default function ResetPasswordScreen() {
       return (
         <TouchableOpacity onPress={resetPassword} style={styles.button}>
           {!loading &&
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>{t.resetPassword[lang]}</Text>
+          <Text style={styles.button.text}>{t.resetPassword[lang]}</Text>
           }
           {loading &&
           <ActivityIndicator size={19} color="white"/>
@@ -69,7 +68,7 @@ export default function ResetPasswordScreen() {
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>{t.resetPassword[lang]}</Text>
+          <Text style={styles.button.text}>{t.resetPassword[lang]}</Text>
         </TouchableOpacity>
       )
     }

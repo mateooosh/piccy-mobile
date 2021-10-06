@@ -138,7 +138,7 @@ function SearchTags(props) {
 
   function getTags() {
     // console.log(API_URL)
-    const url = `${API_URL}/tags?query=${props.query}&token=${store.getState().token}`;
+    const url = `${API_URL}/tags?query=${props.query.replace('#', '')}&token=${store.getState().token}`;
     fetch(url)
       .then(response => response.json())
       .then(response => {
@@ -147,10 +147,14 @@ function SearchTags(props) {
       .catch(err => console.log(err));
   }
 
+  function onTagPress(tag) {
+    props.navigation.push('Tag', {tag: tag.replace('#', '')})
+  }
+
   return (
     <ScrollView style={{padding: 20, backgroundColor: 'white'}}>
       {result.map((tag, index) =>
-        <Text key={index} style={{fontSize: 16, color: colors.hashtag, fontWeight: 'bold', marginBottom: 10}}>{tag}</Text>
+        <Text key={index} onPress={onTagPress.bind(this, tag)} style={{fontSize: 16, color: colors.hashtag, fontWeight: 'bold', marginBottom: 10}}>{tag}</Text>
       )}
     </ScrollView>
   )

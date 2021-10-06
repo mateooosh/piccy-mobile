@@ -21,9 +21,18 @@ export default function MessageUserItem(props) {
       <View style={{flexGrow: 1, marginLeft: 10, flex: 1, justifyContent: 'space-between'}}>
         <View style={{flexDirection: 'row'}}>
           <Text style={{fontWeight: '700', fontSize: 15, flexGrow: 1, paddingBottom: 6}}>{props.channel.username}</Text>
-          <Text style={{fontWeight: '700'}}>{fun.displayTimeV2(props.channel.createdAt)}</Text>
+
+          {props.channel.status ? (
+            <Text style={{fontWeight: '700', fontSize: 13}}>{fun.displayTimeV2(props.channel.createdAt)}</Text>
+          ) : (
+            <Text style={{fontWeight: '400', fontSize: 13}}>{fun.displayTimeV2(props.channel.createdAt)}</Text>
+          )}
         </View>
-        <Text numberOfLines={1} style={{color: '#444'}}>{props.channel.lastMessage}</Text>
+        {props.channel.status ? (
+          <Text numberOfLines={1} style={{color: '#222', fontWeight: '700'}}>{props.channel.lastMessage}</Text>
+        ) : (
+          <Text numberOfLines={1} style={{color: '#444', fontWeight: '400'}}>{props.channel.lastMessage}</Text>
+        )}
       </View>
     </TouchableOpacity>
   )

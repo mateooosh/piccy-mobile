@@ -453,7 +453,7 @@ export default function Post(props) {
             return (
               <Text
                 key={index}
-                onPress={() => alert(`push to ${word} tag`)}
+                onPress={() => props.navigation.push('Tag', {tag: word.replace('#', '')})}
                 style={{color: colors.hashtag, fontWeight: "600"}}
               >
                 {word}{" "}

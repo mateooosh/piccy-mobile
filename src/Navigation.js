@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import {NavigationContainer, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -63,15 +63,16 @@ export default function Navigation() {
   const lang = useSelector(state => state.lang);
 
   useEffect(() => {
-
     const socket = io(API_URL_WS, {transports: ['websocket']});
 
     socket.emit('new-user', store.getState().username);
 
     socket.on(`message-to-user-${store.getState().id}`, (message) => {
-      console.log('message', message);
-      displayToast(toast, `New message`)
-      store.dispatch({type: 'notificationAmountSet', payload: store.getState().notificationAmount + 1});
+      if (navigationRef.current?.getCurrentRoute().name !== 'messages' && navigationRef.current?.getCurrentRoute().name !== 'Chat') {
+        displayToast(toast, `New message`)
+        store.dispatch({type: 'notificationAmountSet', payload: store.getState().notificationAmount + 1});
+      }
+
       // await schedulePushNotification();
     })
   }, [])
@@ -99,8 +100,10 @@ export default function Navigation() {
     config
   };
 
+  const navigationRef = React.useRef(null);
+
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer linking={linking} ref={navigationRef}>
       <Stack.Navigator headerMode="float">
         {logged ? (
           <>

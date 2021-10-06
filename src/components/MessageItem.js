@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity, Dimensions} from 'react-native';
-import {useStore} from "react-redux";
+import {useSelector, useStore} from "react-redux";
 import colors from '../colors/colors';
 
 import fun from '../functions/functions';
@@ -9,21 +9,25 @@ import {Collapse} from "native-base";
 
 export default React.memo(MessageItem);
 
-function MessageItem(props) {
-
+function MessageItem({item}) {
+  const id = useSelector(state => state.id);
   const store = useStore();
-
-  const [item, setItem] = useState({});
   const [displayTime, setDisplayTime] = useState(false);
-
-  useEffect(() => {
-    setItem(props.item);
-  }, [props])
 
   return (
     <View>
-      {item.idSender == store.getState().id && (
+      {item.idSender == id && (
         <View style={{alignItems: 'flex-end'}}>
+          <Collapse isOpen={displayTime}>
+            <Text style={{
+              marginHorizontal: 10,
+              fontSize: 12,
+              color: '#999'
+            }}>
+              {fun.displayTimeV2(item.createdAt)}
+            </Text>
+          </Collapse>
+
           <TouchableOpacity activeOpacity={1} onPress={() => setDisplayTime(!displayTime)} style={{
             paddingHorizontal: 15,
             paddingVertical: 12,
@@ -35,23 +39,26 @@ function MessageItem(props) {
             <Text style={{
               color: 'white',
               fontSize: 16,
-              maxWidth: Dimensions.get('window').width * 3 / 4
-            }}>{item.message} </Text>
+              maxWidth: Dimensions.get('window').width * 3 / 5
+            }}>
+              {item.message}
+            </Text>
           </TouchableOpacity>
-
-          <Collapse isOpen={displayTime}>
-            <Text style={{
-              marginHorizontal: 10,
-              marginBottom: 5,
-              fontSize: 12,
-              color: '#999'
-            }}>{fun.displayTimeV2(item.createdAt)}</Text>
-          </Collapse>
         </View>
       )}
 
-      {item.idSender != store.getState().id && (
+      {item.idSender != id && (
         <View style={{alignItems: 'flex-start'}}>
+          <Collapse isOpen={displayTime}>
+            <Text style={{
+              marginHorizontal: 10,
+              fontSize: 12,
+              color: '#999'
+            }}>
+              {fun.displayTimeV2(item.createdAt)}
+            </Text>
+          </Collapse>
+
           <TouchableOpacity activeOpacity={1} onPress={() => setDisplayTime(!displayTime)} style={{
             paddingHorizontal: 15,
             paddingVertical: 12,
@@ -63,20 +70,10 @@ function MessageItem(props) {
             <Text style={{
               color: 'black',
               fontSize: 16,
-              maxWidth: Dimensions.get('window').width * 3 / 4
+              maxWidth: Dimensions.get('window').width * 3 / 5
             }}>{item.message} </Text>
           </TouchableOpacity>
 
-          <Collapse isOpen={displayTime}>
-            <Text style={{
-              marginHorizontal: 10,
-              marginBottom: 5,
-              fontSize: 12,
-              color: '#999'
-            }}>
-              {fun.displayTimeV2(item.createdAt)}
-            </Text>
-          </Collapse>
         </View>
       )}
 

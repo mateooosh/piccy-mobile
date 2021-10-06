@@ -20,6 +20,14 @@ export default function MessagesScreen({route, navigation}) {
     const socket = io(API_URL_WS, {transports: ['websocket']});
     socket.on(`message-to-user-${store.getState().id}`, getMessages);
 
+    navigation.addListener('focus', () => {
+      store.dispatch({type: 'notificationAmountSet', payload: 0});
+      getMessages();
+      return function cleanupListener() {
+        window.removeEventListener('focus');
+      }
+    })
+
   }, [])
 
   function getMessages() {

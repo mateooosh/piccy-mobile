@@ -40,6 +40,10 @@ export default function ChatScreen({route, navigation}) {
     return users.find(elem => elem.idUser != store.getState().id);
   }
 
+  function markAsRead(idUser, idChannel) {
+    socket.emit('mark-as-read', idUser, idChannel);
+  }
+
   useEffect(() => {
     socket.on(`message-to-user-${store.getState().id}`, handler)
 
@@ -54,7 +58,7 @@ export default function ChatScreen({route, navigation}) {
         setMessages(response.messages);
         setIdChannel(response.idChannel);
 
-        // navigation.setOptions({headerTitle: findUserChattingWith(response.users).username});
+        markAsRead(store.getState().id, response.idChannel);
 
         navigation.setOptions({
           headerTitle: () => (
@@ -62,11 +66,11 @@ export default function ChatScreen({route, navigation}) {
               navigation.navigate("Profile", {
                 username: findUserChattingWith(response.users).username,
               })
-            } style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+            } style={{flexDirection: 'row', alignItems: 'center'}}>
               {findUserChattingWith(response.users).photo ? (
                 <Image
                   source={{uri: findUserChattingWith(response.users).photo}}
-                  style={{width: 40, height: 40, borderRadius: 50}}
+                  style={{width: 40, height: 40, borderRadius: 50, marginRight: 10}}
                 />
               ) : (
                 <MaterialIcons name="account-circle" color={"black"} size={40}/>
@@ -92,7 +96,6 @@ export default function ChatScreen({route, navigation}) {
   function handler(response) {
     console.log('message-to-user', response);
 
-
     let deepCopy = JSON.parse(JSON.stringify(refMessages.current));
     deepCopy.push(response);
     setMessages(deepCopy);
@@ -101,6 +104,7 @@ export default function ChatScreen({route, navigation}) {
       scrollViewRef.current.scrollToEnd({animated: true})
     }, 100)
 
+    markAsRead(store.getState().id, response.idChannel);
   }
 
   function send() {
@@ -129,7 +133,7 @@ export default function ChatScreen({route, navigation}) {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10}}>
+      <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10}} keyboardShouldPersistTaps='always'>
         <View>
           {!isLoading && messages.map((mes, idx) =>
             <MessageItem key={idx} item={mes}/>

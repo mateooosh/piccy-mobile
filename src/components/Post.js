@@ -246,7 +246,7 @@ export default function Post(props) {
     setTimeout(() => {
       if (isOpenComment)
         inputCommentRef.current.focus();
-        // console.log(inputCommentRef)
+      // console.log(inputCommentRef)
     }, 0)
   }, [isOpenComment])
 
@@ -289,11 +289,13 @@ export default function Post(props) {
           >
             <Text style={{fontSize: 16, fontWeight: "600"}}>{t.reportPost[lang]}</Text>
           </Actionsheet.Item>
-          <Actionsheet.Item onPress={() => {
-            onClose();
-            alert('download photo')
-          }}>
-            {t.downloadPhoto[lang]}
+          <Actionsheet.Item
+            onPress={() => {
+              onClose();
+              alert('download photo')
+            }}
+          >
+            <Text style={{fontSize: 16, fontWeight: "600"}}>{t.downloadPhoto[lang]}</Text>
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
@@ -344,7 +346,7 @@ export default function Post(props) {
             {post.username}
           </Text>
           <Text style={{fontWeight: "500", fontSize: 12, color: "#777"}}>
-            {fun.displayTime(post.uploadDate)}
+            {fun.displayTime(post.uploadDate, lang, t)}
           </Text>
         </View>
         <TouchableOpacity onPress={onOpen}>
@@ -494,8 +496,8 @@ export default function Post(props) {
   );
 
   function AlertDialogComment(comment) {
-    function getButton (comment) {
-      if(comment.length > 2) {
+    function getButton(comment) {
+      if (comment.length > 2) {
         return (
           <TouchableOpacity style={{...styles.button, marginLeft: 12}}
                             onPress={createComment}>
@@ -511,7 +513,7 @@ export default function Post(props) {
       }
     }
 
-    return(
+    return (
       <AlertDialog
         leastDestructiveRef={cancelRefComment}
         isOpen={isOpenComment}
@@ -555,7 +557,7 @@ export default function Post(props) {
   }
 
   function AlertDialogRemovePost() {
-    return(
+    return (
       <AlertDialog
         leastDestructiveRef={cancelRefRemove}
         isOpen={isOpenRemove}
@@ -587,7 +589,7 @@ export default function Post(props) {
   }
 
   function AlertDialogReportPost() {
-    return(
+    return (
       <AlertDialog
         leastDestructiveRef={cancelRefReport}
         isOpen={isOpenReport}

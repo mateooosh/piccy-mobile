@@ -34,26 +34,6 @@ import {useToast} from 'native-base';
 const Stack = createStackNavigator();
 
 
-function getHeaderTitle(route) {
-  // If the focused route is not found, we need to assume it's the initial screen
-  // This can happen during if there hasn't been any navigation inside the screen
-  // In our case, it's "Feed" as that's the first screen inside the navigator
-  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
-
-  switch (routeName) {
-    case 'Piccy':
-      return 'Piccy'
-    case 'search':
-      return 'Search'
-    case 'create-post':
-      return 'Create new post'
-    case 'messages':
-      return 'Messages';
-    case 'account':
-      return 'Account';
-  }
-}
-
 
 export default function Navigation() {
   const store = useStore();
@@ -76,6 +56,26 @@ export default function Navigation() {
       // await schedulePushNotification();
     })
   }, [])
+
+  function getHeaderTitle(route) {
+    // If the focused route is not found, we need to assume it's the initial screen
+    // This can happen during if there hasn't been any navigation inside the screen
+    // In our case, it's "Feed" as that's the first screen inside the navigator
+    const routeName = getFocusedRouteNameFromRoute(route);
+
+    switch (routeName) {
+      case 'Piccy':
+        return 'Piccy'
+      case 'search':
+        return t.search[lang]
+      case 'create-post':
+        return t.createNewPost[lang]
+      case 'messages':
+        return t.messages[lang]
+      case 'account':
+        return t.account[lang]
+    }
+  }
 
   const config = {
     screens: {
@@ -124,24 +124,24 @@ export default function Navigation() {
             <Stack.Screen name="Profile" component={ProfileScreen}
                           options={({route}) => ({headerTitle: route.params.username})}/>
             <Stack.Screen name="Post" component={PostScreen} options={() => ({headerTitle: 'Post'})}/>
-            <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: 'Followers'})}/>
-            <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: 'Following'})}/>
+            <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: t.followers2[lang]})}/>
+            <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: t.following2[lang]})}/>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}
-                          options={() => ({headerTitle: 'Edit Profile'})}/>
+                          options={() => ({headerTitle: t.editProfile[lang]})}/>
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}
                           options={() => ({headerTitle: t.resetPassword[lang]})}/>
             <Stack.Screen name="ReportBug" component={ReportBugScreen}
-                          options={() => ({headerTitle: 'Report Bug'})}/>
+                          options={() => ({headerTitle: t.reportBug[lang]})}/>
             <Stack.Screen name="Chat" component={ChatScreen}
                           options={() => ({
                             headerTitle: '',
-                            headerRight: () => (
-                              <MaterialCommunityIcons name="dots-vertical" color='black'
-                                                      size={30}/>
-                            ),
-                            headerRightContainerStyle: {
-                              paddingRight: 15
-                            }
+                            // headerRight: () => (
+                            //   <MaterialCommunityIcons name="dots-vertical" color='black'
+                            //                           size={30}/>
+                            // ),
+                            // headerRightContainerStyle: {
+                            //   paddingRight: 15
+                            // }
                           })}/>
             <Stack.Screen name="Language" component={LanguageScreen}
                           options={() => ({

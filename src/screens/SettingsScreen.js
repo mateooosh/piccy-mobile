@@ -93,7 +93,7 @@ export default function SettingsScreen({navigation}) {
 
         <TouchableOpacity style={styles.option} onPress={() => setIsOpenDelete(true)}>
           <MaterialCommunityIcons style={styles.icon} name="account-remove" size={30}/>
-          <Text style={{fontSize: 16}}>Delete account</Text>
+          <Text style={{fontSize: 16}}>{t.deleteAccount[lang]}</Text>
           <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'}
                          size={30}/>
         </TouchableOpacity>
@@ -102,7 +102,7 @@ export default function SettingsScreen({navigation}) {
 
         <TouchableOpacity style={styles.option} onPress={() => navigation.push('ReportBug')}>
           <MaterialIcons style={styles.icon} name="bug-report" size={30}/>
-          <Text style={{fontSize: 16}}>Report bug</Text>
+          <Text style={{fontSize: 16}}>{t.reportBug[lang]}</Text>
           <MaterialIcons style={{flexGrow: 1, textAlign: 'right'}} name="keyboard-arrow-right" color={'#bbb'}
                          size={30}/>
         </TouchableOpacity>

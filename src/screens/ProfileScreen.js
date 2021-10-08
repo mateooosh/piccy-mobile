@@ -9,7 +9,6 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {API_URL} from '@env';
 import {useStore, useSelector} from 'react-redux';
-import colors from '../colors/colors';
 import ProfileStats from '../components/ProfileStats';
 import ProfilePosts from '../components/ProfilePosts';
 import {t} from '../translations/translations';
@@ -17,6 +16,7 @@ import styles from '../styles/style';
 
 export default function AccountScreen({route, navigation}) {
   const store = useStore();
+  const lang = useSelector(state => state.lang);
 
   useEffect(() => {
     console.log(route.params.username);
@@ -156,7 +156,7 @@ export default function AccountScreen({route, navigation}) {
                   }}
                 >
                   <Text style={styles.button.text}>
-                    Follow
+                    {t.follow[lang]}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -170,7 +170,7 @@ export default function AccountScreen({route, navigation}) {
                   }}
                 >
                   <Text style={styles.button.text}>
-                    Following
+                    {t.following3[lang]}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -179,7 +179,7 @@ export default function AccountScreen({route, navigation}) {
                 style={{...styles.button, flex: 1}}
               >
                 <Text style={styles.button.text}>
-                  Message
+                  {t.message[lang]}
                 </Text>
               </TouchableOpacity>
             </View>

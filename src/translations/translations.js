@@ -1,10 +1,10 @@
-const translations =  {
+const translations = {
   username: {
     de: 'Nutzername',
     en: 'Username',
     es: 'Nombre de usuario',
     fr: 'Nom d\'utilisateur',
-    pl: 'Pseudonim'
+    pl: 'Nazwa użytkownika'
   },
   language: {
     de: 'Sprache',
@@ -104,9 +104,25 @@ const translations =  {
     en: 'Followers',
     pl: 'Obserwujących'
   },
+  followers2: {
+    en: 'Followers',
+    pl: 'Obserwujący'
+  },
   following: {
     en: 'Following',
     pl: 'Obserwowanych'
+  },
+  following2: {
+    en: 'Following',
+    pl: 'Obserwowani'
+  },
+  following3: {
+    en: 'Following',
+    pl: 'Obserwujesz'
+  },
+  follow: {
+    en: 'Follow',
+    pl: 'Obserwuj'
   },
   userHasNoPosts: {
     en: 'User has no posts',
@@ -175,8 +191,131 @@ const translations =  {
   typeHereWhatIsTheReasonReportPost: {
     en: 'Type here what is the reason, that You want to report this post',
     pl: 'Podaj nam powód, dlaczego chcesz zgłosić ten post'
+  },
+  search: {
+    en: 'Search',
+    pl: 'Szukaj'
+  },
+  createNewPost: {
+    en: 'Create new post',
+    pl: 'Dodaj nowy post'
+  },
+  reportBug: {
+    en: 'Report bug',
+    pl: 'Zgłoś błąd'
+  },
+  deleteAccount: {
+    en: 'Delete account',
+    pl: 'Usuń konto'
+  },
+  thereAreNoPosts: {
+    en: 'There are no posts',
+    pl: 'Brak postów'
+  },
+  newPassword: {
+    en: 'New password',
+    pl: 'Nowe hasło'
+  },
+  oldPassword: {
+    en: 'Old password',
+    pl: 'Stare hasło'
+  },
+  attachScreenshot: {
+    en: 'Attach screenshot',
+    pl: 'Dołącz zrzut ekranu'
+  },
+  describeSomeObservation: {
+    en: 'Describe some observation, event, happening or condition we need to resolve',
+    pl: 'Opisz jakąś obserwację, zdarzenie lub stan, który musimy rozwiązać'
+  },
+  createAccount: {
+    en: 'Create account',
+    pl: 'Utwórz konto'
+  },
+  emailIsNotValid: {
+    en: 'E-mail is not valid',
+    pl: 'E-mail jest nieprawidłowy'
+  },
+  usernameAtLeast6: {
+    en: 'Username must be at least 6 characters long',
+    pl: 'Nazwa użytkownika musi mieć minimum 6 znaków'
+  },
+  passwordAtLeast6: {
+    en: 'Password must be at least 6 characters long',
+    pl: 'Hasło musi mieć minimum 6 znaków'
+  },
+  nameAtLeast3: {
+    en: 'Name must be at least 3 characters long',
+    pl: 'Imię musi mieć minimum 3 znaki'
+  },
+  password: {
+    en: 'Password',
+    pl: 'Hasło'
+  },
+  name: {
+    en: 'Name',
+    pl: 'Imię'
+  },
+  alreadyAPiccyMember: {
+    en: 'Already a Piccy member? ',
+    pl: 'Jesteś już członkiem Piccy? '
+  },
+  loginHere: {
+    en: 'Log in here',
+    pl: 'Zaloguj się tutaj'
+  },
+  message: {
+    en: 'Message',
+    pl: 'Wiadomość'
+  },
+  usernameOrPasswordIsInvalid: {
+    en: 'Username or password is invalid. Try again',
+    pl: 'Nazwa użytkownika lub hasło są niepoprawne. Spróbuj ponownie'
+  },
+  youDontHaveAnAccount: {
+    en: 'You don\'t have an account on Piccy? ',
+    pl: 'Nie masz jeszcze konta na Piccy? '
+  },
+  signUpHere: {
+    en: 'Sign up',
+    pl: 'Zarejestruj'
+  },
+  logIn: {
+    en: 'Log in',
+    pl: 'Zaloguj'
+  },
+  logIn: {
+    en: 'Log in',
+    pl: 'Zaloguj'
+  },
+  minuteAgo: {
+    en: ' minute ago',
+    pl: ' minutę temu'
+  },
+  minutesAgo: {
+    en: ' minutes ago',
+    pl: ' minut temu'
+  },
+  hourAgo: {
+    en: ' hour ago',
+    pl: ' godzinę temu'
+  },
+  hoursAgo: {
+    en: ' hours ago',
+    pl: ' godzin temu'
+  },
+  dayAgo: {
+    en: ' day ago',
+    pl: ' dzień temu'
+  },
+  daysAgo: {
+    en: ' days ago',
+    pl: ' dni temu'
+  },
+  now: {
+    en: 'Now',
+    pl: 'Teraz'
   }
-
 }
 
 module.exports.t = translations

@@ -3,19 +3,21 @@ const minute = 1000 * 60;
 const hour = 1000 * 60 * 60;
 const day = 1000 * 60 * 60 * 24;
 
-const displayTime = date => {
+// import {t} from '../translations/translations';
+
+const displayTime = (date, lang, t) => {
   let now = new Date();
   let diff = now - new Date(date);
 
   if (diff < minute)
-    return 'Now';
+    return t.now[lang];
 
   else if (diff >= minute && diff < hour) {
-    return (Math.floor(diff / minute) === 1) ? Math.floor(diff / minute) + ' minute ago' : Math.floor(diff / minute) + ' minutes ago';
+    return (Math.floor(diff / minute) === 1) ? Math.floor(diff / minute) + t.minuteAgo[lang] : Math.floor(diff / minute) + t.minutesAgo[lang];
   } else if (diff >= hour && diff < day) {
-    return (Math.floor(diff / hour) === 1) ? Math.floor(diff / hour) + ' hour ago' : Math.floor(diff / hour) + ' hours ago';
+    return (Math.floor(diff / hour) === 1) ? Math.floor(diff / hour) + t.hourAgo[lang] : Math.floor(diff / hour) + t.hoursAgo[lang];
   } else if (diff >= day && diff < 7 * day) {
-    return (Math.floor(diff / day) === 1) ? Math.floor(diff / day) + ' day ago' : Math.floor(diff / day) + ' days ago';
+    return (Math.floor(diff / day) === 1) ? Math.floor(diff / day) + t.dayAgo[lang] : Math.floor(diff / day) + t.daysAgo[lang];
   } else if (diff >= 7 * day && diff < 365.25 * day) {
     return new Date(date).getDate() + ' ' + monthNames[new Date(date).getMonth()];
   } else if (diff >= day * 365.25) {

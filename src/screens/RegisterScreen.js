@@ -8,7 +8,8 @@ import Input from '../components/Input';
 import {validation, displayToast} from "../functions/functions";
 import {useToast} from "native-base";
 import {Alert, Collapse} from 'native-base';
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {t} from "../translations/translations";
+import {useSelector} from "react-redux";
 
 
 export default function RegisterScreen({navigation}) {
@@ -18,6 +19,7 @@ export default function RegisterScreen({navigation}) {
   const [name, setName] = useState('');
 
   const toast = useToast();
+  const lang = useSelector(state => state.lang);
 
   const [loading, setLoading] = useState(false);
 
@@ -86,7 +88,7 @@ export default function RegisterScreen({navigation}) {
       return (
         <TouchableOpacity onPress={createAccount.bind(this, username, email, password, name)} style={styles.button}>
           {!loading &&
-          <Text style={styles.button.text}>Create account</Text>
+          <Text style={styles.button.text}>{t.createAccount[lang]}</Text>
           }
           {loading &&
           <ActivityIndicator size={19} color="white"/>
@@ -96,7 +98,7 @@ export default function RegisterScreen({navigation}) {
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text style={styles.button.text}>Create account</Text>
+          <Text style={styles.button.text}>{t.createAccount[lang]}</Text>
         </TouchableOpacity>
       )
     }
@@ -113,21 +115,21 @@ export default function RegisterScreen({navigation}) {
 
           <Input value={email} label={'E-mail'} placeholder={'E-mail'} onChangeText={setEmail}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctEmail()}
-                 autoCompleteType="email" errorMessage="E-mail is not valid" marginBottom={30}/>
+                 autoCompleteType="email" errorMessage={t.emailIsNotValid[lang]} marginBottom={30}/>
 
-          <Input value={username} label={'Username'} placeholder={'Username'} onChangeText={setUsername}
+          <Input value={username} label={t.username[lang]} placeholder={t.username[lang]} onChangeText={setUsername}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)}
                  isCorrect={correctUsername()}
-                 autoCompleteType="username" errorMessage="Username must be at least 6 characters long" marginBottom={30}/>
+                 autoCompleteType="username" errorMessage={t.usernameAtLeast6[lang]} marginBottom={30}/>
 
-          <Input value={password} label={'Password'} placeholder={'Password'} onChangeText={setPassword}
+          <Input value={password} label={t.password[lang]} placeholder={t.password[lang]} onChangeText={setPassword}
                  onSubmitEditing={createAccount.bind(this, username, password)} isCorrect={correctPassword()}
-                 autoCompleteType="password" errorMessage="Password must be at least 6 characters long"
+                 autoCompleteType="password" errorMessage={t.passwordAtLeast6[lang]}
                  secureTextEntry={true} marginBottom={30}/>
 
-          <Input value={name} label={'Name'} placeholder={'Name'} onChangeText={setName}
+          <Input value={name} label={t.name[lang]} placeholder={t.name[lang]} onChangeText={setName}
                  onSubmitEditing={createAccount.bind(this, username, email, password, name)} isCorrect={correctName()}
-                 autoCompleteType="name" errorMessage="Name must be at least 3 characters long" marginBottom={30}/>
+                 autoCompleteType="name" errorMessage={t.nameAtLeast3[lang]} marginBottom={30}/>
 
           {getButton()}
         </View>
@@ -146,9 +148,12 @@ export default function RegisterScreen({navigation}) {
 
         <View style={{marginTop: 40}}>
           <Divider style={{backgroundColor: '#ddd'}}/>
-          <Text style={{textAlign: 'center', marginVertical: 20}}>Already a Piccy member? <Text
-            onPress={() => navigation.navigate('Piccy')} style={{color: colors.primary, fontWeight: '700'}}>Log in
-            here</Text></Text>
+          <Text style={{textAlign: 'center', marginVertical: 20}}>{t.alreadyAPiccyMember[lang]}
+            <Text
+            onPress={() => navigation.navigate('Piccy')} style={{color: colors.primary, fontWeight: '700'}}>
+              {t.loginHere[lang]}
+            </Text>
+          </Text>
         </View>
 
       </ScrollView>

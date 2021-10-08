@@ -6,6 +6,7 @@ import {useStore, useSelector} from "react-redux";
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import colors from '../colors/colors';
+import {t} from "../translations/translations";
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -51,6 +52,7 @@ export default function SearchScreen({navigation}) {
 function SearchAccounts(props) {
   const [result, setResult] = useState([]);
   const store = useStore();
+  const lang = useSelector(state => state.lang);
 
   const [time, setTime] = useState(setTimeout(() => {
   }, 0));
@@ -112,7 +114,7 @@ function SearchAccounts(props) {
               {item.followers}
             </Text>
             <Text style={{color: '#555'}}>
-              Followers
+              {t.followers[lang]}
             </Text>
           </View>
 

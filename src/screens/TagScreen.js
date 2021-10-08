@@ -1,20 +1,17 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import {
   View,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   Image,
-  ActivityIndicator, Dimensions, RefreshControl
+  ActivityIndicator, Dimensions
 } from "react-native";
 import {API_URL, API_URL_WS} from "@env";
 import {useStore, useSelector} from "react-redux";
-import {io} from "socket.io-client";
 import colors from "../colors/colors";
 import {useToast} from "native-base";
 import {t} from "../translations/translations";
-import ProfilePosts from "../components/ProfilePosts";
 
 export default function TagScreen({route, navigation}) {
   const store = useStore();
@@ -57,7 +54,7 @@ export default function TagScreen({route, navigation}) {
 
         {images.length < 1 && !loading &&
         <View style={{padding: 20}}>
-          <Text>There are no posts</Text>
+          <Text>{t.thereAreNoPosts[lang]}</Text>
         </View>
         }
 

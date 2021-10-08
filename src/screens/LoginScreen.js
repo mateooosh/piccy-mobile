@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useStore} from 'react-redux';
+import {useSelector, useStore} from 'react-redux';
 import {Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
@@ -12,12 +12,14 @@ import {Alert, Collapse} from 'native-base';
 
 import Input from '../components/Input';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {t} from "../translations/translations";
 
 export default function LoginScreen({navigation}) {
   const store = useStore();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const lang = useSelector(state => state.lang);
 
   const toast = useToast();
 
@@ -79,7 +81,7 @@ export default function LoginScreen({navigation}) {
       return (
         <TouchableOpacity onPress={logIn.bind(this, username, password)} style={styles.button}>
           {!loading &&
-          <Text style={styles.button.text}>Log in</Text>
+          <Text style={styles.button.text}>{t.logIn[lang]}</Text>
           }
           {loading &&
           <ActivityIndicator size={19} color="white"/>
@@ -89,7 +91,7 @@ export default function LoginScreen({navigation}) {
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text style={styles.button.text}>Log in</Text>
+          <Text style={styles.button.text}>{t.logIn[lang]}</Text>
         </TouchableOpacity>
       )
     }
@@ -101,15 +103,15 @@ export default function LoginScreen({navigation}) {
                   contentContainerStyle={{padding: 32}}>
 
         <View style={{display: 'flex', flexDirection: 'column'}}>
-          <Input value={username} label={'Username'} placeholder={'Username'} onChangeText={setUsername}
+          <Input value={username} label={t.username[lang]} placeholder={t.username[lang]} onChangeText={setUsername}
                  onSubmitEditing={logIn.bind(this, username, password)} isCorrect={correctUsername()}
-                 autoCompleteType="username" errorMessage="Username must be at least 6 characters long"
-                 marginBottom={30}/>
-          <Input value={password} label={'Password'} placeholder={'Password'} onChangeText={setPassword}
+                 autoCompleteType="username" errorMessage={t.usernameAtLeast6[lang]}
+                 marginBottom={40}/>
+          <Input value={password} label={t.password[lang]} placeholder={t.password[lang]} onChangeText={setPassword}
                  onSubmitEditing={logIn.bind(this, username, password)} isCorrect={correctPassword()}
-                 autoCompleteType="password" errorMessage="Password must be at least 6 characters long"
+                 autoCompleteType="password" errorMessage={t.passwordAtLeast6[lang]}
                  secureTextEntry={true}
-                 marginBottom={30}/>
+                 marginBottom={40}/>
 
           {getButton()}
 
@@ -120,7 +122,7 @@ export default function LoginScreen({navigation}) {
             <Alert.Icon/>
             <Alert.Description>
               <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                <Text>Username or password is invalid. Try again.</Text>
+                <Text>{t.usernameOrPasswordIsInvalid[lang]}</Text>
                 {/*<MaterialIcons onPress={() => setAlertIsOpen(false)} name="close" color={'black'} size={30}/>*/}
               </View>
             </Alert.Description>
@@ -129,9 +131,12 @@ export default function LoginScreen({navigation}) {
 
         <View style={{marginTop: 40}}>
           <Divider style={{backgroundColor: '#ddd'}}/>
-          <Text style={{textAlign: 'center', marginVertical: 20}}>You don't have an account on Piccy? <Text
-            onPress={() => navigation.push('Register')} style={{color: colors.primary, fontWeight: '700'}}>Sign up
-            here</Text></Text>
+          <Text style={{textAlign: 'center', marginVertical: 20}}>{t.youDontHaveAnAccount[lang]}
+            <Text
+              onPress={() => navigation.push('Register')} style={{color: colors.primary, fontWeight: '700'}}>
+              {t.signUpHere[lang]}
+            </Text>
+          </Text>
         </View>
 
       </ScrollView>

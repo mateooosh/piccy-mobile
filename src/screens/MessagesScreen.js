@@ -1,18 +1,21 @@
 import React, {useState, useEffect, useRef} from "react";
 import {
   View,
-  ScrollView,
+  ScrollView, ActivityIndicator,
 } from "react-native";
 import {API_URL, API_URL_WS} from "@env";
 import {useStore, useSelector} from "react-redux";
 import {io} from "socket.io-client";
 import MessageUserItem from "../components/MessageUserItem";
 import {Divider} from 'react-native-elements';
+import colors from '../colors/colors';
 
 export default function MessagesScreen({route, navigation}) {
   const store = useStore();
 
   const [channels, setChannels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     getMessages();
@@ -38,7 +41,8 @@ export default function MessagesScreen({route, navigation}) {
         console.log(response);
         setChannels(response);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false));
   }
 
   return (
@@ -52,6 +56,10 @@ export default function MessagesScreen({route, navigation}) {
             }
           </View>
         )}
+
+        {loading &&
+          <ActivityIndicator size={60} color={colors.primary} style={{marginVertical: 40}}/>
+        }
 
       </ScrollView>
     </View>

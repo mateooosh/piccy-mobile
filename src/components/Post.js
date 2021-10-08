@@ -5,13 +5,11 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
-  ToastAndroid,
   TextInput,
   Animated
 } from "react-native";
 
 import {
-  Button,
   Actionsheet,
   useDisclose,
   AlertDialog, useToast
@@ -236,6 +234,10 @@ export default function Post(props) {
       .finally(() => {
         setCommentInput('');
         setIsOpenComment(false);
+
+        let deepCopy = JSON.parse(JSON.stringify(post));
+        deepCopy.comments++;
+        setPost(deepCopy);
         getComments(props.post.id);
       })
   }

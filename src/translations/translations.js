@@ -132,6 +132,10 @@ const translations = {
     en: 'likes',
     pl: 'polubień'
   },
+  likes2: {
+    en: 'Likes',
+    pl: 'Polubienia'
+  },
   comment: {
     en: 'Comment',
     pl: 'Skomentuj'
@@ -315,6 +319,14 @@ const translations = {
   now: {
     en: 'Now',
     pl: 'Teraz'
+  },
+  settings: {
+    en: 'Settings',
+    pl: 'Ustawienia'
+  },
+  register: {
+    en: 'Register',
+    pl: 'Rejestracja'
   }
 }
 

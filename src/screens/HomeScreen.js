@@ -29,6 +29,7 @@ export default function HomeScreen({navigation}) {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [emptyPosts, setEmptyPosts] = useState(false);
+  const [activityIndicator, setActivityIndicator] = useState(true);
 
 
   const onRefresh = useCallback(() => {
@@ -52,19 +53,20 @@ export default function HomeScreen({navigation}) {
       .then(response => response.json())
       .then(response => {
         console.log(response);
-        setLoading(false);
         //push new posts to array
         response.map(item => setPosts(posts => [...posts, item]));
-
 
         if (!!response.length) {
           setPage(temp);
         } else {
           setEmptyPosts(true);
-
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        setLoading(false);
+        setActivityIndicator(false);
+      })
   }
 
   function updatePosts(post) {
@@ -97,7 +99,7 @@ export default function HomeScreen({navigation}) {
           <RefreshControl refreshing={loading} onRefresh={onRefresh} colors={[colors.primary]}/>
         }
       >
-        {posts.length < 1 && (
+        {activityIndicator && (
           <ActivityIndicator
             size={60}
             color={colors.primary}
@@ -114,6 +116,10 @@ export default function HomeScreen({navigation}) {
             updatePosts={updatePosts}
           />
         ))}
+
+        {!posts.length && !activityIndicator &&
+          <Text style={{fontSize: 16, marginVertical: 20}}>You need to follow someone</Text>
+        }
 
         {!!posts.length && !emptyPosts && (
           <TouchableOpacity

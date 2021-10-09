@@ -18,6 +18,7 @@ import ProfileScreen from './screens/ProfileScreen.js';
 import PostScreen from './screens/PostScreen.js';
 import FollowersScreen from './screens/FollowersScreen.js';
 import FollowingScreen from './screens/FollowingScreen.js';
+import LikesScreen from './screens/LikesScreen.js';
 import EditProfileScreen from './screens/EditProfileScreen.js';
 import ChatScreen from './screens/ChatScreen.js';
 import ResetPasswordScreen from './screens/ResetPasswordScreen.js';
@@ -85,6 +86,7 @@ export default function Navigation() {
       Post: 'post/:id',
       Followers: 'followers/:id',
       Following: 'following/:id',
+      Likes: 'likes/:idPost',
       EditProfile: 'edit/profile',
       ResetPassword: 'reset/password',
       ReportBug: 'report/bug',
@@ -120,12 +122,13 @@ export default function Navigation() {
               })}
             />
 
-            <Stack.Screen name="Settings" component={SettingsScreen}/>
+            <Stack.Screen name="Settings" component={SettingsScreen} options={() => ({headerTitle: t.settings[lang]})}/>
             <Stack.Screen name="Profile" component={ProfileScreen}
                           options={({route}) => ({headerTitle: route.params.username})}/>
             <Stack.Screen name="Post" component={PostScreen} options={() => ({headerTitle: 'Post'})}/>
             <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: t.followers2[lang]})}/>
             <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: t.following2[lang]})}/>
+            <Stack.Screen name="Likes" component={LikesScreen} options={() => ({headerTitle: t.likes2[lang]})}/>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}
                           options={() => ({headerTitle: t.editProfile[lang]})}/>
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}
@@ -155,10 +158,9 @@ export default function Navigation() {
         ) : (
           <>
             <Stack.Screen name="Piccy" component={LoginScreen}/>
-            <Stack.Screen name="Register" component={RegisterScreen}/>
+            <Stack.Screen name="Register" component={RegisterScreen} options={() => ({headerTitle: t.register[lang]})}/>
           </>
-        )
-        }
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   )

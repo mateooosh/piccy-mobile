@@ -432,10 +432,10 @@ export default function Post(props) {
       </View>
 
       <View style={{flexDirection: "row", marginBottom: 10}}>
-        <Text style={{marginHorizontal: 15, fontWeight: "700", fontSize: 13}}>
+        <Text style={{marginHorizontal: 15, fontWeight: "700", fontSize: 13}} onPress={() => props.navigation.navigate("Likes", {idPost: post.id})}>
           {post.likes} {t.likes[lang]}
         </Text>
-        <Text style={{fontWeight: "700", fontSize: 13}}>
+        <Text style={{fontWeight: "700", fontSize: 13}} onPress={() => props.navigation.navigate("Post", {id: post.id})}>
           {post.comments} {t.comments[lang]}
         </Text>
       </View>
@@ -458,7 +458,17 @@ export default function Post(props) {
               <Text
                 key={index}
                 onPress={() => props.navigation.push('Tag', {tag: word.replace('#', '')})}
-                style={{color: colors.hashtag, fontWeight: "600"}}
+                style={{color: colors.primary, fontWeight: "600"}}
+              >
+                {word}{" "}
+              </Text>
+            )
+          else if (word.charAt(0) === "@")
+            return (
+              <Text
+                key={index}
+                onPress={() => props.navigation.push('Profile', {username: word.replace('@', '')})}
+                style={{color: colors.primary, fontWeight: "600"}}
               >
                 {word}{" "}
               </Text>

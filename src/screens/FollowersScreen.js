@@ -3,12 +3,13 @@ import {useStore} from "react-redux";
 import {
   Text,
   View,
-  ScrollView
+  ScrollView, ActivityIndicator
 } from "react-native";
 
 import {API_URL} from "@env";
 
 import UserItem from "../components/UserItem";
+import colors from "../colors/colors";
 
 
 export default function FollowersScreen({route, navigation}) {
@@ -19,9 +20,12 @@ export default function FollowersScreen({route, navigation}) {
 
   const [followers, setFollowers] = useState([]);
   const [hasData, setHasData] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const url = `${API_URL}/followers/${route.params.id}?token=${store.getState().token}`;
+
+    setLoading(true)
     fetch(url)
       .then((response) => response.json())
       .then((response) => {
@@ -29,7 +33,8 @@ export default function FollowersScreen({route, navigation}) {
         setFollowers(response);
         setHasData(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
 
     return function cleanup() {
       setFollowers([]);
@@ -43,6 +48,14 @@ export default function FollowersScreen({route, navigation}) {
       {followers.map((item, idx) => (
         <UserItem item={item} key={idx} navigation={navigation}/>
       ))}
+
+      {loading && (
+        <ActivityIndicator
+          size={60}
+          color={colors.primary}
+          style={{marginVertical: 40}}
+        />
+      )}
 
       {hasData && followers.length === 0 && (
         <View

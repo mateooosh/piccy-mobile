@@ -143,7 +143,7 @@ export default function AccountScreen({route, navigation}) {
             <Text style={{fontWeight: '700', fontSize: 16}}>
               {item.name}
             </Text>
-            <Text style={{fontSize: 14}}>{item.description}</Text>
+            <Text style={{fontSize: 14, marginVertical: 5}}>{item.description}</Text>
 
             <View style={{flexDirection: 'row', justifyContent: 'space-between', marginVertical: 16}}>
               {item.amIFollowing === 0 && (

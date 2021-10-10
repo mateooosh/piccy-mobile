@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {useStore} from "react-redux";
-import {Text, View, ScrollView} from 'react-native';
+import {Text, View, ScrollView, ActivityIndicator} from 'react-native';
 
 import {API_URL} from '@env';
 
 import UserItem from '../components/UserItem';
+import colors from "../colors/colors";
 
 export default function FollowingScreen({route, navigation}) {
   const store = useStore();
@@ -14,10 +15,13 @@ export default function FollowingScreen({route, navigation}) {
 
   const [following, setFollowing] = useState([]);
   const [hasData, setHasData] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
     const url = `${API_URL}/following/${route.params.id}?token=${store.getState().token}`;
+
+    setLoading(true);
     fetch(url)
       .then(response => response.json())
       .then(response => {
@@ -25,7 +29,8 @@ export default function FollowingScreen({route, navigation}) {
         setFollowing(response);
         setHasData(true);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false));
 
     return function cleanup() {
       setFollowing([]);
@@ -37,6 +42,14 @@ export default function FollowingScreen({route, navigation}) {
     <ScrollView style={{paddingHorizontal: 10, height: '100%', backgroundColor: 'white'}}>
       {following.map((item, idx) =>
         <UserItem item={item} key={idx} navigation={navigation}/>
+      )}
+
+      {loading && (
+        <ActivityIndicator
+          size={60}
+          color={colors.primary}
+          style={{marginVertical: 40}}
+        />
       )}
 
       {hasData && following.length === 0 &&

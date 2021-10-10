@@ -25,6 +25,7 @@ import ResetPasswordScreen from './screens/ResetPasswordScreen.js';
 import ReportBugScreen from './screens/ReportBugScreen.js';
 import LanguageScreen from './screens/LanguageScreen.js';
 import TagScreen from './screens/TagScreen.js';
+import SharePostScreen from './screens/SharePostScreen.js';
 
 import {io} from "socket.io-client";
 import {displayToast} from './functions/functions'
@@ -42,21 +43,35 @@ export default function Navigation() {
 
   const logged = useSelector(state => state.logged);
   const lang = useSelector(state => state.lang);
+  const idUser = useSelector(state => state.id);
 
   useEffect(() => {
+    const id = store.getState().id;
+    const log = store.getState().logged
+
     const socket = io(API_URL_WS, {transports: ['websocket']});
 
-    socket.emit('new-user', store.getState().username);
+    if(log) {
+      console.warn('turn on: ', `message-to-user-${id}`)
+      socket.emit('new-user', store.getState().username);
+      socket.on(`message-to-user-${id}`, handler);
+    }
 
-    socket.on(`message-to-user-${store.getState().id}`, (message) => {
-      if (navigationRef.current?.getCurrentRoute().name !== 'messages' && navigationRef.current?.getCurrentRoute().name !== 'Chat') {
-        displayToast(toast, `New message`)
-        store.dispatch({type: 'notificationAmountSet', payload: store.getState().notificationAmount + 1});
+    return function cleanup() {
+
+      if(log) {
+        console.warn('turn off: ', `message-to-user-${id}`);
+        socket.off(`message-to-user-${id}`, handler);
       }
+    }
+  }, [logged])
 
-      // await schedulePushNotification();
-    })
-  }, [])
+  const handler = (message) => {
+    if (navigationRef.current?.getCurrentRoute().name !== 'messages' && navigationRef.current?.getCurrentRoute().name !== 'Chat') {
+      displayToast(toast, `New message`)
+      store.dispatch({type: 'notificationAmountSet', payload: store.getState().notificationAmount + 1});
+    }
+  }
 
   function getHeaderTitle(route) {
     // If the focused route is not found, we need to assume it's the initial screen
@@ -93,6 +108,7 @@ export default function Navigation() {
       Chat: 'chat/:idUser',
       Language: 'language',
       Tag: 'tag/:tag',
+      Share: 'share/:id',
       Piccy: '/'
     }
   };
@@ -129,6 +145,7 @@ export default function Navigation() {
             <Stack.Screen name="Followers" component={FollowersScreen} options={() => ({headerTitle: t.followers2[lang]})}/>
             <Stack.Screen name="Following" component={FollowingScreen} options={() => ({headerTitle: t.following2[lang]})}/>
             <Stack.Screen name="Likes" component={LikesScreen} options={() => ({headerTitle: t.likes2[lang]})}/>
+            <Stack.Screen name="Share" component={SharePostScreen} options={() => ({headerTitle: 'Share post'})}/>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}
                           options={() => ({headerTitle: t.editProfile[lang]})}/>
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}

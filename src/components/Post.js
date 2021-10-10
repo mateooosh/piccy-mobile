@@ -257,7 +257,7 @@ export default function Post(props) {
 
   function onSharePress() {
     console.log('share');
-
+    props.navigation.push('Share', {id: post.id});
   }
 
   return (

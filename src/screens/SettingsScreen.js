@@ -28,6 +28,7 @@ export default function SettingsScreen({navigation}) {
     store.dispatch({type: 'tokenSet', payload: ''});
     store.dispatch({type: 'usernameSet', payload: ''});
     store.dispatch({type: 'idSet', payload: ''});
+    store.dispatch({type: 'notificationAmountSet', payload: 0});
   }
 
   function deleteAccount() {

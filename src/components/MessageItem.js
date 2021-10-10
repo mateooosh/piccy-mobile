@@ -9,7 +9,7 @@ import {Collapse} from "native-base";
 
 export default React.memo(MessageItem);
 
-function MessageItem({item}) {
+function MessageItem({item, navigation}) {
   const id = useSelector(state => state.id);
   const store = useStore();
   const [displayTime, setDisplayTime] = useState(false);
@@ -36,12 +36,18 @@ function MessageItem({item}) {
             marginVertical: 5,
             textAlign: 'left'
           }}>
-            <Text style={{
-              color: 'white',
-              fontSize: 16,
-              maxWidth: Dimensions.get('window').width * 3 / 5
-            }}>
-              {item.message}
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 16,
+                maxWidth: Dimensions.get('window').width * 3 / 5
+              }}
+            >
+              {item.message.startsWith('LINKTOPOST') ? (
+                <Text style={{textDecorationLine: 'underline'}} onPress={() => navigation.push('Post', {id: item.message.split('|')[1]})}>Link to post</Text>
+              ) : (
+                item.message
+              )}
             </Text>
           </TouchableOpacity>
         </View>
@@ -71,8 +77,16 @@ function MessageItem({item}) {
               color: 'black',
               fontSize: 16,
               maxWidth: Dimensions.get('window').width * 3 / 5
-            }}>{item.message} </Text>
+            }}>
+              {item.message.startsWith('LINKTOPOST') ? (
+                <Text style={{textDecorationLine: 'underline'}} onPress={() => navigation.push('Post', {id: item.message.split('|')[1]})}>Link to post</Text>
+              ) : (
+                item.message
+              )}
+            </Text>
           </TouchableOpacity>
+
+
 
         </View>
       )}

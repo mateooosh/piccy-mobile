@@ -29,9 +29,21 @@ export default function MessageUserItem(props) {
           )}
         </View>
         {props.channel.status ? (
-          <Text numberOfLines={1} style={{color: '#222', fontWeight: '700'}}>{props.channel.lastMessage}</Text>
+          <Text numberOfLines={1} style={{color: '#222', fontWeight: '700'}}>
+            {props.channel.lastMessage.startsWith('LINKTOPOST') ? (
+              'Link to post'
+            ) : (
+              props.channel.lastMessage
+            )}
+          </Text>
         ) : (
-          <Text numberOfLines={1} style={{color: '#444', fontWeight: '400'}}>{props.channel.lastMessage}</Text>
+          <Text numberOfLines={1} style={{color: '#444', fontWeight: '400'}}>
+            {props.channel.lastMessage.startsWith('LINKTOPOST') ? (
+              'Link to post'
+            ) : (
+              props.channel.lastMessage
+            )}
+          </Text>
         )}
       </View>
     </TouchableOpacity>

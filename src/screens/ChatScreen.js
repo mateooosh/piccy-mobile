@@ -133,10 +133,10 @@ export default function ChatScreen({route, navigation}) {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10}} keyboardShouldPersistTaps='always'>
+      <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10}} keyboardShouldPersistTaps='always' onLayout={() => scrollViewRef.current.scrollToEnd({animated: true})}>
         <View>
           {!isLoading && messages.map((mes, idx) =>
-            <MessageItem key={idx} item={mes}/>
+            <MessageItem key={idx} item={mes} navigation={navigation}/>
           )}
 
           {isLoading &&

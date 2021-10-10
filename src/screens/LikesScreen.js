@@ -3,12 +3,13 @@ import {useStore} from "react-redux";
 import {
   Text,
   View,
-  ScrollView
+  ScrollView, ActivityIndicator
 } from "react-native";
 
 import {API_URL} from "@env";
 
 import UserItem from "../components/UserItem";
+import colors from "../colors/colors";
 
 
 export default function LikesScreen({route, navigation}) {
@@ -19,9 +20,12 @@ export default function LikesScreen({route, navigation}) {
 
   const [likes, setLikes] = useState([]);
   const [hasData, setHasData] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const url = `${API_URL}/likes/${route.params.idPost}?token=${store.getState().token}`;
+
+    setLoading(true);
     fetch(url)
       .then((response) => response.json())
       .then((response) => {
@@ -29,7 +33,8 @@ export default function LikesScreen({route, navigation}) {
         setLikes(response);
         setHasData(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
 
     return function cleanup() {
       setLikes([]);
@@ -43,6 +48,14 @@ export default function LikesScreen({route, navigation}) {
       {likes.map((item, idx) => (
         <UserItem item={item} key={idx} navigation={navigation} hideNumberOfFollowers={true}/>
       ))}
+
+      {loading && (
+        <ActivityIndicator
+          size={60}
+          color={colors.primary}
+          style={{marginVertical: 40}}
+        />
+      )}
 
       {hasData && likes.length === 0 && (
         <View

@@ -327,6 +327,10 @@ const translations = {
   register: {
     en: 'Register',
     pl: 'Rejestracja'
+  },
+  more: {
+    en: 'More',
+    pl: 'Więcej'
   }
 }
 

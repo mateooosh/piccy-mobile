@@ -8,13 +8,14 @@ import {
   ScrollView,
   RefreshControl
 } from 'react-native';
-import {useStore} from 'react-redux';
+import {useSelector, useStore} from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
 import Post from '../components/Post';
 import colors from '../colors/colors';
 
 import {useToast} from 'native-base';
 import styles from "../styles/style";
+import {t} from "../translations/translations";
 
 // import { theme } from 'native-base';
 
@@ -24,6 +25,7 @@ console.log('home', API_URL)
 export default function HomeScreen({navigation}) {
   const store = useStore();
   const toast = useToast();
+  const lang = useSelector(state => state.lang);
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
@@ -33,6 +35,7 @@ export default function HomeScreen({navigation}) {
 
 
   const onRefresh = useCallback(() => {
+    setActivityIndicator(true);
     setPage(0);
     setPosts([]);
     setEmptyPosts(false);
@@ -133,7 +136,7 @@ export default function HomeScreen({navigation}) {
                   ...styles.button.text
                 }}
               >
-                More
+                {t.more[lang]}
               </Text>
             )}
             {loading && <ActivityIndicator size={19} color="white"/>}

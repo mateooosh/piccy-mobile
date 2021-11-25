@@ -34,16 +34,6 @@ export default function PostScreen({route, navigation}) {
       .catch(err => console.log(err));
   }, [])
 
-  function updatePosts (post) {
-    let deepCopy = JSON.parse(JSON.stringify(post));
-    deepCopy.forEach((item) => {
-      if (item.id == post.id) {
-        item = post;
-      }
-    });
-    setPost(deepCopy);
-  }
-
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
       <ScrollView keyboardShouldPersistTaps="always">
@@ -57,7 +47,6 @@ export default function PostScreen({route, navigation}) {
             key={idx}
             navigation={navigation}
             homeScreen={false}
-            updatePosts={updatePosts}
           />
         )}
       </ScrollView>

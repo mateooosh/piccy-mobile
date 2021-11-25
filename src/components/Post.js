@@ -6,7 +6,7 @@ import {
   Dimensions,
   Image,
   TextInput,
-  Animated
+  Animated, ActivityIndicator
 } from "react-native";
 
 import {
@@ -26,7 +26,6 @@ import {displayToast} from "../functions/functions";
 import {t} from "../translations/translations";
 import styles from "../styles/style";
 import Input from "./Input";
-
 
 // //import my functions
 const fun = require("../functions/functions");
@@ -61,6 +60,7 @@ export default function Post(props) {
   const [comments, setComments] = useState([]);
   const [reason, setReason] = useState('');
   const [commentInput, setCommentInput] = useState('');
+  const [loadingComments, setLoadingComments] = useState(false);
 
   useEffect(() => {
     setPost(props.post);
@@ -162,13 +162,15 @@ export default function Post(props) {
   function getComments(id) {
     if (!props.homeScreen) {
       const url = `${API_URL}/comments/${id}?token=${store.getState().token}`;
+      setLoadingComments(true);
       fetch(url)
         .then((response) => response.json())
         .then((response) => {
           console.log('comments', response);
           setComments(response);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setLoadingComments(false));
     }
   }
 
@@ -207,6 +209,7 @@ export default function Post(props) {
         setIsOpenRemove(!isOpenRemove);
         onClose();
         displayToast(toast, response.message);
+        props.navigation.navigate('Piccy');
       })
       .catch(err => alert(err))
   }
@@ -483,6 +486,15 @@ export default function Post(props) {
         </Text>
       )}
 
+      {loadingComments &&
+      <ActivityIndicator
+        size={30}
+        color={colors.primary}
+        style={{marginVertical: 10}}
+      />
+      }
+
+
       {comments.map((comment, idx) => (
         <View
           onPress={() =>
@@ -636,15 +648,6 @@ export default function Post(props) {
             </TouchableOpacity>
 
             {reason.length > 3 && (
-              // <Button
-              //   style={{backgroundColor: colors.primary}}
-              //   onPress={() => {
-              //     reportPost();
-              //   }}
-              //   ml={3}
-              // >
-              //   {t.report[lang]}
-              // </Button>
 
               <TouchableOpacity style={{...styles.button, marginLeft: 12}}
                                 onPress={reportPost}>

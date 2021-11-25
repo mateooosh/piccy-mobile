@@ -190,11 +190,16 @@ export default function EditProfileScreen({route, navigation}) {
             <TextInput
               onChangeText={(str) => setDescription(str)}
               style={{
+                backgroundColor: '#eee',
+                paddingVertical: 5,
+                marginTop: 10,
+                paddingHorizontal: 15,
+                borderRadius: 10,
                 textAlignVertical: 'top',
+                fontSize: 16
               }}
-              style={styles.input}
               multiline={true}
-              numberOfLines={5}
+              numberOfLines={3}
               placeholder="Description"
               value={description}
             />

@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react';
 import { StatusBar } from 'react-native';
 import Navigation from './src/Navigation.js';
-import { Provider } from 'react-redux';
 import store from './store/store.js';
+import { Provider } from 'react-redux';
 import colors from './src/colors/colors'
 
 import { NativeBaseProvider } from "native-base";

@@ -75,6 +75,10 @@ export default function BottomTab(){
             <MaterialIcons name="message" color={color} size={26}/>
           ),
           tabBarBadge: notificationAmount ? notificationAmount : null,
+          tabBarBadgeStyle: {
+            backgroundColor: colors.primary,
+            color: 'white'
+          },
           title: t.messages[lang]
         }}
         name="messages"

@@ -5,7 +5,7 @@ const initialState = {
   logged: true,
   token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImlhdCI6MTYzMTQ2NjE5MSwiZXhwIjoxNjMxNTUyNTkxfQ.5wTXB5pPvS3cF2jasWIlft_Pb6rSf81cv2qgkNemS-A',
   username: 'asdasd',
-  id: 40,
+  id: 62,
   lang: 'en',
   notificationAmount: 0
 };

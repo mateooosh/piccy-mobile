@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  RefreshControl
+  RefreshControl, Dimensions
 } from 'react-native';
 import {useSelector, useStore} from 'react-redux';
 import {API_URL, API_URL_WS} from '@env';
@@ -21,7 +21,6 @@ import {t} from "../translations/translations";
 
 console.log('home', API_URL)
 
-
 export default function HomeScreen({navigation}) {
   const store = useStore();
   const toast = useToast();
@@ -32,7 +31,6 @@ export default function HomeScreen({navigation}) {
   const [loading, setLoading] = useState(false);
   const [emptyPosts, setEmptyPosts] = useState(false);
   const [activityIndicator, setActivityIndicator] = useState(true);
-
 
   const onRefresh = useCallback(() => {
     setActivityIndicator(true);
@@ -47,6 +45,9 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   function getPosts() {
+    if(emptyPosts || loading)
+      return;
+
     let temp = page + 1;
     setLoading(true);
     console.log('ti', API_URL)
@@ -72,26 +73,22 @@ export default function HomeScreen({navigation}) {
       })
   }
 
-  function updatePosts(post) {
-    let deepCopy = JSON.parse(JSON.stringify(posts));
-    deepCopy.forEach((item) => {
-      if (item.id == post.id) {
-        item = post;
-      }
-    });
-    console.log(posts[0], deepCopy[0])
-    setPosts(deepCopy);
-  }
-
   useEffect(() => {
 
-    toast.show({
-      title: 'Home mounted',
-      duration: 3000
-    })
+    // toast.show({
+    //   title: 'Home mounted',
+    //   duration: 3000
+    // })
 
     getPosts();
   }, [])
+
+  function onScroll(e) {
+    if(e.nativeEvent.contentOffset.y + Dimensions.get('window').height + 200 > e.nativeEvent.contentSize.height) {
+      console.log('should update');
+      getPosts();
+    }
+  }
 
 
   return (
@@ -101,6 +98,7 @@ export default function HomeScreen({navigation}) {
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} colors={[colors.primary]}/>
         }
+        onScroll={onScroll}
       >
         {activityIndicator && (
           <ActivityIndicator
@@ -109,6 +107,7 @@ export default function HomeScreen({navigation}) {
             style={{marginVertical: 40}}
           />
         )}
+
         {posts.map((post, idx) => (
           <Post
             post={post}
@@ -116,32 +115,21 @@ export default function HomeScreen({navigation}) {
             key={idx}
             navigation={navigation}
             homeScreen={true}
-            updatePosts={updatePosts}
           />
         ))}
+
+        {loading && !activityIndicator && (
+          <ActivityIndicator
+            size={40}
+            color={colors.primary}
+            style={{paddingBottom: 10, marginTop: 2}}
+          />
+        )}
 
         {!posts.length && !activityIndicator &&
           <Text style={{fontSize: 16, marginVertical: 20}}>You need to follow someone</Text>
         }
 
-        {!!posts.length && !emptyPosts && (
-          <TouchableOpacity
-            onPress={getPosts}
-            style={{...styles.button, marginHorizontal: 10, marginTop: 0, marginBottom: 8}}
-          >
-            {!loading && (
-              <Text
-                style={{
-                  textAlign: "center",
-                  ...styles.button.text
-                }}
-              >
-                {t.more[lang]}
-              </Text>
-            )}
-            {loading && <ActivityIndicator size={19} color="white"/>}
-          </TouchableOpacity>
-        )}
       </ScrollView>
     </View>
   );

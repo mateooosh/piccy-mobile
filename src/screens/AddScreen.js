@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, Image} from 'react-native';
+import {Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, Image, ActivityIndicator} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useStore} from 'react-redux';
@@ -12,10 +12,12 @@ import * as ImagePicker from 'expo-image-picker';
 import {API_URL} from '@env';
 import {displayToast} from "../functions/functions";
 import {t} from "../translations/translations";
+import {useToast} from "native-base";
 
 export default function AddScreen({navigation}) {
   const store = useStore();
   const lang = useSelector(state => state.lang);
+  const toast = useToast();
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -26,6 +28,8 @@ export default function AddScreen({navigation}) {
 
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
+
+  const [sending, setSending] = useState(false);
 
   const camera = useRef(null);
   const scrollRef = useRef(null);
@@ -113,6 +117,7 @@ export default function AddScreen({navigation}) {
 
 
   async function createPost() {
+    console.log('create post');
     const index = photo.indexOf(',');
     let base64 = photo.slice(index + 1, (photo.length));
 
@@ -122,8 +127,8 @@ export default function AddScreen({navigation}) {
       photo: base64,
       token: store.getState().token
     };
-    console.log(obj)
 
+    setSending(true);
     const url = `${API_URL}/posts`;
     fetch(url, {
       method: 'POST',
@@ -138,8 +143,9 @@ export default function AddScreen({navigation}) {
         navigation.push('Piccy', {screen: 'account'});
       })
       .catch(err => {
-        alert('Something went wrong!')
+        alert(err)
       })
+      .finally(() => setSending(true))
   }
 
   return (
@@ -148,7 +154,7 @@ export default function AddScreen({navigation}) {
       <ScrollView
         keyboardShouldPersistTaps='handled'
         ref={scrollRef}
-        contentContainerStyle={{width: '100%'}}
+        contentContainerStyle={{width: '100%', paddingBottom: 5}}
       >
         {photo &&
         <View>
@@ -159,7 +165,7 @@ export default function AddScreen({navigation}) {
           <Text style={{fontWeight: '700', fontSize: 16, marginHorizontal: 16}}>{t.caption[lang]}</Text>
           <TextInput
             style={{
-              backgroundColor: '#ddd',
+              backgroundColor: '#eee',
               marginHorizontal: 16,
               paddingVertical: 5,
               marginBottom: 20,
@@ -177,17 +183,28 @@ export default function AddScreen({navigation}) {
             }}
             placeholder={t.typeHere[lang]}
           />
-          <TouchableOpacity
-            onPress={createPost}
-            style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
-          >
-            <Text style={styles.button.text}>{t.addNewPost[lang]}</Text>
-          </TouchableOpacity>
+          {!sending ? (
+            <TouchableOpacity
+              onPress={createPost}
+              style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
+            >
+              <Text style={styles.button.text}>{t.addNewPost[lang]}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={createPost}
+              style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
+            >
+              <ActivityIndicator size={19} color="white"/>
+            </TouchableOpacity>
+          )}
+
+
         </View>
         }
 
         {loaded && cameraVisible && (
-          <View style={{positon: 'relative'}}>
+          <View style={{positon: 'relative', marginBottom: 10}}>
             <Camera
               whiteBalance="auto"
               autoFocus="on"
@@ -269,17 +286,17 @@ export default function AddScreen({navigation}) {
             setCameraVisible(true);
             setPhoto(null);
           }}
-          style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
+          style={{...styles.buttonOutline, marginVertical: 5, marginHorizontal: 16}}
         >
-          <Text style={styles.button.text}>{t.takePictureAgain[lang]}</Text>
+          <Text style={styles.buttonOutline.text}>{t.takePictureAgain[lang]}</Text>
         </TouchableOpacity>
         }
 
         <TouchableOpacity
           onPress={pickImage}
-          style={{...styles.button, marginVertical: 5, marginHorizontal: 16}}
+          style={{...styles.buttonOutline, marginVertical: 5, marginHorizontal: 16}}
         >
-          <Text style={styles.button.text}>{t.pickAnImage[lang]}</Text>
+          <Text style={styles.buttonOutline.text}>{t.pickAnImage[lang]}</Text>
         </TouchableOpacity>
 
       </ScrollView>

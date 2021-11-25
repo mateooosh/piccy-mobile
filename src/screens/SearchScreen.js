@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, TextInput, View, TouchableOpacity, ScrollView, Image} from 'react-native';
+import {Text, TextInput, View, TouchableOpacity, ScrollView, Image, ActivityIndicator} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {API_URL, API_URL_WS} from '@env';
 import {useStore, useSelector} from "react-redux";
@@ -54,6 +54,9 @@ function SearchAccounts(props) {
   const store = useStore();
   const lang = useSelector(state => state.lang);
 
+  const [loading, setLoading] = useState(true);
+
+
   const [time, setTime] = useState(setTimeout(() => {
   }, 0));
 
@@ -73,12 +76,16 @@ function SearchAccounts(props) {
         console.log('search accounts: ', response);
         setResult(response);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false));
   }
 
 
   return (
     <ScrollView style={{paddingHorizontal: 10, backgroundColor: 'white'}}>
+      {loading &&
+      <ActivityIndicator size={60} color={colors.primary} style={{marginVertical: 40}}/>
+      }
       {result.map((item, idx) =>
         <View key={idx} style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 10, marginHorizontal: 15}}>
           <TouchableOpacity
@@ -124,9 +131,12 @@ function SearchAccounts(props) {
   )
 }
 
+
 function SearchTags(props) {
   const [result, setResult] = useState([]);
   const store = useStore();
+
+  const [loading, setLoading] = useState(true);
 
   const [time, setTime] = useState(setTimeout(() => {
   }, 0));
@@ -146,7 +156,8 @@ function SearchTags(props) {
       .then(response => {
         setResult(response);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false));
   }
 
   function onTagPress(tag) {
@@ -155,6 +166,10 @@ function SearchTags(props) {
 
   return (
     <ScrollView style={{padding: 20, backgroundColor: 'white'}}>
+      {loading &&
+      <ActivityIndicator size={60} color={colors.primary} style={{marginVertical: 40}}/>
+      }
+
       {result.map((tag, index) =>
         <Text key={index} onPress={onTagPress.bind(this, tag)} style={{fontSize: 16, color: colors.hashtag, fontWeight: 'bold', marginBottom: 10}}>{tag}</Text>
       )}

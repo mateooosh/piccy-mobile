@@ -52,7 +52,7 @@ export default function Navigation() {
     const socket = io(API_URL_WS, {transports: ['websocket']});
 
     if(log) {
-      console.warn('turn on: ', `message-to-user-${id}`)
+      console.log('turn on: ', `message-to-user-${id}`)
       socket.emit('new-user', store.getState().username);
       socket.on(`message-to-user-${id}`, handler);
     }
@@ -60,7 +60,7 @@ export default function Navigation() {
     return function cleanup() {
 
       if(log) {
-        console.warn('turn off: ', `message-to-user-${id}`);
+        console.log('turn off: ', `message-to-user-${id}`);
         socket.off(`message-to-user-${id}`, handler);
       }
     }

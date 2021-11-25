@@ -97,7 +97,7 @@ export default function ChatScreen({route, navigation}) {
     console.log('message-to-user', response);
 
     let deepCopy = JSON.parse(JSON.stringify(refMessages.current));
-    deepCopy.push(response);
+    deepCopy.unshift(response);
     setMessages(deepCopy);
 
     setTimeout(() => {
@@ -119,7 +119,7 @@ export default function ChatScreen({route, navigation}) {
     }
 
     let deepCopy = JSON.parse(JSON.stringify(messages));
-    deepCopy.push(obj);
+    deepCopy.unshift(obj);
     setMessages(deepCopy);
 
     socket.emit('message-from-user', obj);
@@ -134,7 +134,7 @@ export default function ChatScreen({route, navigation}) {
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 10}} keyboardShouldPersistTaps='always' onLayout={() => scrollViewRef.current.scrollToEnd({animated: true})}>
-        <View>
+        <View style={{display: 'flex', flexDirection: 'column-reverse'}}>
           {!isLoading && messages.map((mes, idx) =>
             <MessageItem key={idx} item={mes} navigation={navigation}/>
           )}

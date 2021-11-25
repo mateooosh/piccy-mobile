@@ -25,6 +25,10 @@ export default function LoginScreen({navigation}) {
 
   const [alertIsOpen, setAlertIsOpen] = useState(false);
 
+  useEffect(() => {
+
+  }, [])
+
   function correctUsername() {
     return validation.min6Chars(username);
   }
@@ -60,20 +64,21 @@ export default function LoginScreen({navigation}) {
       .then(response => {
         // alert(response.message);
         console.log('token:', response.token)
-        store.dispatch({type: "logged/true"});
         store.dispatch({type: "tokenSet", payload: response.token});
         store.dispatch({type: "usernameSet", payload: response.username});
         store.dispatch({type: "idSet", payload: response.id});
         displayToast(toast, response.message);
+        setLoading(false);
+        store.dispatch({type: "logged/true"});
       })
       .catch(err => {
         setAlertIsOpen(true);
+        setLoading(false);
 
         setTimeout(() => {
           setAlertIsOpen(false);
         }, 3000);
       })
-      .finally(() => setLoading(false))
   }
 
   function getButton() {

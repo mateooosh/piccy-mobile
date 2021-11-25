@@ -25,11 +25,17 @@ const displayTime = (date, lang, t) => {
   }
 }
 
+function isSameDay(d1, d2) {
+  return d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+}
+
 const displayTimeV2 = date => {
   let now = new Date();
   date = new Date(date);
 
-  if (now.getDay() === date.getDay()) {
+  if (isSameDay(now, date)) {
     return `${date.getHours()}:${prefixTime(date.getMinutes())}`
   }
 

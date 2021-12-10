@@ -13,6 +13,9 @@ import ProfileStats from '../components/ProfileStats';
 import ProfilePosts from '../components/ProfilePosts';
 import {t} from '../translations/translations';
 import styles from '../styles/style';
+import {useToast} from "native-base";
+import {checkStatus, displayToast} from "../functions/functions";
+import Toast from "react-native-toast-message";
 
 export default function AccountScreen({route, navigation}) {
   const store = useStore();
@@ -26,10 +29,24 @@ export default function AccountScreen({route, navigation}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const toast = useToast();
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
+
   useEffect(() => {
     //if this is my account
     if (route.params.username === store.getState().username) {
-      console.log('teraz');
       navigation.navigate('Piccy', {screen: 'account'});
       return;
     } else {
@@ -37,31 +54,27 @@ export default function AccountScreen({route, navigation}) {
       const url = `${API_URL}/users?username=${route.params.username}&myIdUser=${store.getState().id}&token=${store.getState().token}`;
       setLoading(true)
       fetch(url)
-        .then((response) => response.json())
-        .then((response) => {
-          // console.log(response);
+        .then(checkStatus)
+        .then(response => {
           setProfile(response);
 
           // get user's posts
           fetch(
             `${API_URL}/posts?username=${route.params.username}&onlyUserPosts=true&token=${store.getState().token}`
           )
-            .then((response) => response.json())
+            .then(checkStatus)
             .then((response) => {
-              // console.log(response);
               setPosts(response);
               setLoading(false);
             })
-            .catch((err) => console.log(err));
+            .catch(checkError);
         })
-        .catch((err) => console.log(err));
+        .catch(checkError);
     }
   }, []);
 
   //follow user
   function follow(idUser, idFollower) {
-    console.log(idUser, idFollower);
-
     let deepCopy = JSON.parse(JSON.stringify(profile));
     deepCopy[0].amIFollowing = 1;
     deepCopy[0].followers++;
@@ -74,11 +87,11 @@ export default function AccountScreen({route, navigation}) {
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => response.json())
+      .then(checkStatus)
       .then((response) => {
         console.log(response.message);
       })
-      .catch((err) => console.log(err));
+      .catch(checkError);
   }
 
   // unfollow user
@@ -95,11 +108,11 @@ export default function AccountScreen({route, navigation}) {
         'Content-Type': 'application/json',
       }
     })
-      .then((response) => response.json())
-      .then((response) => {
+      .then(checkStatus)
+      .then(response => {
         console.log(response.message);
       })
-      .catch((err) => console.log(err));
+      .catch(checkError);
   }
 
   return (

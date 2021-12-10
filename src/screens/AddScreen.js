@@ -3,16 +3,14 @@ import {Text, TextInput, View, TouchableOpacity, ScrollView, Dimensions, Image, 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useStore} from 'react-redux';
-
-import colors from '../colors/colors';
 import styles from "../styles/style";
-
 import {Camera} from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import {API_URL} from '@env';
-import {displayToast} from "../functions/functions";
+import {checkStatus, displayToast} from "../functions/functions";
 import {t} from "../translations/translations";
 import {useToast} from "native-base";
+import Toast from "react-native-toast-message";
 
 export default function AddScreen({navigation}) {
   const store = useStore();
@@ -33,6 +31,19 @@ export default function AddScreen({navigation}) {
 
   const camera = useRef(null);
   const scrollRef = useRef(null);
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
 
   useEffect(() => {
     (async () => {
@@ -137,20 +148,21 @@ export default function AddScreen({navigation}) {
         'Content-Type': 'application/json'
       },
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
-        displayToast(toast, response.message);
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response?.message[lang]
+        });
         navigation.push('Piccy', {screen: 'account'});
       })
-      .catch(err => {
-        alert(err)
-      })
+      .catch(checkError)
       .finally(() => setSending(true))
   }
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-
       <ScrollView
         keyboardShouldPersistTaps='handled'
         ref={scrollRef}

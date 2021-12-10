@@ -19,7 +19,7 @@ import {t} from '../translations/translations';
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker";
-import {validation, displayToast} from "../functions/functions";
+import {validation, displayToast, checkStatus} from "../functions/functions";
 
 export default function EditProfileScreen({route, navigation}) {
   const store = useStore();
@@ -36,12 +36,20 @@ export default function EditProfileScreen({route, navigation}) {
 
   const toast = useToast();
 
+  function checkError(err) {
+    if (err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      displayToast(toast, t.youHaveBeenLoggedOutBecauceOfToken[lang]);
+    } else
+      console.log(err)
+  }
+
 
   useEffect(() => {
     const url = `${API_URL}/users/${store.getState().id}/get?token=${store.getState().token}`;
 
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         setPhoto(response.photo);
         setUsername(response.username);
@@ -51,7 +59,7 @@ export default function EditProfileScreen({route, navigation}) {
         setHasData(true);
         console.log(response);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
   }, [])
 
   async function editProfile() {
@@ -79,12 +87,12 @@ export default function EditProfileScreen({route, navigation}) {
         'Content-Type': 'application/json'
       }
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         displayToast(toast, response.message);
         navigation.push('Piccy', {screen: 'account'});
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setLoading(false))
   }
 
@@ -120,8 +128,8 @@ export default function EditProfileScreen({route, navigation}) {
   }
 
   function getButton() {
-    if(allCorrect()) {
-      return(
+    if (allCorrect()) {
+      return (
         <TouchableOpacity onPress={editProfile} style={styles.button}>
           {!loading && (
             <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>
@@ -134,7 +142,7 @@ export default function EditProfileScreen({route, navigation}) {
         </TouchableOpacity>
       )
     } else {
-      return(
+      return (
         <TouchableOpacity style={styles.buttonDisabled}>
           <Text style={{color: 'white', textAlign: 'center', fontWeight: '700'}}>Save changes</Text>
         </TouchableOpacity>
@@ -174,7 +182,8 @@ export default function EditProfileScreen({route, navigation}) {
           <View style={{marginBottom: 20}}>
             <Input value={username} label={t.username[lang]} placeholder={t.username[lang]} onChangeText={setUsername}
                    onSubmitEditing={() => console.log('submit')} isCorrect={correctUsername()}
-                   autoCompleteType="username" errorMessage="Username must be at least 6 characters long" editable={false}/>
+                   autoCompleteType="username" errorMessage="Username must be at least 6 characters long"
+                   editable={false}/>
           </View>
 
           <View style={{marginBottom: 20}}>

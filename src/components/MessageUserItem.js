@@ -1,9 +1,13 @@
 import React from 'react';
 import {Text, View, Image, TouchableOpacity} from 'react-native';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import fun from '../functions/functions'
+import fun from '../functions/functions';
+import {t} from '../translations/translations';
+import {useSelector} from "react-redux";
 
 export default function MessageUserItem(props) {
+
+  const lang = useSelector(state => state.lang);
 
   return (
     <TouchableOpacity onPress={() => props.navigation.push('Chat', {idUser: props.channel.idUser})}
@@ -30,18 +34,18 @@ export default function MessageUserItem(props) {
         </View>
         {props.channel.status ? (
           <Text numberOfLines={1} style={{color: '#222', fontWeight: '700'}}>
-            {props.channel.lastMessage.startsWith('LINKTOPOST') ? (
-              'Link to post'
+            {props.channel?.lastMessage?.startsWith('LINKTOPOST') ? (
+              t.linkToPost[lang]
             ) : (
-              props.channel.lastMessage
+              props.channel?.lastMessage
             )}
           </Text>
         ) : (
           <Text numberOfLines={1} style={{color: '#444', fontWeight: '400'}}>
-            {props.channel.lastMessage.startsWith('LINKTOPOST') ? (
-              'Link to post'
+            {props.channel?.lastMessage?.startsWith('LINKTOPOST') ? (
+              t.linkToPost[lang]
             ) : (
-              props.channel.lastMessage
+              props.channel?.lastMessage
             )}
           </Text>
         )}

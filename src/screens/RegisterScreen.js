@@ -5,11 +5,12 @@ import {API_URL} from '@env';
 import colors from "../colors/colors";
 import styles from '../styles/style';
 import Input from '../components/Input';
-import {validation, displayToast} from "../functions/functions";
+import {validation, displayToast, checkStatus} from "../functions/functions";
 import {useToast} from "native-base";
 import {Alert, Collapse} from 'native-base';
 import {t} from "../translations/translations";
 import {useSelector} from "react-redux";
+import Toast from "react-native-toast-message";
 
 
 export default function RegisterScreen({navigation}) {
@@ -44,10 +45,15 @@ export default function RegisterScreen({navigation}) {
         'Content-Type': 'application/json'
       },
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
-        if(response.created) {
-          displayToast(toast, response.message);
+        if(response?.created) {
+          Toast.show({
+            type: 'success',
+            text1: t.success[lang],
+            text2: response.message[lang]
+          });
+
           navigation.navigate('Piccy');
         }
         else {
@@ -109,7 +115,7 @@ export default function RegisterScreen({navigation}) {
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView
         keyboardShouldPersistTaps='handled'
-        contentContainerStyle={{paddingHorizontal: '10%', paddingTop: '10%'}}
+        contentContainerStyle={{paddingHorizontal: 32, paddingTop: 32}}
       >
         <View style={{display: 'flex', flexDirection: 'column'}}>
 

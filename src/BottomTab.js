@@ -1,6 +1,5 @@
 
 import React from 'react';
-import {View, Text} from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
@@ -18,7 +17,8 @@ import SearchScreen from './screens/SearchScreen.js';
 import MessagesScreen from './screens/MessagesScreen.js';
 
 
-export default function BottomTab(){
+export default function BottomTab(props){
+  console.log('asdadasdasd', props)
   const store = useStore();
   const lang = useSelector(state => state.lang);
   const notificationAmount = useSelector(state => state.notificationAmount);

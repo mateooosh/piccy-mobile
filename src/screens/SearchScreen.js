@@ -7,6 +7,9 @@ import {useStore, useSelector} from "react-redux";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import colors from '../colors/colors';
 import {t} from "../translations/translations";
+import {useToast} from "native-base";
+import {checkStatus, displayToast} from "../functions/functions";
+import Toast from "react-native-toast-message";
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -67,17 +70,31 @@ function SearchAccounts(props) {
   }, [props])
 
   function getAccounts() {
-    // console.log(API_URL)
     const url = `${API_URL}/users/${props.query}?token=${store.getState().token}`;
     console.log(url)
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log('search accounts: ', response);
         setResult(response);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setLoading(false));
+  }
+
+  const toast = useToast();
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
 
@@ -149,15 +166,30 @@ function SearchTags(props) {
   }, [props])
 
   function getTags() {
-    // console.log(API_URL)
     const url = `${API_URL}/tags?query=${props.query.replace('#', '')}&token=${store.getState().token}`;
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         setResult(response);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setLoading(false));
+  }
+
+  const toast = useToast();
+  const lang = useSelector(state => state.lang);
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
   function onTagPress(tag) {

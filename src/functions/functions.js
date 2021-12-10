@@ -1,4 +1,7 @@
-const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthNames = {
+  en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  pl: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]
+};
 const minute = 1000 * 60;
 const hour = 1000 * 60 * 60;
 const day = 1000 * 60 * 60 * 24;
@@ -19,9 +22,9 @@ const displayTime = (date, lang, t) => {
   } else if (diff >= day && diff < 7 * day) {
     return (Math.floor(diff / day) === 1) ? Math.floor(diff / day) + t.dayAgo[lang] : Math.floor(diff / day) + t.daysAgo[lang];
   } else if (diff >= 7 * day && diff < 365.25 * day) {
-    return new Date(date).getDate() + ' ' + monthNames[new Date(date).getMonth()];
+    return new Date(date).getDate() + ' ' + monthNames[lang][new Date(date).getMonth()];
   } else if (diff >= day * 365.25) {
-    return new Date(date).getDate() + ' ' + monthNames[new Date(date).getMonth()] + ' ' + new Date(date).getFullYear();
+    return new Date(date).getDate() + ' ' + monthNames[lang][new Date(date).getMonth()] + ' ' + new Date(date).getFullYear();
   }
 }
 
@@ -83,10 +86,21 @@ const validation = {
 }
 
 const displayToast = (toast, title, duration = 3000) => {
-  toast.show({
-    title: title,
-    duration: 3000
-  })
+  // toast.show({
+  //   title: title,
+  //   duration: 3000
+  // })
+}
+
+const checkStatus = res => {
+  if (res.ok)
+    return res.json()
+  else
+    return Promise.reject(res)
+}
+
+const notAllowed = res => {
+  return res.status === 405
 }
 
 
@@ -95,3 +109,5 @@ module.exports.displayTimeV2 = displayTimeV2
 module.exports.displayTimeV3 = displayTimeV3
 module.exports.validation = validation
 module.exports.displayToast = displayToast
+module.exports.checkStatus = checkStatus
+module.exports.notAllowed = notAllowed

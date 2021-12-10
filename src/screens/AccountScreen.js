@@ -13,22 +13,22 @@ import {useSelector, useStore} from 'react-redux'
 import {API_URL} from '@env';
 import ProfileStats from "../components/ProfileStats";
 import ProfilePosts from "../components/ProfilePosts";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import styles from "../styles/style";
 import {t} from "../translations/translations";
-
+import {checkStatus, displayToast} from "../functions/functions";
+import {useToast} from "native-base";
+import Toast from "react-native-toast-message";
 
 export default function AccountScreen({navigation}) {
   const store = useStore();
   const lang = useSelector(state => state.lang);
 
-
   const [profile, setProfile] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
-    console.log(API_URL)
     getProfile();
   }, [])
 
@@ -38,22 +38,34 @@ export default function AccountScreen({navigation}) {
     const url = `${API_URL}/users?idUser=${store.getState().id}&token=${store.getState().token}`;
     setLoading(true);
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
-        // console.log(response);
         setProfile(response);
 
         fetch(`${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=true&token=${store.getState().token}`)
-          .then(response => response.json())
+          .then(checkStatus)
           .then(response => {
             // console.log(response);
             setPosts(response);
             setLoading(false);
             console.log(loading)
           })
-          .catch(err => console.log(err));
+          .catch(checkError);
       })
-      .catch(err => console.log(err));
+      .catch(checkError);
+  }
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
   return (

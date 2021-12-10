@@ -8,10 +8,12 @@ import {useStore, useSelector} from "react-redux";
 import {io} from "socket.io-client";
 import {Divider} from 'react-native-elements';
 import colors from '../colors/colors';
-import {Text} from "native-base";
+import {Text, useToast} from "native-base";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {t} from "../translations/translations";
 import styles from "../styles/style";
+import {checkStatus, displayToast} from "../functions/functions";
+import Toast from "react-native-toast-message";
 
 export default function SharePostScreen({route, navigation}) {
   const store = useStore();
@@ -29,13 +31,28 @@ export default function SharePostScreen({route, navigation}) {
   function getMessages() {
     const url = `${API_URL}/channels?idUser=${store.getState().id}&token=${store.getState().token}`;
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log(response);
         setChannels(response);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setLoading(false));
+  }
+
+  const toast = useToast();
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
   function sharePost (idUser, idChannel) {

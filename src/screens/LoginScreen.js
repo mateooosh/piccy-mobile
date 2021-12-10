@@ -5,14 +5,19 @@ import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
 import colors from '../colors/colors';
 import styles from '../styles/style';
-import {validation, displayToast} from '../functions/functions';
+import {validation, displayToast, checkStatus} from '../functions/functions';
 import {useToast} from 'native-base';
-
 import {Alert, Collapse} from 'native-base';
-
 import Input from '../components/Input';
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {t} from "../translations/translations";
+import Toast from "react-native-toast-message";
+
+Toast.show({
+  type: 'base',
+  text1: 'Error',
+  text2: 'Teklst'
+});
+
 
 export default function LoginScreen({navigation}) {
   const store = useStore();
@@ -37,8 +42,6 @@ export default function LoginScreen({navigation}) {
     return validation.min6Chars(password);
   }
 
-  // const logged = useSelector(state => state.logged);
-
   function logIn(username, password) {
     if (!correctUsername() || !correctPassword())
       return;
@@ -60,18 +63,24 @@ export default function LoginScreen({navigation}) {
         'Content-Type': 'application/json'
       },
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         // alert(response.message);
         console.log('token:', response.token)
         store.dispatch({type: "tokenSet", payload: response.token});
         store.dispatch({type: "usernameSet", payload: response.username});
         store.dispatch({type: "idSet", payload: response.id});
-        displayToast(toast, response.message);
+
+        Toast.show({
+          type: 'success',
+          text1: response.message[lang]
+        });
+
         setLoading(false);
         store.dispatch({type: "logged/true"});
       })
       .catch(err => {
+        checkError(err);
         setAlertIsOpen(true);
         setLoading(false);
 
@@ -79,6 +88,19 @@ export default function LoginScreen({navigation}) {
           setAlertIsOpen(false);
         }, 3000);
       })
+  }
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
   function getButton() {
@@ -128,7 +150,6 @@ export default function LoginScreen({navigation}) {
             <Alert.Description>
               <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                 <Text>{t.usernameOrPasswordIsInvalid[lang]}</Text>
-                {/*<MaterialIcons onPress={() => setAlertIsOpen(false)} name="close" color={'black'} size={30}/>*/}
               </View>
             </Alert.Description>
           </Alert>

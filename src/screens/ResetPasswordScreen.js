@@ -3,11 +3,12 @@ import {useSelector, useStore} from 'react-redux';
 import {Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import styles from "../styles/style";
 import {API_URL} from "@env";
-import {validation, displayToast} from '../functions/functions';
+import {validation, displayToast, checkStatus} from '../functions/functions';
 import {useToast} from 'native-base';
 import Input from "../components/Input";
 
 import {t} from '../translations/translations';
+import Toast from "react-native-toast-message";
 
 export default function ResetPasswordScreen() {
   const store = useStore();
@@ -36,17 +37,30 @@ export default function ResetPasswordScreen() {
         "Content-Type": "application/json",
       }
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log(response.message);
         displayToast(toast, response.message);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => {
         setLoading(false);
         setNewPassword('');
         setOldPassword('');
       })
+  }
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
   function disableButton() {
@@ -75,17 +89,18 @@ export default function ResetPasswordScreen() {
   }
 
   return (
-
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView keyboardShouldPersistTaps='handled'
                   contentContainerStyle={{paddingHorizontal: 20, paddingTop: 20}}>
         <View style={{marginBottom: 30}}>
-          <Input value={oldPassword} label={t.oldPassword[lang]} onSubmitEditing={resetPassword} onChangeText={setOldPassword}
+          <Input value={oldPassword} label={t.oldPassword[lang]} onSubmitEditing={resetPassword}
+                 onChangeText={setOldPassword}
                  secureTextEntry={true} placeholder={t.oldPassword[lang]}/>
         </View>
 
         <View style={{marginBottom: 30}}>
-          <Input value={newPassword} label={t.newPassword[lang]} onSubmitEditing={resetPassword} onChangeText={setNewPassword}
+          <Input value={newPassword} label={t.newPassword[lang]} onSubmitEditing={resetPassword}
+                 onChangeText={setNewPassword}
                  secureTextEntry={true} placeholder={t.newPassword[lang]}/>
         </View>
 

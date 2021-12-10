@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {useStore} from "react-redux";
+import {useSelector, useStore} from "react-redux";
 import {
   Text,
   View,
@@ -10,6 +10,10 @@ import {API_URL} from "@env";
 
 import UserItem from "../components/UserItem";
 import colors from "../colors/colors";
+import {checkStatus, displayToast} from "../functions/functions";
+import {useToast} from "native-base";
+import {t} from "../translations/translations";
+import Toast from "react-native-toast-message";
 
 
 export default function LikesScreen({route, navigation}) {
@@ -21,19 +25,35 @@ export default function LikesScreen({route, navigation}) {
   const [likes, setLikes] = useState([]);
   const [hasData, setHasData] = useState(false);
   const [loading, setLoading] = useState(false);
+  const lang = useSelector(state => state.lang);
+
+  const toast = useToast();
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
 
   useEffect(() => {
     const url = `${API_URL}/likes/${route.params.idPost}?token=${store.getState().token}`;
 
     setLoading(true);
     fetch(url)
-      .then((response) => response.json())
+      .then(checkStatus)
       .then((response) => {
         console.log(response);
         setLikes(response);
         setHasData(true);
       })
-      .catch((err) => console.log(err))
+      .catch(checkError)
       .finally(() => setLoading(false));
 
     return function cleanup() {

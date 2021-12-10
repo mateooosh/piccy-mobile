@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import {
   View,
   ScrollView, ActivityIndicator,
@@ -9,12 +9,17 @@ import {io} from "socket.io-client";
 import MessageUserItem from "../components/MessageUserItem";
 import {Divider} from 'react-native-elements';
 import colors from '../colors/colors';
+import {useToast} from "native-base";
+import {checkStatus, displayToast} from "../functions/functions";
+import {t} from "../translations/translations";
+import Toast from "react-native-toast-message";
 
 export default function MessagesScreen({route, navigation}) {
   const store = useStore();
 
   const [channels, setChannels] = useState([]);
   const [loading, setLoading] = useState(true);
+  const lang = useSelector(state => state.lang);
 
 
   useEffect(() => {
@@ -33,15 +38,30 @@ export default function MessagesScreen({route, navigation}) {
 
   }, [])
 
+  const toast = useToast();
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
+
   function getMessages() {
     const url = `${API_URL}/channels?idUser=${store.getState().id}&token=${store.getState().token}`;
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log(response);
         setChannels(response);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setLoading(false));
   }
 

@@ -1,10 +1,8 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {
-  Alert,
   Text,
   ActivityIndicator,
   View,
-  TouchableOpacity,
   ScrollView,
   RefreshControl, Dimensions
 } from 'react-native';
@@ -13,17 +11,23 @@ import {API_URL, API_URL_WS} from '@env';
 import Post from '../components/Post';
 import colors from '../colors/colors';
 
-import {useToast} from 'native-base';
-import styles from "../styles/style";
+// import {useToast} from 'native-base';
 import {t} from "../translations/translations";
+import {checkStatus, displayToast} from "../functions/functions";
+import Toast from "react-native-toast-message";
 
-// import { theme } from 'native-base';
+//
+// Toast.show({
+//   type: 'info',
+//   text1: 'This is an info message'
+// });
+
 
 console.log('home', API_URL)
 
 export default function HomeScreen({navigation}) {
   const store = useStore();
-  const toast = useToast();
+  // const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   const [posts, setPosts] = useState([]);
@@ -54,7 +58,7 @@ export default function HomeScreen({navigation}) {
 
     const url = `${API_URL}/posts?idUser=${store.getState().id}&onlyUserPosts=false&page=${temp}&token=${store.getState().token}`;
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log(response);
         //push new posts to array
@@ -66,20 +70,27 @@ export default function HomeScreen({navigation}) {
           setEmptyPosts(true);
         }
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => {
         setLoading(false);
         setActivityIndicator(false);
       })
   }
 
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
+
   useEffect(() => {
-
-    // toast.show({
-    //   title: 'Home mounted',
-    //   duration: 3000
-    // })
-
     getPosts();
   }, [])
 
@@ -89,7 +100,6 @@ export default function HomeScreen({navigation}) {
       getPosts();
     }
   }
-
 
   return (
     <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>

@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  ActivityIndicator, Dimensions
+  ActivityIndicator
 } from "react-native";
 import {API_URL, API_URL_WS} from "@env";
 import {useStore, useSelector} from "react-redux";
@@ -16,6 +16,8 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors from "../colors/colors";
 import {useToast} from "native-base";
 import {t} from "../translations/translations";
+import {checkStatus, displayToast} from "../functions/functions";
+import Toast from "react-native-toast-message";
 
 export default function ChatScreen({route, navigation}) {
   const store = useStore();
@@ -31,6 +33,19 @@ export default function ChatScreen({route, navigation}) {
 
   const [message, setMessage] = useState('');
   const [socket, setSocket] = useState(io(API_URL_WS, {transports: ['websocket']}));
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
 
   useEffect(() => {
     refMessages.current = messages;
@@ -52,7 +67,7 @@ export default function ChatScreen({route, navigation}) {
     setIsLoading(true);
 
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log('messages:', response);
         setMessages(response.messages);
@@ -85,7 +100,7 @@ export default function ChatScreen({route, navigation}) {
           scrollViewRef.current.scrollToEnd({animated: false})
         }, 0)
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setIsLoading(false))
 
     return () => {
@@ -115,7 +130,8 @@ export default function ChatScreen({route, navigation}) {
       idSender: store.getState().id,
       idReciever: route.params.idUser,
       idChannel: idChannel,
-      createdAt: new Date()
+      createdAt: new Date(),
+      usernameSender: store.getState().username
     }
 
     let deepCopy = JSON.parse(JSON.stringify(messages));

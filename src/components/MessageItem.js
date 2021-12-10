@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, TouchableOpacity, Dimensions} from 'react-native';
-import {useSelector, useStore} from "react-redux";
+import React, {useState} from 'react';
+import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
+import {useSelector} from "react-redux";
 import colors from '../colors/colors';
 
 import fun from '../functions/functions';
 import {Collapse} from "native-base";
-
+import {t} from '../translations/translations';
 
 export default React.memo(MessageItem);
 
 function MessageItem({item, navigation}) {
   const id = useSelector(state => state.id);
-  const store = useStore();
+  const lang = useSelector(state => state.lang);
   const [displayTime, setDisplayTime] = useState(false);
 
   return (
@@ -44,7 +44,8 @@ function MessageItem({item, navigation}) {
               }}
             >
               {item.message.startsWith('LINKTOPOST') ? (
-                <Text style={{textDecorationLine: 'underline'}} onPress={() => navigation.push('Post', {id: item.message.split('|')[1]})}>Link to post</Text>
+                <Text style={{textDecorationLine: 'underline'}}
+                      onPress={() => navigation.push('Post', {id: item.message.split('|')[1]})}>{t.linkToPost[lang]}</Text>
               ) : (
                 item.message
               )}
@@ -79,15 +80,13 @@ function MessageItem({item, navigation}) {
               maxWidth: Dimensions.get('window').width * 3 / 5
             }}>
               {item.message.startsWith('LINKTOPOST') ? (
-                <Text style={{textDecorationLine: 'underline'}} onPress={() => navigation.push('Post', {id: item.message.split('|')[1]})}>Link to post</Text>
+                <Text style={{textDecorationLine: 'underline'}}
+                      onPress={() => navigation.push('Post', {id: item.message.split('|')[1]})}>{t.linkToPost[lang]}</Text>
               ) : (
                 item.message
               )}
             </Text>
           </TouchableOpacity>
-
-
-
         </View>
       )}
 

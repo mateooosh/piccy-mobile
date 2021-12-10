@@ -12,6 +12,8 @@ import {useStore, useSelector} from "react-redux";
 import colors from "../colors/colors";
 import {useToast} from "native-base";
 import {t} from "../translations/translations";
+import {checkStatus, displayToast} from "../functions/functions";
+import Toast from "react-native-toast-message";
 
 export default function TagScreen({route, navigation}) {
   const store = useStore();
@@ -25,16 +27,28 @@ export default function TagScreen({route, navigation}) {
     setLoading(true);
     const url = `${API_URL}/tag/posts?tag=${route.params.tag}&token=${store.getState().token}`;
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log(response);
         setImages(response);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setLoading(false));
 
   }, [])
 
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
 
   return (
     <View style={{flex: 1}}>

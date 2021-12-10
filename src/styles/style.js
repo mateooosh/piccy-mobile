@@ -69,7 +69,7 @@ const styles = {
     shadowColor: '#000',
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-    elevation: 6
+    elevation: 10
   }
 }
 

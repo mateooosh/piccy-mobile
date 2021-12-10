@@ -21,11 +21,13 @@ import colors from '../colors/colors'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {useSelector, useStore} from "react-redux";
-import {API_URL} from "@env";
-import {displayToast} from "../functions/functions";
+import {API_URL, API_URL_WS} from '@env';
+import {checkStatus, displayToast} from "../functions/functions";
 import {t} from "../translations/translations";
 import styles from "../styles/style";
 import Input from "./Input";
+import {io} from "socket.io-client";
+import Toast from "react-native-toast-message";
 
 // //import my functions
 const fun = require("../functions/functions");
@@ -34,7 +36,6 @@ export default function Post(props) {
 
   const store = useStore();
   const lang = useSelector(state => state.lang);
-  const toast = useToast();
 
   const {isOpen, onOpen, onClose} = useDisclose();
   const fadeAnim = useRef(new Animated.Value(0)).current
@@ -62,9 +63,23 @@ export default function Post(props) {
   const [commentInput, setCommentInput] = useState('');
   const [loadingComments, setLoadingComments] = useState(false);
 
+  const toast = useToast();
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
+  }
+
   useEffect(() => {
     setPost(props.post);
-    console.log(props)
 
     Animated.timing(
       fadeAnim,
@@ -75,15 +90,8 @@ export default function Post(props) {
       }
     ).start();
 
-
     getPhoto(props.post.id);
-
     getComments(props.post.id);
-
-    return function cleanup() {
-      console.log('destroy')
-    }
-
   }, [])
 
   function animateHeartIcon() {
@@ -108,7 +116,6 @@ export default function Post(props) {
 
   function likePost(idUser, idPost, index) {
     const url = `${API_URL}/likes`;
-    console.log(JSON.stringify({idUser: idUser, idPost: idPost}));
     fetch(url, {
       method: "POST",
       body: JSON.stringify({idUser: idUser, idPost: idPost, token: store.getState().token}),
@@ -116,7 +123,7 @@ export default function Post(props) {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then(checkStatus)
       .then(response => {
         let deepCopy = JSON.parse(JSON.stringify(post));
         deepCopy.likes++;
@@ -125,7 +132,7 @@ export default function Post(props) {
 
         animateHeartIcon();
       })
-      .catch((err) => console.log(err));
+      .catch(checkError);
   }
 
   function dislikePost(idUser, idPost, index) {
@@ -137,26 +144,26 @@ export default function Post(props) {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then(checkStatus)
       .then((response) => {
         let deepCopy = JSON.parse(JSON.stringify(post));
         deepCopy.likes--;
         deepCopy.liked = 0;
         setPost(deepCopy);
       })
-      .catch((err) => console.log(err));
+      .catch(checkError);
   }
 
   function getPhoto(id) {
     const url = `${API_URL}/posts/${id}/photo?token=${store.getState().token}`;
 
     fetch(url)
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log('photo', response);
         setPhoto(response.photo);
       })
-      .catch(err => console.log(err))
+      .catch(checkError);
   }
 
   function getComments(id) {
@@ -164,12 +171,12 @@ export default function Post(props) {
       const url = `${API_URL}/comments/${id}?token=${store.getState().token}`;
       setLoadingComments(true);
       fetch(url)
-        .then((response) => response.json())
+        .then(checkStatus)
         .then((response) => {
           console.log('comments', response);
           setComments(response);
         })
-        .catch((err) => console.log(err))
+        .catch(checkError)
         .finally(() => setLoadingComments(false));
     }
   }
@@ -190,11 +197,11 @@ export default function Post(props) {
         "Content-Type": "application/json"
       }
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
-        console.log(response.message);
+        displayToast(toast, response.message[lang]);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => setIsOpenReport(false))
   }
 
@@ -203,7 +210,7 @@ export default function Post(props) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         console.log(response);
         setIsOpenRemove(!isOpenRemove);
@@ -211,7 +218,7 @@ export default function Post(props) {
         displayToast(toast, response.message);
         props.navigation.navigate('Piccy');
       })
-      .catch(err => alert(err))
+      .catch(checkError)
   }
 
   function createComment() {
@@ -229,11 +236,11 @@ export default function Post(props) {
         "Content-Type": "application/json",
       }
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         displayToast(toast, response.message);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => {
         setCommentInput('');
         setIsOpenComment(false);
@@ -435,10 +442,12 @@ export default function Post(props) {
       </View>
 
       <View style={{flexDirection: "row", marginBottom: 10}}>
-        <Text style={{marginHorizontal: 15, fontWeight: "700", fontSize: 13}} onPress={() => props.navigation.navigate("Likes", {idPost: post.id})}>
+        <Text style={{marginHorizontal: 15, fontWeight: "700", fontSize: 13}}
+              onPress={() => props.navigation.navigate("Likes", {idPost: post.id})}>
           {post.likes} {t.likes[lang]}
         </Text>
-        <Text style={{fontWeight: "700", fontSize: 13}} onPress={() => props.navigation.navigate("Post", {id: post.id})}>
+        <Text style={{fontWeight: "700", fontSize: 13}}
+              onPress={() => props.navigation.navigate("Post", {id: post.id})}>
           {post.comments} {t.comments[lang]}
         </Text>
       </View>

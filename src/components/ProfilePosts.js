@@ -4,7 +4,6 @@ import {useSelector} from "react-redux";
 import colors from '../colors/colors';
 import {t} from "../translations/translations";
 
-
 export default function ProfilePosts({posts, loading, navigation}) {
   const lang = useSelector(state => state.lang);
 

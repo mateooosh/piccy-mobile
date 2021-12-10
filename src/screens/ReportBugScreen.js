@@ -3,10 +3,11 @@ import {useSelector, useStore} from 'react-redux';
 import {Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Image, Dimensions} from 'react-native';
 import styles from "../styles/style";
 import {API_URL} from "@env";
-import {validation, displayToast} from '../functions/functions';
+import {validation, displayToast, checkStatus} from '../functions/functions';
 import {useToast} from 'native-base';
 import {t} from "../translations/translations";
 import * as ImagePicker from "expo-image-picker";
+import Toast from "react-native-toast-message";
 
 export default function ReportBugScreen() {
   const store = useStore();
@@ -35,15 +36,28 @@ export default function ReportBugScreen() {
         "Content-Type": "application/json",
       }
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         displayToast(toast, response.message);
       })
-      .catch(err => console.log(err))
+      .catch(checkError)
       .finally(() => {
         setLoading(false);
         setBugDescription('');
       })
+  }
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
   function disableButton() {

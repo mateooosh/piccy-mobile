@@ -2,7 +2,6 @@ import React from 'react';
 import {Text, View, TextInput} from 'react-native';
 import styles from "../styles/style";
 
-
 export default function Input({label, placeholder, autoCompleteType, onSubmitEditing, onChangeText, secureTextEntry, isCorrect, errorMessage, value, marginBottom, editable = true}) {
 
   return (

@@ -6,12 +6,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from '../styles/style';
 import {API_URL} from '@env';
-import {displayToast} from '../functions/functions';
+import {checkStatus, displayToast} from '../functions/functions';
 
 import {t} from '../translations/translations';
 import {AlertDialog, Button, useToast} from "native-base";
 import colors from "../colors/colors";
-
+import Toast from "react-native-toast-message";
 
 export default function SettingsScreen({navigation}) {
   const store = useStore();
@@ -24,11 +24,12 @@ export default function SettingsScreen({navigation}) {
   const cancelRefDelete = useRef();
 
   function logOut() {
-    store.dispatch({type: 'logged/false'});
-    store.dispatch({type: 'tokenSet', payload: ''});
-    store.dispatch({type: 'usernameSet', payload: ''});
-    store.dispatch({type: 'idSet', payload: ''});
-    store.dispatch({type: 'notificationAmountSet', payload: 0});
+    store.dispatch({type: 'resetStore'});
+    // store.dispatch({type: 'logged/false'});
+    // store.dispatch({type: 'tokenSet', payload: ''});
+    // store.dispatch({type: 'usernameSet', payload: ''});
+    // store.dispatch({type: 'idSet', payload: ''});
+    // store.dispatch({type: 'notificationAmountSet', payload: 0});
   }
 
   function deleteAccount() {
@@ -40,13 +41,29 @@ export default function SettingsScreen({navigation}) {
         "Content-Type": "application/json",
       }
     })
-      .then(response => response.json())
+      .then(checkStatus)
       .then(response => {
         displayToast(toast, response.message);
         logOut();
       })
-      .catch(err => displayToast(toast, 'Something went wrong!'))
+      .catch(err => {
+        checkError(err);
+        displayToast(toast, 'Something went wrong!')
+      })
       .finally(() => setIsLoading(false))
+  }
+
+  function checkError(err) {
+    if(err.status == 405) {
+      store.dispatch({type: 'resetStore'});
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+    }
+    else
+      console.log(err);
   }
 
   return (

@@ -13,8 +13,7 @@ import ProfileStats from '../components/ProfileStats';
 import ProfilePosts from '../components/ProfilePosts';
 import {t} from '../translations/translations';
 import styles from '../styles/style';
-import {useToast} from "native-base";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import Toast from "react-native-toast-message";
 
 export default function AccountScreen({route, navigation}) {
@@ -28,8 +27,6 @@ export default function AccountScreen({route, navigation}) {
   const [profile, setProfile] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const toast = useToast();
 
   function checkError(err) {
     if(err.status == 405) {

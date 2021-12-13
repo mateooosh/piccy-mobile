@@ -30,7 +30,6 @@ import SharePostScreen from './screens/SharePostScreen.js';
 
 import {io} from "socket.io-client";
 
-import {useToast} from 'native-base';
 import Toast, {BaseToast, ErrorToast, SuccessToast} from 'react-native-toast-message';
 import styles from "./styles/style";
 // import store from "../store/store";
@@ -40,8 +39,6 @@ const Stack = createStackNavigator();
 
 export default function Navigation() {
   const store = useStore();
-  const toast = useToast();
-
   const logged = useSelector(state => state.logged);
   const lang = useSelector(state => state.lang);
   const idUser = useSelector(state => state.id);
@@ -93,7 +90,7 @@ export default function Navigation() {
 
     switch (routeName) {
       case 'Piccy':
-        'Piccy'
+        return 'Piccy'
       case 'search':
         return t.search[lang]
       case 'create-post':

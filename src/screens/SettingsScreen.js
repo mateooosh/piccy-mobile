@@ -6,16 +6,15 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from '../styles/style';
 import {API_URL} from '@env';
-import {checkStatus, displayToast} from '../functions/functions';
+import {checkStatus} from '../functions/functions';
 
 import {t} from '../translations/translations';
-import {AlertDialog, Button, useToast} from "native-base";
+import {AlertDialog, Button} from "native-base";
 import colors from "../colors/colors";
 import Toast from "react-native-toast-message";
 
 export default function SettingsScreen({navigation}) {
   const store = useStore();
-  const toast = useToast();
   const lang = useSelector(state => state.lang);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,12 +42,20 @@ export default function SettingsScreen({navigation}) {
     })
       .then(checkStatus)
       .then(response => {
-        displayToast(toast, response.message);
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response.message[lang]
+        })
         logOut();
       })
       .catch(err => {
         checkError(err);
-        displayToast(toast, 'Something went wrong!')
+        Toast.show({
+          type: 'error',
+          text1: t.error[lang],
+          text2: t.somethingWentWrong[lang]
+        })
       })
       .finally(() => setIsLoading(false))
   }
@@ -77,10 +84,10 @@ export default function SettingsScreen({navigation}) {
         >
           <AlertDialog.Content>
             <AlertDialog.Header fontSize="lg" fontWeight="bold">
-              Delete account
+              {t.deleteAccount[lang]}
             </AlertDialog.Header>
             <AlertDialog.Body>
-              Are you sure You want to delete your account? Your every post, comment, message and many, many others will be removed. It will not be possible to restore it.
+              {t.areYouSureYouWantToDeleteThisAccount[lang]}
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button
@@ -90,7 +97,7 @@ export default function SettingsScreen({navigation}) {
                 ref={cancelRefDelete}
                 onPress={onCloseDelete}
               >
-                Cancel
+                {t.cancel[lang]}
               </Button>
 
               <Button
@@ -101,7 +108,7 @@ export default function SettingsScreen({navigation}) {
                 {isLoading ? (
                   <ActivityIndicator color={'white'}/>
                 ) : (
-                  'Delete account'
+                  t.deleteAccount[lang]
                 )}
               </Button>
 

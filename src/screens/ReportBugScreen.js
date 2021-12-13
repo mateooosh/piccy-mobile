@@ -3,15 +3,13 @@ import {useSelector, useStore} from 'react-redux';
 import {Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Image, Dimensions} from 'react-native';
 import styles from "../styles/style";
 import {API_URL} from "@env";
-import {validation, displayToast, checkStatus} from '../functions/functions';
-import {useToast} from 'native-base';
+import {validation, checkStatus} from '../functions/functions';
 import {t} from "../translations/translations";
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
 
 export default function ReportBugScreen() {
   const store = useStore();
-  const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   const [attachment, setAttachment] = useState(null);
@@ -38,7 +36,11 @@ export default function ReportBugScreen() {
     })
       .then(checkStatus)
       .then(response => {
-        displayToast(toast, response.message);
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response.message[lang]
+        });
       })
       .catch(checkError)
       .finally(() => {

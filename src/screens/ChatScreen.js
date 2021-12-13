@@ -14,14 +14,12 @@ import {io} from "socket.io-client";
 import MessageItem from "../components/MessageItem";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors from "../colors/colors";
-import {useToast} from "native-base";
 import {t} from "../translations/translations";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import Toast from "react-native-toast-message";
 
 export default function ChatScreen({route, navigation}) {
   const store = useStore();
-  const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   const scrollViewRef = useRef();

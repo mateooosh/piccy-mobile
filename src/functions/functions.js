@@ -85,13 +85,6 @@ const validation = {
   }
 }
 
-const displayToast = (toast, title, duration = 3000) => {
-  // toast.show({
-  //   title: title,
-  //   duration: 3000
-  // })
-}
-
 const checkStatus = res => {
   if (res.ok)
     return res.json()
@@ -103,11 +96,9 @@ const notAllowed = res => {
   return res.status === 405
 }
 
-
 module.exports.displayTime = displayTime
 module.exports.displayTimeV2 = displayTimeV2
 module.exports.displayTimeV3 = displayTimeV3
 module.exports.validation = validation
-module.exports.displayToast = displayToast
 module.exports.checkStatus = checkStatus
 module.exports.notAllowed = notAllowed

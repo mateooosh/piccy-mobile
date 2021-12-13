@@ -9,8 +9,7 @@ import {io} from "socket.io-client";
 import MessageUserItem from "../components/MessageUserItem";
 import {Divider} from 'react-native-elements';
 import colors from '../colors/colors';
-import {useToast} from "native-base";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import {t} from "../translations/translations";
 import Toast from "react-native-toast-message";
 
@@ -37,8 +36,6 @@ export default function MessagesScreen({route, navigation}) {
     })
 
   }, [])
-
-  const toast = useToast();
 
   function checkError(err) {
     if(err.status == 405) {

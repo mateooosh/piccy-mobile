@@ -12,15 +12,13 @@ import Post from '../components/Post'
 // //import my functions
 const fun = require('../functions/functions');
 import colors from '../colors/colors'
-import {checkStatus, displayToast} from "../functions/functions";
-import {useToast} from "native-base";
+import {checkStatus} from "../functions/functions";
 import {t} from "../translations/translations";
 import Toast from "react-native-toast-message";
 
 
 export default function PostScreen({route, navigation}) {
   const store = useStore();
-  const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   const [post, setPost] = useState([]);

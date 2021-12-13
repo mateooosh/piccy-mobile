@@ -7,8 +7,7 @@ import {useStore, useSelector} from "react-redux";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import colors from '../colors/colors';
 import {t} from "../translations/translations";
-import {useToast} from "native-base";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import Toast from "react-native-toast-message";
 
 const TopTab = createMaterialTopTabNavigator();
@@ -81,8 +80,6 @@ function SearchAccounts(props) {
       .catch(checkError)
       .finally(() => setLoading(false));
   }
-
-  const toast = useToast();
 
   function checkError(err) {
     if(err.status == 405) {
@@ -176,7 +173,6 @@ function SearchTags(props) {
       .finally(() => setLoading(false));
   }
 
-  const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   function checkError(err) {

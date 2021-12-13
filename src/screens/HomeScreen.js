@@ -11,23 +11,12 @@ import {API_URL, API_URL_WS} from '@env';
 import Post from '../components/Post';
 import colors from '../colors/colors';
 
-// import {useToast} from 'native-base';
 import {t} from "../translations/translations";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import Toast from "react-native-toast-message";
-
-//
-// Toast.show({
-//   type: 'info',
-//   text1: 'This is an info message'
-// });
-
-
-console.log('home', API_URL)
 
 export default function HomeScreen({navigation}) {
   const store = useStore();
-  // const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   const [posts, setPosts] = useState([]);

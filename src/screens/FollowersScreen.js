@@ -8,9 +8,8 @@ import {
 import {API_URL} from "@env";
 import UserItem from "../components/UserItem";
 import colors from "../colors/colors";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import {t} from "../translations/translations";
-import {useToast} from "native-base";
 import Toast from "react-native-toast-message";
 
 export default function FollowersScreen({route, navigation}) {

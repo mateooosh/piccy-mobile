@@ -12,7 +12,7 @@ import {
 import {
   Actionsheet,
   useDisclose,
-  AlertDialog, useToast
+  AlertDialog
 } from "native-base";
 
 // import colors
@@ -22,7 +22,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {useSelector, useStore} from "react-redux";
 import {API_URL, API_URL_WS} from '@env';
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import {t} from "../translations/translations";
 import styles from "../styles/style";
 import Input from "./Input";
@@ -62,8 +62,6 @@ export default function Post(props) {
   const [reason, setReason] = useState('');
   const [commentInput, setCommentInput] = useState('');
   const [loadingComments, setLoadingComments] = useState(false);
-
-  const toast = useToast();
 
   function checkError(err) {
     if(err.status == 405) {
@@ -199,7 +197,11 @@ export default function Post(props) {
     })
       .then(checkStatus)
       .then(response => {
-        displayToast(toast, response.message[lang]);
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response.message[lang]
+        })
       })
       .catch(checkError)
       .finally(() => setIsOpenReport(false))
@@ -215,8 +217,12 @@ export default function Post(props) {
         console.log(response);
         setIsOpenRemove(!isOpenRemove);
         onClose();
-        displayToast(toast, response.message);
-        props.navigation.navigate('Piccy');
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response.message[lang]
+        });
+        props.navigation.push('Piccy', {screen: 'account'});
       })
       .catch(checkError)
   }
@@ -238,7 +244,11 @@ export default function Post(props) {
     })
       .then(checkStatus)
       .then(response => {
-        displayToast(toast, response.message);
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response.message[lang]
+        });
       })
       .catch(checkError)
       .finally(() => {
@@ -299,14 +309,14 @@ export default function Post(props) {
           >
             <Text style={{fontSize: 16, fontWeight: "600"}}>{t.reportPost[lang]}</Text>
           </Actionsheet.Item>
-          <Actionsheet.Item
-            onPress={() => {
-              onClose();
-              alert('download photo')
-            }}
-          >
-            <Text style={{fontSize: 16, fontWeight: "600"}}>{t.downloadPhoto[lang]}</Text>
-          </Actionsheet.Item>
+          {/*<Actionsheet.Item*/}
+          {/*  onPress={() => {*/}
+          {/*    onClose();*/}
+          {/*    alert('download photo')*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <Text style={{fontSize: 16, fontWeight: "600"}}>{t.downloadPhoto[lang]}</Text>*/}
+          {/*</Actionsheet.Item>*/}
         </Actionsheet.Content>
       </Actionsheet>
 

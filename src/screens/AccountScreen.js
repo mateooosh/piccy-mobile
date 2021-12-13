@@ -15,8 +15,7 @@ import ProfileStats from "../components/ProfileStats";
 import ProfilePosts from "../components/ProfilePosts";
 import styles from "../styles/style";
 import {t} from "../translations/translations";
-import {checkStatus, displayToast} from "../functions/functions";
-import {useToast} from "native-base";
+import {checkStatus} from "../functions/functions";
 import Toast from "react-native-toast-message";
 
 export default function AccountScreen({navigation}) {
@@ -26,7 +25,6 @@ export default function AccountScreen({navigation}) {
   const [profile, setProfile] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
 
   useEffect(() => {
     getProfile();

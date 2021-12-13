@@ -2,11 +2,16 @@
   "name": "piccy-mobile",
   "displayName": "piccy-mobile",
   "expo": {
-    "name": "piccy-mobile",
-    "slug": "piccy-mobile",
+    "name": "Piccy",
+    "slug": "piccy",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
-  }  
+    ],
+    "description": "Piccy",
+    "android": {
+      "package": "com.piccy",
+      "versionCode": 1
+    }
+  }
 }

@@ -5,8 +5,7 @@ import {API_URL} from '@env';
 import colors from "../colors/colors";
 import styles from '../styles/style';
 import Input from '../components/Input';
-import {validation, displayToast, checkStatus} from "../functions/functions";
-import {useToast} from "native-base";
+import {validation, checkStatus} from "../functions/functions";
 import {Alert, Collapse} from 'native-base';
 import {t} from "../translations/translations";
 import {useSelector} from "react-redux";
@@ -19,7 +18,6 @@ export default function RegisterScreen({navigation}) {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
-  const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   const [loading, setLoading] = useState(false);
@@ -57,7 +55,7 @@ export default function RegisterScreen({navigation}) {
           navigation.navigate('Piccy');
         }
         else {
-          setAlertMessage(response.message);
+          setAlertMessage(response.message[lang]);
           setAlertIsOpen(true);
 
           setTimeout(() => {

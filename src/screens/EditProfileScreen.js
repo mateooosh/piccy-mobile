@@ -8,8 +8,6 @@ import {
   ActivityIndicator, TextInput,
 } from "react-native";
 
-import {useToast} from 'native-base';
-
 import Input from '../components/Input';
 
 import {useStore, useSelector} from "react-redux";
@@ -19,7 +17,8 @@ import {t} from '../translations/translations';
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker";
-import {validation, displayToast, checkStatus} from "../functions/functions";
+import {validation, checkStatus} from "../functions/functions";
+import Toast from "react-native-toast-message";
 
 export default function EditProfileScreen({route, navigation}) {
   const store = useStore();
@@ -34,12 +33,15 @@ export default function EditProfileScreen({route, navigation}) {
 
   const [loading, setLoading] = useState(false);
 
-  const toast = useToast();
-
   function checkError(err) {
     if (err.status == 405) {
       store.dispatch({type: 'resetStore'});
-      displayToast(toast, t.youHaveBeenLoggedOutBecauceOfToken[lang]);
+      Toast.show({
+        type: 'error',
+        text1: t.error[lang],
+        text2: t.youHaveBeenLoggedOutBecauceOfToken[lang]
+      });
+
     } else
       console.log(err)
   }
@@ -89,7 +91,11 @@ export default function EditProfileScreen({route, navigation}) {
     })
       .then(checkStatus)
       .then(response => {
-        displayToast(toast, response.message);
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response.message[lang]
+        });
         navigation.push('Piccy', {screen: 'account'});
       })
       .catch(checkError)
@@ -176,25 +182,25 @@ export default function EditProfileScreen({route, navigation}) {
           <View style={{marginBottom: 20}}>
             <Input value={email} label={'E-mail'} placeholder={'E-mail'} onChangeText={setEmail}
                    onSubmitEditing={() => console.log('submit')} isCorrect={correctEmail()}
-                   autoCompleteType="email" errorMessage="E-mail is not valid" editable={false}/>
+                   autoCompleteType="email" errorMessage={t.emailIsNotValid[lang]} editable={false}/>
           </View>
 
           <View style={{marginBottom: 20}}>
             <Input value={username} label={t.username[lang]} placeholder={t.username[lang]} onChangeText={setUsername}
                    onSubmitEditing={() => console.log('submit')} isCorrect={correctUsername()}
-                   autoCompleteType="username" errorMessage="Username must be at least 6 characters long"
+                   autoCompleteType="username" errorMessage={t.usernameAtLeast6[lang]}
                    editable={false}/>
           </View>
 
           <View style={{marginBottom: 20}}>
-            <Input value={name} label={'Name'} placeholder={'Name'} onChangeText={setName}
+            <Input value={name} label={t.name[lang]} placeholder={t.name[lang]} onChangeText={setName}
                    onSubmitEditing={() => console.log('submit')} isCorrect={correctName()}
-                   autoCompleteType="name" errorMessage="Name must be at least 3 characters long"/>
+                   autoCompleteType="name" errorMessage={t.nameAtLeast3[lang]}/>
           </View>
 
           <View style={{marginBottom: 20}}>
             <Text style={styles.label}>
-              Description
+              {t.description[lang]}
             </Text>
             <TextInput
               onChangeText={(str) => setDescription(str)}
@@ -209,7 +215,7 @@ export default function EditProfileScreen({route, navigation}) {
               }}
               multiline={true}
               numberOfLines={3}
-              placeholder="Description"
+              placeholder={t.description[lang]}
               value={description}
             />
           </View>

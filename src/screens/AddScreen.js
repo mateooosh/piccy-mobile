@@ -7,15 +7,13 @@ import styles from "../styles/style";
 import {Camera} from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import {API_URL} from '@env';
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import {t} from "../translations/translations";
-import {useToast} from "native-base";
 import Toast from "react-native-toast-message";
 
 export default function AddScreen({navigation}) {
   const store = useStore();
   const lang = useSelector(state => state.lang);
-  const toast = useToast();
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);

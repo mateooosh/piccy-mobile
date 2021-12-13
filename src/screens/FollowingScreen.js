@@ -1,25 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector, useStore} from "react-redux";
+import {useSelector} from "react-redux";
 import {Text, View, ScrollView, ActivityIndicator} from 'react-native';
 
 import {API_URL} from '@env';
 
 import UserItem from '../components/UserItem';
 import colors from "../colors/colors";
-import {useToast} from "native-base";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import {t} from "../translations/translations";
 import Toast from "react-native-toast-message";
 
 export default function FollowingScreen({route, navigation}) {
-  const store = useStore();
-
   const [following, setFollowing] = useState([]);
   const [hasData, setHasData] = useState(false);
   const [loading, setLoading] = useState(false);
   const lang = useSelector(state => state.lang);
-
-  const toast = useToast();
 
   function checkError(err) {
     if(err.status == 405) {

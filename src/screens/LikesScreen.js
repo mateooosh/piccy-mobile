@@ -10,8 +10,7 @@ import {API_URL} from "@env";
 
 import UserItem from "../components/UserItem";
 import colors from "../colors/colors";
-import {checkStatus, displayToast} from "../functions/functions";
-import {useToast} from "native-base";
+import {checkStatus} from "../functions/functions";
 import {t} from "../translations/translations";
 import Toast from "react-native-toast-message";
 
@@ -19,15 +18,10 @@ import Toast from "react-native-toast-message";
 export default function LikesScreen({route, navigation}) {
   const store = useStore();
 
-  // const [profile, setProfile] = useState([]);
-  // const [posts, setPosts] = useState([]);
-
   const [likes, setLikes] = useState([]);
   const [hasData, setHasData] = useState(false);
   const [loading, setLoading] = useState(false);
   const lang = useSelector(state => state.lang);
-
-  const toast = useToast();
 
   function checkError(err) {
     if(err.status == 405) {

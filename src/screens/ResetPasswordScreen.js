@@ -3,8 +3,7 @@ import {useSelector, useStore} from 'react-redux';
 import {Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import styles from "../styles/style";
 import {API_URL} from "@env";
-import {validation, displayToast, checkStatus} from '../functions/functions';
-import {useToast} from 'native-base';
+import {validation, checkStatus} from '../functions/functions';
 import Input from "../components/Input";
 
 import {t} from '../translations/translations';
@@ -12,7 +11,6 @@ import Toast from "react-native-toast-message";
 
 export default function ResetPasswordScreen() {
   const store = useStore();
-  const toast = useToast();
 
   const lang = useSelector(state => state.lang);
 
@@ -39,8 +37,11 @@ export default function ResetPasswordScreen() {
     })
       .then(checkStatus)
       .then(response => {
-        console.log(response.message);
-        displayToast(toast, response.message);
+        Toast.show({
+          type: 'success',
+          text1: t.success[lang],
+          text2: response.message[lang]
+        });
       })
       .catch(checkError)
       .finally(() => {

@@ -5,19 +5,11 @@ import {Divider} from 'react-native-elements';
 import {API_URL} from '@env';
 import colors from '../colors/colors';
 import styles from '../styles/style';
-import {validation, displayToast, checkStatus} from '../functions/functions';
-import {useToast} from 'native-base';
+import {validation, checkStatus} from '../functions/functions';
 import {Alert, Collapse} from 'native-base';
 import Input from '../components/Input';
 import {t} from "../translations/translations";
 import Toast from "react-native-toast-message";
-
-Toast.show({
-  type: 'base',
-  text1: 'Error',
-  text2: 'Teklst'
-});
-
 
 export default function LoginScreen({navigation}) {
   const store = useStore();
@@ -25,8 +17,6 @@ export default function LoginScreen({navigation}) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const lang = useSelector(state => state.lang);
-
-  const toast = useToast();
 
   const [alertIsOpen, setAlertIsOpen] = useState(false);
 

@@ -10,14 +10,12 @@ import {
 import {API_URL, API_URL_WS} from "@env";
 import {useStore, useSelector} from "react-redux";
 import colors from "../colors/colors";
-import {useToast} from "native-base";
 import {t} from "../translations/translations";
-import {checkStatus, displayToast} from "../functions/functions";
+import {checkStatus} from "../functions/functions";
 import Toast from "react-native-toast-message";
 
 export default function TagScreen({route, navigation}) {
   const store = useStore();
-  const toast = useToast();
   const lang = useSelector(state => state.lang);
 
   const [images, setImages] = useState([]);

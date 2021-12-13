@@ -32,6 +32,7 @@ import {io} from "socket.io-client";
 
 import Toast, {BaseToast, ErrorToast, SuccessToast} from 'react-native-toast-message';
 import styles from "./styles/style";
+import {Vibration} from "react-native";
 // import store from "../store/store";
 
 const Stack = createStackNavigator();
@@ -73,6 +74,8 @@ export default function Navigation() {
 
   const handler = (message) => {
     if (navigationRef.current?.getCurrentRoute().name !== 'messages' && navigationRef.current?.getCurrentRoute().name !== 'Chat') {
+      Vibration.vibrate()
+
       Toast.show({
         type: 'base',
         text1: message.usernameSender,

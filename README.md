@@ -14,4 +14,4 @@ Photo sharing social networking service - mobile version
 ## Screenshots
 
 ### Home page
-<img src="https://github.com/mateooosh/piccy-mobile/assets/57798535/867b8c7f-90e0-452f-bf09-95ce2bf102e6" width="50%">
+<img src="https://github.com/mateooosh/piccy-mobile/assets/57798535/867b8c7f-90e0-452f-bf09-95ce2bf102e6" width="200px">

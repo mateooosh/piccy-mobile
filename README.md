@@ -10,3 +10,8 @@ Photo sharing social networking service - mobile version
 * Expo 41.0.1
 * Native Base 3.0.6
 * Socket.io 4.1.2
+
+## Screenshots
+
+### Home page
+![Home page](https://github.com/mateooosh/piccy-mobile/assets/57798535/867b8c7f-90e0-452f-bf09-95ce2bf102e6)

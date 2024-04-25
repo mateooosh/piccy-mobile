@@ -1,6 +1,10 @@
 # Piccy - mobile
 Photo sharing social networking service - mobile version
 
+Web application created with React -> [Piccy](https://github.com/mateooosh/piccy)
+
+Server created with Node.js -> [Server](https://github.com/mateooosh/piccy-server)
+
 ## Technologies
  Project is created with:
 * React 16.13.1

@@ -5,6 +5,8 @@ Web application created with React -> [Piccy](https://github.com/mateooosh/piccy
 
 Server created with Node.js -> [Server](https://github.com/mateooosh/piccy-server)
 
+![Logo](https://github.com/mateooosh/piccy/assets/57798535/20a94e21-ed45-43b9-97ef-3ba5eca9e2e1)
+
 ## Technologies
  Project is created with:
 * React 16.13.1
